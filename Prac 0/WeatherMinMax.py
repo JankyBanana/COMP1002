@@ -2,16 +2,30 @@
 # Find the minimum and maximum temperatures and dates from temperatures_365_days.csv
 #
 
-input = [22, 30, 25, 28, 35, 31, 27]
+import csv
 
-tempMax = input[0]
-for i in input:
-    if tempMax <= i:
-        tempMax = i
+# Converts the csv file into a 2xN array
+with open('temperatures_365_days.csv') as file:
+    reader = csv.reader(file)
+    next(reader) # Skips header
+    contents = []
+    for row in reader:
+        tempRow = [row[0], float(row[1])] # Converts the temp into a float
+        contents.append(tempRow)
 
-tempMin = input[0]
-for i in input:
-    if tempMin >= i:
-        tempMin = i
+# Min/Max temperature search
+tempMax = contents[1][1]
+tempMaxDate = contents[1][0]
+for i in contents:
+    if tempMax <= i[1]:
+        tempMax = i[1]
+        tempMaxDate = i[0]
 
-print(f'Max temperature is: {tempMax} \nMinimum temperature is: {tempMin}')
+tempMin = contents[1][1]
+tempMinDate = contents[1][0]
+for i in contents:
+    if tempMin >= i[1]:
+        tempMin = i[1]
+        tempMinDate = i[0]
+
+print(f'Hottest day was: {tempMaxDate}, {tempMax} \nColdest day was: {tempMinDate}, {tempMin}')
