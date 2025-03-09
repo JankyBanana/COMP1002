@@ -19,9 +19,10 @@ def insertionSort(A):
         key = A[sortIndex]
         subArrayIndex = sortIndex - 1
 
-        A[subArrayIndex + 1] = A[subArrayIndex]
-        subArrayIndex -= 1
-    A[subArrayIndex + 1] = key
+        while subArrayIndex >= 0 and key < A[subArrayIndex]:
+            A[subArrayIndex + 1] = A[subArrayIndex]
+            subArrayIndex -= 1
+            A[subArrayIndex + 1] = key
 
 def selectionSort(A):
     for index in range(len(A)):
