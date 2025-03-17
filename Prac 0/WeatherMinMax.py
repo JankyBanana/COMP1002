@@ -4,7 +4,7 @@
 
 import csv
 
-# Converts the csv file into a 2xN array
+# Converts the csv file into a 2xN list
 with open('temperatures_365_days.csv') as file:
     reader = csv.reader(file)
     next(reader) # Skips header
