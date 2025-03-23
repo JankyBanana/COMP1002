@@ -40,6 +40,7 @@ def recurFactorial(n):
         val = n * recurFactorial(n-1)
     return val
 
+def GCD(n):
 
 
 
