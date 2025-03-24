@@ -3,7 +3,7 @@
 #
 
 class Hanoi():
-    recursionLvl = 0
+    recursionLvl = 1
     moves = 0
 
     def towers(n, src, dest):
@@ -15,12 +15,12 @@ class Hanoi():
             tmp = 6 - src - dest
             Hanoi.recursionLvl += 1
             Hanoi.towers(n-1, src, tmp)
-
-            Hanoi.moveDisk(n, src, dest)
-            Hanoi.towers(n-1, tmp, dest)
-
             Hanoi.recursionLvl -= 1
 
+            Hanoi.moveDisk(n, src, dest)
+            Hanoi.recursionLvl += 1
+            Hanoi.towers(n-1, tmp, dest)
+            Hanoi.recursionLvl -= 1
 
     def moveDisk(n, src, dest):
         Hanoi.moves += 1
