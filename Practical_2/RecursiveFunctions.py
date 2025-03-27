@@ -58,18 +58,12 @@ def GCD(number1, number2):
 
 def DecToBaseN(decimal, base):
     baseList = "0123456789ABCDEF"
-    try:
-        if base < 2:
-            raise ValueError("Base 1 doesn't exist, valid range is from 2 to 16.")
-        elif base > 16:
-            raise ValueError("Outside the range of valid bases, valid range is from base 2 to 16 ")
-        elif decimal < base:
-            return str(baseList[decimal])
-        else:
-            return DecToBaseN(decimal // base, base) + str(baseList[(decimal % base)])
-    except ValueError as err:
-        print(err)
-
+    if base < 2 or base > 16:
+        raise ValueError("Outside the range of valid bases, valid range is from base 2 to 16 ")
+    elif decimal < base:
+        return str(baseList[decimal])
+    else:
+        return DecToBaseN(decimal // base, base) + str(baseList[(decimal % base)])
 
 def main():
     number1 = 1
