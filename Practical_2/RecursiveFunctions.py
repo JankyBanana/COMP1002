@@ -5,8 +5,9 @@
 def iterFibonacci(number):
     currVal = 1
     lastVal = 0
+
     if number < 0:
-        raise ValueError("Imput must not be negative")
+        raise ValueError("Input cannot be negative")
     elif (number == 0):
         fibVal = 0
     elif (number == 1):
@@ -20,7 +21,7 @@ def iterFibonacci(number):
 
 def recurFibonacci(number):
     if number < 0:
-        raise ValueError("Import must not be negative")
+        raise ValueError("Input cannot be negative")
     elif (number == 0):
         fibVal = 0
     elif (number == 1):
@@ -31,7 +32,7 @@ def recurFibonacci(number):
 
 def iterFactorial(number):
     if number < 0:
-        raise ValueError("Import must not be negative")
+        raise ValueError("Input cannot be negative")
     val = 1
     for i in range(1, number+1):
         val *= i
@@ -39,7 +40,7 @@ def iterFactorial(number):
 
 def recurFactorial(number):
     if number < 0:
-        raise ValueError("Import must not be negative")
+        raise ValueError("Input cannot be negative")
     if number == 0 or number == 1:
         val = 1
     else:
@@ -48,7 +49,7 @@ def recurFactorial(number):
 
 def GCD(number1, number2):
     if number1 < 0 or number2 < 0:
-        raise ValueError("Import must not be negative")
+        raise ValueError("Input cannot be negative")
     elif number2 == 0:
         return number1
     else:
@@ -66,17 +67,25 @@ def DecToBaseN(decimal, base):
         return DecToBaseN(decimal // base, base) + str(baseList[(decimal % base)])
 
 def main():
-    number1 = 1
-    print(f'\nFibonacci number {number1} is: {iterFibonacci(number1)}, {recurFibonacci(number1)}')
-    print(f'The factorial of {number1} or {number1}! is: {iterFactorial(number1)}, {recurFactorial(number1)}\n')
+    try:
+        number1 = -1
+        print(f'\nFibonacci number {number1} is: {iterFibonacci(number1)}, {recurFibonacci(number1)}')
+        print(f'The factorial of {number1} or {number1}! is: {iterFactorial(number1)}, {recurFactorial(number1)}\n')
+    except ValueError as e:
+        print(e)
 
+    try:
+        number2 = 1440
+        number3 = -1
+        print(f'The greatest common denominator of {number2} and {number3} is: {GCD(number2, number3)}\n')
+    except ValueError as e:
+        print(e)
 
-    number2 = 1440
-    number3 = 140
-    print(f'The greatest common denominator of {number2} and {number3} is: {GCD(number2, number3)}\n')
-
-    decimal = 3223481
-    base = 16
-    print(f'The Base 10 number {decimal} converted to Base {base} is: {DecToBaseN(decimal, base)}\n')
+    try:
+        decimal = 2048
+        base = 17
+        print(f'The Base 10 number {decimal} converted to Base {base} is: {DecToBaseN(decimal, base)}\n')
+    except ValueError as e:
+        print(e)
 
 main()
