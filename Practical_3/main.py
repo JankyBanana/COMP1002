@@ -6,6 +6,8 @@ import DSAStack as DSAS
 import DSAQueue as DSAQ
 
 def main():
-      DSAS.Stack.demo()
+      #DSAS.Stack.demo()
+      #DSAQ.ShufflingQueue.demo()
+
 main()
 
