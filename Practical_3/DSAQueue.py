@@ -5,39 +5,23 @@
 
 import numpy as np
 
-class ShufflingQueue():
+class DSAQueue():
     defaultSize = 100
 
     def __init__(self, name):
-        self.queueArray = np.full(ShufflingQueue.defaultSize, None)
+        self.queueArray = np.full(DSAQueue.defaultSize, None)
         self.numElements = 0
         self.size = len(self.queueArray)
         self.name = name
 
     def enqueue(self, value):
-        if self.isFull == True:
-            raise MemoryError(f"Can't add new item as the queue, {self.name} is full")
-        else:
-            self.queueArray[self.numElements] = value
-            self.numElements += 1
+        raise NotImplementedError("enqueue must be implemented in subclass")
 
     def dequeue(self):
-        if self.isEmpty == True:
-            raise IndexError(f"Can't dequeue next item as the queue, {self.name} is empty")
-        else:
-            queueNext = self.queueArray[0]
-            for i in range(1, self.numElements):
-                self.queueArray[i-1] = self.queueArray[i]
-            self.queueArray[self.numElements-1] = None
-            self.numElements -= 1
-            return queueNext
+        raise NotImplementedError("dequeue must be implemented in subclass")
 
     def peek(self):
-        if self.isEmpty == True:
-            raise IndexError(f"Can't access next item as the queue, {self.name} is empty")
-        else:
-            queueTop = self.queueArray[0]
-            return queueTop
+        raise NotImplementedError("peek must be implemented in subclass")
 
     def isEmpty(self):
         if self.numElements == 0:
@@ -51,28 +35,57 @@ class ShufflingQueue():
         else:
             return False
 
-    def demo():
-        demoQueue = ShufflingQueue("demoQueue")
-        print(f"\nThe queue, {demoQueue.name}, has size {demoQueue.size}, "
-              f"has {demoQueue.numElements} elements "
-              f"and contains the array:\n\n{demoQueue.queueArray}\n")
+class ShufflingQueue(DSAQueue):
+    def enqueue(self, value):
+        if self.isFull:  # Same as saying if self.isFull == True
+            raise MemoryError(f"Can't add new item as the queue, {self.name} is full")
+        else:
+            self.queueArray[self.numElements] = value
+            self.numElements += 1
 
-        print(f"{demoQueue.name} is empty? {demoQueue.isEmpty()}")
-        print(f"{demoQueue.name} is full? {demoQueue.isFull()}\n")
+    def dequeue(self):
+        if self.isEmpty:
+            raise IndexError(f"Can't dequeue next item as the queue, {self.name} is empty")
+        else:
+            queueNext = self.queueArray[0]
+            for i in range(1, self.numElements):
+                self.queueArray[i-1] = self.queueArray[i]
+            self.queueArray[self.numElements-1] = None
+            self.numElements -= 1
+            return queueNext
 
-        for i in range(100):
-            demoQueue.enqueue(i)
+    def peek(self):
+        if self.isEmpty == True:
+            raise IndexError(f"Can't access next item as the queue, {self.name} is empty")
+        else:
+            return self.queueArray[0]
 
-        print(f"The queue, {demoQueue.name}, has size {demoQueue.size}, "
-              f"has {demoQueue.numElements} elements "
-              f"and contains the array:\n\n{demoQueue.queueArray}\n")
+class CircularQueue(DSAQueue):
+    def __init__(self, name):
+        super().__init__(name)
+        self.queueEnd = 0
+        self.queueStart = 0
 
-        print(f"{demoQueue.name} is empty? {demoQueue.isEmpty()}")
-        print(f"{demoQueue.name} is full? {demoQueue.isFull()}\n")
+    def enqueue(self, value):
+        if self.isFull:
+            raise MemoryError(f"Can't add new item as the queue, {self.name} is full")
+        else:
+            self.queueArray[self.queueEnd] = value
+            self.queueEnd = (self.queueEnd+1) % self.size
+            self.numElements += 1
 
-        print(f"Taking a peek at the next element of queue, {demoQueue.name}: Next element = {demoQueue.peek()}")
-        print(f"Dequeuing the next element of {demoQueue.name}, which is: {demoQueue.dequeue()}\n")
+    def dequeue(self):
+        if self.isEmpty == True:
+            raise IndexError(f"Can't dequeue next item as the queue, {self.name} is empty")
+        else:
+            queueNext = self.queueArray[self.queueStart]
+            self.queueArray[self.queueStart] = None
+            self.queueStart = (self.queueStart + 1) % self.size
+            self.numElements -= 1
+            return queueNext
 
-        print(f"The queue, {demoQueue.name}, has size {demoQueue.size}, "
-              f"has {demoQueue.numElements} elements "
-              f"and contains the array:\n\n{demoQueue.queueArray}\n")
+    def peek(self):
+        if self.isEmpty == True:
+            raise IndexError(f"Can't access next item as the queue, {self.name} is empty")
+        else:
+            return self.queueArray[self.queueStart]
