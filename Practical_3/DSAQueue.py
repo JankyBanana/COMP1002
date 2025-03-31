@@ -70,8 +70,8 @@ class ShufflingQueue():
         print(f"{demoQueue.name} is empty? {demoQueue.isEmpty()}")
         print(f"{demoQueue.name} is full? {demoQueue.isFull()}\n")
 
-        print(f"Taking a peek of queue, {demoQueue.name}, the next element in the queue is: {demoQueue.peek()}")
-        print(f"Dequeuing the next element of {demoQueue.name} removes {demoQueue.dequeue()} from the queue\n")
+        print(f"Taking a peek at the next element of queue, {demoQueue.name}: Next element = {demoQueue.peek()}")
+        print(f"Dequeuing the next element of {demoQueue.name}, which is: {demoQueue.dequeue()}\n")
 
         print(f"The queue, {demoQueue.name}, has size {demoQueue.size}, "
               f"has {demoQueue.numElements} elements "
