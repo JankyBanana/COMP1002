@@ -16,14 +16,14 @@ class Stack():
 
     def push(self, value):
         if self.isFull == True:
-            raise MemoryError(f"New item can't be added to stack, {self.name} as it is full")
+            raise MemoryError(f"New item can't be added to the stack, {self.name} as it is full")
         else:
             self.stackArray[self.numElements] = value
             self.numElements += 1
 
     def pop(self):
         if self.isEmpty == True:
-            raise IndexError(f"Can't access top item as stack, {self.name} is empty")
+            raise IndexError(f"Can't access top item as the stack, {self.name} is empty")
         else:
             stackTop = self.stackArray[self.numElements-1]
             self.stackArray[self.numElements-1] = None
@@ -32,7 +32,7 @@ class Stack():
 
     def peek(self):
         if self.isEmpty == True:
-            raise IndexError(f"Can't access top item as stack, {self.name} is empty")
+            raise IndexError(f"Can't access top item as the stack, {self.name} is empty")
         else:
             stackTop = self.stackArray[self.numElements-1]
             return stackTop
