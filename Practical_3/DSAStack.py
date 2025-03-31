@@ -5,11 +5,11 @@
 
 import numpy as np
 
-class Stack():
+class DSAStack():
     defaultSize = 100
 
     def __init__(self, name):
-        self.stackArray = np.full(Stack.defaultSize, None)
+        self.stackArray = np.full(DSAStack.defaultSize, None)
         self.numElements = 0
         self.size = len(self.stackArray)
         self.name = name
@@ -50,7 +50,7 @@ class Stack():
             return False
 
     def demo():
-        demoStack = Stack("demoStack")
+        demoStack = DSAStack("demoStack")
         print(f"\nThe stack, {demoStack.name}, has size {demoStack.size}, "
               f"has {demoStack.numElements} elements "
               f"and contains the array:\n\n{demoStack.stackArray}\n")
