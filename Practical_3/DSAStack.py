@@ -2,7 +2,6 @@
 # Implementation of the DSAStack abstract
 # data type for COMP1002 practical 3
 #
-from itertools import count
 
 import numpy as np
 
