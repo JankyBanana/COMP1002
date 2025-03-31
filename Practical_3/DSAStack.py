@@ -16,7 +16,7 @@ class Stack():
 
     def push(self, value):
         if self.isFull == True:
-            raise MemoryError(f"New item can't be added to the stack, {self.name} as it is full")
+            raise MemoryError(f"Can't add new item as the stack, {self.name} is full")
         else:
             self.stackArray[self.numElements] = value
             self.numElements += 1
@@ -61,16 +61,16 @@ class Stack():
         for i in range(100):
             demoStack.push(i)
 
-        print(f"\nThe stack, {demoStack.name}, has size {demoStack.size}, "
+        print(f"The stack, {demoStack.name}, has size {demoStack.size}, "
               f"has {demoStack.numElements} elements "
               f"and contains the array:\n\n{demoStack.stackArray}\n")
 
         print(f"{demoStack.name} is empty? {demoStack.isEmpty()}")
         print(f"{demoStack.name} is full? {demoStack.isFull()}\n")
 
-        print(f"Taking a peek of the top element of {demoStack.name}: Top element = {demoStack.peek()}")
+        print(f"Taking a peek at the top element of {demoStack.name}: Top element = {demoStack.peek()}")
         print(f"Taking the top element of {demoStack.name}, which is: {demoStack.pop()}\n")
 
-        print(f"\nThe stack, {demoStack.name}, has size {demoStack.size}, "
+        print(f"The stack, {demoStack.name}, has size {demoStack.size}, "
               f"has {demoStack.numElements} elements "
               f"and contains the array:\n\n{demoStack.stackArray}\n")
