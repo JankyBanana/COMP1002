@@ -6,7 +6,7 @@ import DSAStack as DSAS
 import DSAQueue as DSAQ
 
 def stackTest():
-    # Demonstration of the DSAStack class in DSAStack.py
+    print("Demonstration of the DSAStack class in DSAStack.py")
     stack = DSAS.DSAStack("stack", 10)
     print(f"Stack is:\n{stack.stackArray}\n")
 
@@ -15,7 +15,7 @@ def stackTest():
     print(f"The stack is full? {stack.isFull()}\n")
 
     # Pushing one-less than max items to the stack
-    print("Adding none-less than max items in ascending order to the stack")
+    print("Adding one-less than max items in ascending order to the stack")
     for i in range(stack.size - 1):
         stack.push(i + 1)
     print(f"Stack is:\n{stack.stackArray}\n")
@@ -44,7 +44,7 @@ def stackTest():
     print(f"Stack is:\n{stack.stackArray}\n")
 
 def shufflingQueueTest():
-    # Demonstration of the ShufflingQueue subclass in DSAQueue.py
+    print("Demonstration of the ShufflingQueue subclass in DSAQueue.py")
     shufflingQueue = DSAQ.ShufflingQueue("shufflingQueue", 10)
     print(f"Queue is:\n{shufflingQueue.queueArray}\n")
 
@@ -81,8 +81,64 @@ def shufflingQueueTest():
           f"Dequeued item = {shufflingQueue.dequeue()}")
     print(f"Queue is:\n{shufflingQueue.queueArray}\n")
 
+def circularQueueTest():
+    print("Demonstration of the CircularQueue subclass in DSAQueue.py")
+    circularQueue = DSAQ.CircularQueue("circularQueue", 10)
+    print(f"Queue is:\n{circularQueue.queueArray}\n")
+
+    # Full or empty queue check
+    print(f"The Queue is empty? {circularQueue.isEmpty()}")
+    print(f"The Queue is full? {circularQueue.isFull()}\n")
+
+    # Enqueuing one-less than max items to the queue
+    print("Enqueuing one-less than max items in ascending order to the Queue")
+    for i in range(circularQueue.size - 1):
+        circularQueue.enqueue(i + 1)
+    print(f"Queue is:\n{circularQueue.queueArray}\n")
+
+    # Full or empty queue check
+    print(f"The queue is empty? {circularQueue.isEmpty()}")
+    print(f"The queue is full? {circularQueue.isFull()}\n")
+
+    # Enqueuing one more item to the queue
+    print("Enqueuing 10 to the queue")
+    circularQueue.enqueue(10)
+    print(f"Queue is:\n{circularQueue.queueArray}\n")
+
+    # Full or empty queue check
+    print(f"The queue is empty? {circularQueue.isEmpty()}")
+    print(f"The queue is full? {circularQueue.isFull()}\n")
+
+    # Peeking the queue
+    print(f"Taking a peek at the next item of the queue\n"
+          f"Next item = {circularQueue.peek()}")
+    print(f"Queue is: {circularQueue.queueArray}\n")
+
+    # Dequeuing the next item in the queue
+    print(f"Dequeuing the next item in the queue\n"
+          f"Dequeued item = {circularQueue.dequeue()}")
+    print(f"Queue is:\n{circularQueue.queueArray}\n")
+
+    # Dequeuing the next item in the queue
+    print(f"Dequeuing the next item in the queue\n"
+          f"Dequeued item = {circularQueue.dequeue()}")
+    print(f"Queue is:\n{circularQueue.queueArray}\n")
+
+    # Enqueuing one more item to the queue
+    print("Enqueuing 11 to the queue")
+    circularQueue.enqueue(11)
+    print(f"Queue is:\n{circularQueue.queueArray}\n")
+
+    # Enqueuing one more item to the queue
+    print("Enqueuing 12 to the queue")
+    circularQueue.enqueue(12)
+    print(f"Queue is:\n{circularQueue.queueArray}\n")
+
 def main():
-    #stackTest()
+    stackTest()
+    print("-"*65, "\n")
     shufflingQueueTest()
+    print("-" * 65, "\n")
+    circularQueueTest()
 main()
 
