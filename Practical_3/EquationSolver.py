@@ -14,7 +14,9 @@ def infixToPostfix():
     equation = input("Enter an equation in infix form: ")
     for i in range(len(equation)):
         term = equation[i]
-        if term == "(":
+        if term == " ":
+            pass
+        elif term == "(":
             opStack.push(term)
         elif term == ")":
             while opStack.peek() != "(":
