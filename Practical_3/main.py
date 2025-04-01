@@ -43,9 +43,46 @@ def stackTest():
           f"Taken item = {stack.pop()}")
     print(f"Stack is:\n{stack.stackArray}\n")
 
+def shufflingQueueTest():
+    # Demonstration of the ShufflingQueue subclass in DSAQueue.py
+    shufflingQueue = DSAQ.ShufflingQueue("shufflingQueue", 10)
+    print(f"Queue is:\n{shufflingQueue.queueArray}\n")
+
+    # Full or empty queue check
+    print(f"The Queue is empty? {shufflingQueue.isEmpty()}")
+    print(f"The Queue is full? {shufflingQueue.isFull()}\n")
+
+    # Enqueuing one-less than max items to the queue
+    print("Enqueuing one-less than max items in ascending order to the Queue")
+    for i in range(shufflingQueue.size - 1):
+        shufflingQueue.enqueue(i + 1)
+    print(f"Queue is:\n{shufflingQueue.queueArray}\n")
+
+    # Full or empty queue check
+    print(f"The queue is empty? {shufflingQueue.isEmpty()}")
+    print(f"The queue is full? {shufflingQueue.isFull()}\n")
+
+    # Enqueuing one more item to the queue
+    print("Enqueuing 10 to the queue")
+    shufflingQueue.enqueue(10)
+    print(f"Queue is:\n{shufflingQueue.queueArray}\n")
+
+    # Full or empty queue check
+    print(f"The queue is empty? {shufflingQueue.isEmpty()}")
+    print(f"The queue is full? {shufflingQueue.isFull()}\n")
+
+    # Peeking the queue
+    print(f"Taking a peek at the next item of the queue\n"
+          f"Next item = {shufflingQueue.peek()}")
+    print(f"Queue is: {shufflingQueue.queueArray}\n")
+
+    # Dequeuing the next item in the queue
+    print(f"Dequeuing the next item in the queue\n"
+          f"Dequeued item = {shufflingQueue.dequeue()}")
+    print(f"Queue is:\n{shufflingQueue.queueArray}\n")
 
 def main():
-    stackTest()
-    #shufflingQueueTest()
+    #stackTest()
+    shufflingQueueTest()
 main()
 
