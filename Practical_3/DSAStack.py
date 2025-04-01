@@ -8,21 +8,21 @@ import numpy as np
 class DSAStack():
     defaultSize = 100
 
-    def __init__(self, name = str):
-        self.stackArray = np.full(DSAStack.defaultSize, None)
+    def __init__(self, name = str, size = defaultSize):
+        self.size = size
+        self.stackArray = np.full(self.size, None, dtype=object)
         self.numElements = 0
-        self.size = len(self.stackArray)
         self.name = name
 
     def push(self, value):
-        if self.isFull == True:
+        if self.isFull() == True:
             raise MemoryError(f"Can't add new item as the stack, {self.name} is full")
         else:
             self.stackArray[self.numElements] = value
             self.numElements += 1
 
     def pop(self):
-        if self.isEmpty == True:
+        if self.isEmpty() == True:
             raise IndexError(f"Can't access top item as the stack, {self.name} is empty")
         else:
             stackTop = self.stackArray[self.numElements-1]
@@ -31,7 +31,7 @@ class DSAStack():
             return stackTop
 
     def peek(self):
-        if self.isEmpty == True:
+        if self.isEmpty() == True:
             raise IndexError(f"Can't access top item as the stack, {self.name} is empty")
         else:
             stackTop = self.stackArray[self.numElements-1]
