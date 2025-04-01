@@ -8,7 +8,7 @@ import numpy as np
 class DSAStack():
     defaultSize = 100
 
-    def __init__(self, name):
+    def __init__(self, name = str):
         self.stackArray = np.full(DSAStack.defaultSize, None)
         self.numElements = 0
         self.size = len(self.stackArray)
@@ -48,29 +48,3 @@ class DSAStack():
             return True
         else:
             return False
-
-    def demo():
-        demoStack = DSAStack("demoStack")
-        print(f"\nThe stack, {demoStack.name}, has size {demoStack.size}, "
-              f"has {demoStack.numElements} elements "
-              f"and contains the array:\n\n{demoStack.stackArray}\n")
-
-        print(f"{demoStack.name} is empty? {demoStack.isEmpty()}")
-        print(f"{demoStack.name} is full? {demoStack.isFull()}\n")
-
-        for i in range(100):
-            demoStack.push(i)
-
-        print(f"The stack, {demoStack.name}, has size {demoStack.size}, "
-              f"has {demoStack.numElements} elements "
-              f"and contains the array:\n\n{demoStack.stackArray}\n")
-
-        print(f"{demoStack.name} is empty? {demoStack.isEmpty()}")
-        print(f"{demoStack.name} is full? {demoStack.isFull()}\n")
-
-        print(f"Taking a peek at the top element of {demoStack.name}: Top element = {demoStack.peek()}")
-        print(f"Taking the top element of {demoStack.name}, which is: {demoStack.pop()}\n")
-
-        print(f"The stack, {demoStack.name}, has size {demoStack.size}, "
-              f"has {demoStack.numElements} elements "
-              f"and contains the array:\n\n{demoStack.stackArray}\n")
