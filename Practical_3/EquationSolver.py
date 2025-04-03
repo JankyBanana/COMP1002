@@ -5,6 +5,7 @@
 #
 
 import DSAStack as DSAS
+import DSAQueue as DSAQ
 
 def infixToPostfix():
     opList = {"+":0, "-":0,  "*":1,  "/":1}
@@ -23,22 +24,39 @@ def infixToPostfix():
                 postfix = postfix + " " + opStack.pop()
             opStack.pop()
         elif term in opList:
-            while (opStack.isEmpty() == False and opStack.peek() != "(" and
+            while (not opStack.isEmpty() and opStack.peek() != "(" and
                    opList[opStack.peek()] >= opList[term]):
                 postfix = postfix + " " + opStack.pop()
             opStack.push(term)
         else:
             postfix = postfix + " " + str(term)
 
-    while opStack.isEmpty() == False:
-        postfix = postfix + str(opStack.pop())
+    while not opStack.isEmpty():
+        postfix = postfix + " " + str(opStack.pop())
     print(postfix)
 
-#def solvePostfix(equation):
+def solvePostfix(postfix):
+    opQueue = DSAQ.CircularQueue("opQueue", 2)
+    opList = {"+": 0, "-": 0, "*": 1, "/": 1}
 
+    for i in range(len(postfix)):
+        term = postfix[i]
+        if term == " ":
+            pass
+        elif term in opList:
+            if opQueue.numElements == 2:
+                x = opQueue.dequeue()
+                y = opQueue.dequeue()
+                result = eval(x + term + y)
+                opQueue.enqueue(str(result))
+            else:
+                raise SyntaxError("Issue with syntax of postfix equation")
+        else:
+            opQueue.enqueue(term)
+    return opQueue.dequeue()
 
 #def solve(equation):
 
 def main():
-    infixToPostfix()
+    print(solvePostfix("12+3*3/"))
 main()
