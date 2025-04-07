@@ -7,8 +7,13 @@
 import DSAStack as DSAS
 import DSAQueue as DSAQ
 
+def opPriority(opStr: str):
+    if opStr == "+" or opStr == "-":
+        return 0
+    elif opStr == "*" or opStr == "/":
+        return 1
+
 def infixToPostfix(equation):
-    opList = {"+":0, "-":0,  "*":1,  "/":1}
     opStack = DSAS.DSAStack("operators", 20)
     postfix = ""
 
@@ -22,9 +27,9 @@ def infixToPostfix(equation):
             while opStack.peek() != "(":
                 postfix = postfix + " " + opStack.pop()
             opStack.pop()
-        elif term in opList:
+        elif term == "+" or term == "-" or term == "*" or term == "/":
             while (not opStack.isEmpty() and opStack.peek() != "(" and
-                   opList[opStack.peek()] >= opList[term]):
+                   opPriority(opStack.peek()) >= opPriority(term)):
                 postfix = postfix + " " + opStack.pop()
             opStack.push(term)
         else:
@@ -36,13 +41,12 @@ def infixToPostfix(equation):
 
 def solvePostfix(postfix):
     opStack = DSAS.DSAStack("opStack", 20)
-    opList = {"+": 0, "-": 0, "*": 1, "/": 1}
 
     for i in range(len(postfix)):
         term = postfix[i]
         if term == " ":
             pass
-        elif term in opList:
+        elif term == "+" or term == "-" or term == "*" or term == "/":
             y = opStack.pop()
             x = opStack.pop()
             result = eval(x + term + y)
