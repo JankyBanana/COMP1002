@@ -25,9 +25,9 @@ class DSALinkedList():
         else:
             return False
     def peekFirst(self):
-        return self.head
+        return self.head.getValue()
     def peekLast(self):
-        return self.tail
+        return self.tail.getValue()
     def insertFirst(self, value: object):
         if self.isEmpty():
             newNode = DSAListNode(value)
