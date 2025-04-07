@@ -13,6 +13,16 @@ def opPriority(opStr: str):
     elif opStr == "*" or opStr == "/":
         return 1
 
+def evaluate(x, y, op):
+    if op == "+":
+        return float(x) + float(y)
+    elif op == "-":
+        return float(x) - float(y)
+    elif op == "*":
+        return float(x) * float(y)
+    elif op == "/":
+        return float(x) / float(y)
+
 def infixToPostfix(equation):
     opStack = DSAS.DSAStack("operators", 20)
     postfix = ""
@@ -49,7 +59,7 @@ def solvePostfix(postfix):
         elif term == "+" or term == "-" or term == "*" or term == "/":
             y = opStack.pop()
             x = opStack.pop()
-            result = eval(x + term + y)
+            result = evaluate(x, y, term)
             opStack.push(str(result))
         else:
             opStack.push(term)
@@ -62,4 +72,5 @@ def solve(equation):
 
 def main():
     print(solve("(1+2)*((5-3)/2)"))
+    print(infixToPostfix("(1+2)*((5-3)/2)"))
 main()
