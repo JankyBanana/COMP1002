@@ -29,6 +29,9 @@ class DSAQueue():
     def queueContents(self):
         return self.linkedList.printNodeValues()
 
+    def queueInfo(self):
+        return self.linkedList.listStats()
+
 class ShufflingQueue(DSAQueue):
     def enqueue(self, value):
         self.linkedList.insertLast(value)
