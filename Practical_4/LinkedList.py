@@ -98,7 +98,7 @@ class DSALinkedList():
             nextNode = self.head
             print(f"The values of the nodes in the list '{self.name}' are:")
             valueString = "( "
-            while nextNode is not None:
+            for i in range(self.nodes):
                 valueString += f"{str(nextNode.getValue())} "
                 nextNode = nextNode.getNext()
             print(valueString + ")\n")
