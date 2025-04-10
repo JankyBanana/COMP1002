@@ -10,7 +10,7 @@
 # vulnerable to any unexpected changes to the `elements` variable which would break this logic check
 
 class DSALinkedList():
-    class _DSAListNode():
+    class _DSAListNode():  # Defining the class DSAListNode as a private inner class of DSALinkedList
         def __init__(self, data, next=None, previous=None):
             self.data = data
             self.next = next
@@ -24,22 +24,24 @@ class DSALinkedList():
 
         def getPrev(self):
             return self.prev
-    def __init__(self, head = None, tail = None, name = None):
-        self.head = head
-        self.tail = tail
+
+    def __init__(self, name = None):
+        self.head = None
+        self.tail = None
         self.name = name
         self.elements = 0
 
     def isEmpty(self):
-        if self.elements == 0:
-            return True
-        else:
-            return False
+        return self.elements == 0
 
     def peekFirst(self):
+        if self.isEmpty():
+            raise Exception("Linked list is empty")
         return self.head.getValue()
 
     def peekLast(self):
+        if self.isEmpty():
+            raise Exception("Linked list is empty")
         return self.tail.getValue()
 
     def insertFirst(self, value: object):
@@ -47,36 +49,31 @@ class DSALinkedList():
             newNode = self._DSAListNode(value)
             self.head = newNode
             self.tail = newNode
-            self.elements += 1
         else:
             newNode = self._DSAListNode(value, self.head)
             self.head.prev = newNode
             self.head = newNode
-            self.elements += 1
+        self.elements += 1
 
     def insertLast(self, value: object):
         if self.isEmpty():
             newNode = self._DSAListNode(value, self.head)
             self.head = newNode
             self.tail = newNode
-            self.elements += 1
-
         else:
             newNode = self._DSAListNode(value, None, self.tail)
             self.tail.next = newNode
             self.tail = newNode
-            self.elements += 1
+        self.elements += 1
 
     def removeFirst(self):
-        if self.elements == 0:
-            return False
-
+        if self.isEmpty():
+            raise Exception(f"Cannot remove as list {self.name} is empty.")
         elif self.head == self.tail:
             nodeValue = self.head.getValue()
             self.head = None
             self.tail = None
             return nodeValue
-
         else:
             nodeValue = self.head.getValue()
             self.head = self.head.getNext()
@@ -85,15 +82,13 @@ class DSALinkedList():
             return nodeValue
 
     def removeLast(self):
-        if self.elements == 0:
-            return False
-
+        if self.isEmpty():
+            raise Exception(f"Cannot remove as list {self.name} is empty.")
         elif self.head == self.tail:
             nodeValue = self.head.getValue()
             self.head = None
             self.tail = None
             return nodeValue
-
         else:
             nodeValue = self.tail.getValue()
             self.tail = self.tail.getPrev()
@@ -102,11 +97,13 @@ class DSALinkedList():
             return nodeValue
 
     def printNodeValues(self):
-        nextNode = self.head
-
-        print(f"The values of the nodes in {self.name} are:")
-        valueString = "( "
-        for i in range(self.elements):
-            valueString += f"{str(nextNode.getValue())} "
-            nextNode = nextNode.getNext()
-        print(valueString + ")\n")
+        if self.isEmpty():
+            print(f"The list {self.name} is empty.")
+        else:
+            nextNode = self.head
+            print(f"The values of the nodes in the list {self.name} are:")
+            valueString = "( "
+            while nextNode is not None:
+                valueString += f"{str(nextNode.getValue())} "
+                nextNode = nextNode.getNext()
+            print(valueString + ")\n")
