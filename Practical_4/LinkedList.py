@@ -104,5 +104,7 @@ class DSALinkedList():
             print(valueString + ")\n")
 
     def listStats(self):
-        print(f"Head: {self.head}    Tail: {self.tail}    Nodes: {self.nodes}")
+        print(f"Head: {self.head.getValue()}\n"
+              f"Tail: {self.tail.getValue()}\n"
+              f"Nodes: {self.nodes}")
         self.printNodeValues()
