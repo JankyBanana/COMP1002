@@ -1,5 +1,5 @@
 #
-# Main section of program for practical 4
+# Test section for LinkedList.py
 #
 
 import LinkedList as ll
@@ -157,7 +157,3 @@ def testCases():
     except Exception as err:
         print(err)
 testCases()
-
-def main():
-    pass
-main()
