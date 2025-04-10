@@ -36,7 +36,7 @@ def testCases():
 
     try:
         testList = ll.DSALinkedList(name="testList")
-        testList.insertFirst('1')
+        testList.insertFirst(1)
         testList.listStats()
         print("pass")
     except Exception as err:
@@ -44,7 +44,7 @@ def testCases():
 
     try:
         testList = ll.DSALinkedList(name="testList")
-        testList.insertLast('1')
+        testList.insertLast(1)
         testList.listStats()
         print("pass")
     except Exception as err:
