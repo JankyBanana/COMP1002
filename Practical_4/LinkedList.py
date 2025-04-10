@@ -9,21 +9,21 @@
 # Using `self.elements == 0` is valid this relies on self-managing the `elements` variable, leaving this method
 # vulnerable to any unexpected changes to the `elements` variable which would break this logic check
 
-class DSAListNode():
-    def __init__(self, data, next = None, previous = None):
-        self.data = data
-        self.next = next
-        self.prev = previous
-
-    def getValue(self):
-        return self.data
-    def getNext(self):
-        return self.next
-
-    def getPrev(self):
-        return self.prev
-
 class DSALinkedList():
+    class _DSAListNode():
+        def __init__(self, data, next=None, previous=None):
+            self.data = data
+            self.next = next
+            self.prev = previous
+
+        def getValue(self):
+            return self.data
+
+        def getNext(self):
+            return self.next
+
+        def getPrev(self):
+            return self.prev
     def __init__(self, head = None, tail = None, name = None):
         self.head = head
         self.tail = tail
@@ -44,25 +44,25 @@ class DSALinkedList():
 
     def insertFirst(self, value: object):
         if self.isEmpty():
-            newNode = DSAListNode(value)
+            newNode = self._DSAListNode(value)
             self.head = newNode
             self.tail = newNode
             self.elements += 1
         else:
-            newNode = DSAListNode(value, self.head)
+            newNode = self._DSAListNode(value, self.head)
             self.head.prev = newNode
             self.head = newNode
             self.elements += 1
 
     def insertLast(self, value: object):
         if self.isEmpty():
-            newNode = DSAListNode(value, self.head)
+            newNode = self._DSAListNode(value, self.head)
             self.head = newNode
             self.tail = newNode
             self.elements += 1
 
         else:
-            newNode = DSAListNode(value, None, self.tail)
+            newNode = self._DSAListNode(value, None, self.tail)
             self.tail.next = newNode
             self.tail = newNode
             self.elements += 1
@@ -103,7 +103,10 @@ class DSALinkedList():
 
     def printNodeValues(self):
         nextNode = self.head
-        print("The values of the nodes in {self.name} are:")
+
+        print(f"The values of the nodes in {self.name} are:")
+        valueString = "( "
         for i in range(self.elements):
-            print(nextNode.getValue())
+            valueString += f"{str(nextNode.getValue())} "
             nextNode = nextNode.getNext()
+        print(valueString + ")\n")
