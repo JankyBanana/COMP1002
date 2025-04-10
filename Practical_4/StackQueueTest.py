@@ -89,7 +89,7 @@ def circularQueueTest():
     print("Enqueuing 10 items in ascending order to the Queue")
     for i in range(10):
         circularQueue.enqueue(i)
-    circularQueue.queueContents()
+    circularQueue.queueInfo()
 
     # Full or empty queue check
     print(f"The queue is empty? {circularQueue.isEmpty()}")
@@ -97,7 +97,7 @@ def circularQueueTest():
     # Enqueuing one more item to the queue
     print("Enqueuing 10 to the queue")
     circularQueue.enqueue(10)
-    circularQueue.queueContents()
+    circularQueue.queueInfo()
 
     # Full or empty queue check
     print(f"The queue is empty? {circularQueue.isEmpty()}")
@@ -105,32 +105,32 @@ def circularQueueTest():
     # Peeking the queue
     print(f"Taking a peek at the next item of the queue\n"
           f"Next item = {circularQueue.peek()}")
-    circularQueue.queueContents()
+    circularQueue.queueInfo()
 
     # Dequeuing the next item in the queue
     print(f"Dequeuing the next item in the queue\n"
           f"Dequeued item = {circularQueue.dequeue()}")
-    circularQueue.queueContents()
+    circularQueue.queueInfo()
 
     # Dequeuing the next item in the queue
     print(f"Dequeuing the next item in the queue\n"
           f"Dequeued item = {circularQueue.dequeue()}")
-    circularQueue.queueContents()
+    circularQueue.queueInfo()
 
     # Enqueuing one more item to the queue
     print("Enqueuing 11 to the queue")
     circularQueue.enqueue(11)
-    circularQueue.queueContents()
+    circularQueue.queueInfo()
 
     # Enqueuing one more item to the queue
     print("Enqueuing 12 to the queue")
     circularQueue.enqueue(12)
-    circularQueue.queueContents()
+    circularQueue.queueInfo()
 
 def main():
-    stackTest()
+    #stackTest()
     print("-"*65, "\n")
-    shufflingQueueTest()
+    #shufflingQueueTest()
     print("-" * 65, "\n")
     circularQueueTest()
 main()
