@@ -1,16 +1,11 @@
 #
 # Implementation of the linked list ADS for practical 4
 #
-# ---- Note ----
-# The remove methods check if the linked list only has 1 node using `if self.head == self.tail' as these references are
-# explicitly assigned and controlled each time the linked list's structure changes and so represent the real structure
-# of the linked list.
-#
-# Using `self.elements == 0` is valid this relies on self-managing the `elements` variable, leaving this method
-# vulnerable to any unexpected changes to the `elements` variable which would break this logic check
 
 class DSALinkedList():
-    class _DSAListNode():  # Defining the class DSAListNode as a private inner class of DSALinkedList
+
+    # Defining the listNode class as a private inner class of the linkedList class
+    class _DSAListNode():
         def __init__(self, data, next=None, previous=None):
             self.data = data
             self.next = next
@@ -36,17 +31,17 @@ class DSALinkedList():
 
     def peekFirst(self):
         if self.isEmpty():
-            raise Exception(f"Cannot peek first node as the list {self.name} is empty")
+            raise Exception(f"Cannot peek first node as the list '{self.name}' is empty")
         return self.head.getValue()
 
     def peekLast(self):
         if self.isEmpty():
-            raise Exception(f"Cannot peek last node as the list {self.name} is empty")
+            raise Exception(f"Cannot peek last node as the list '{self.name}' is empty")
         return self.tail.getValue()
 
     def removeFirst(self):
         if self.isEmpty():
-            raise Exception(f"Cannot remove first node as the list {self.name} is empty.")
+            raise Exception(f"Cannot remove first node as the list '{self.name}' is empty.")
         elif self.head == self.tail:
             nodeValue = self.head.getValue()
             self.head = None
@@ -61,7 +56,7 @@ class DSALinkedList():
 
     def removeLast(self):
         if self.isEmpty():
-            raise Exception(f"Cannot remove last node as the list {self.name} is empty.")
+            raise Exception(f"Cannot remove last node as the list '{self.name}' is empty.")
         elif self.head == self.tail:
             nodeValue = self.head.getValue()
             self.head = None
@@ -98,15 +93,15 @@ class DSALinkedList():
 
     def printNodeValues(self):
         if self.isEmpty():
-            print(f"The list {self.name} is empty.")
+            print(f"The list '{self.name}' is empty.\n")
         else:
             nextNode = self.head
-            print(f"The values of the nodes in the list {self.name} are:")
+            print(f"The values of the nodes in the list '{self.name}' are:")
             valueString = "( "
             while nextNode is not None:
                 valueString += f"{str(nextNode.getValue())} "
                 nextNode = nextNode.getNext()
-            print(valueString + ")")
+            print(valueString + ")\n")
 
     def listStats(self):
         print(f"Head: {self.head}    Tail: {self.tail}    Nodes: {self.nodes}")
