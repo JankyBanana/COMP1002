@@ -2,6 +2,8 @@
 # Implementation of the DSAStack abstract
 # data type using a linked list for practical 4
 #
+# Derived from DSAStack.py submitted for COMP1002 Practical 3
+#
 
 import LinkedList as ll
 
