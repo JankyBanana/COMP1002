@@ -3,39 +3,13 @@
 # data type using a linked list for practical 4
 #
 
-import numpy as np
+import LinkedList as ll
 
 class DSAStack():
-    defaultSize = 100
-
-    def __init__(self, name = str, size = defaultSize):
-        self.size = size
-        self.stackArray = np.full(self.size, None, dtype=object)
+    def __init__(self, name = None):
+        self.linkedList = ll.DSALinkedList(f"{name}")
         self.numElements = 0
         self.name = name
-
-    def push(self, value):
-        if self.isFull() == True:
-            raise MemoryError(f"Can't add new item as the stack, {self.name} is full")
-        else:
-            self.stackArray[self.numElements] = value
-            self.numElements += 1
-
-    def pop(self):
-        if self.isEmpty() == True:
-            raise IndexError(f"Can't access top item as the stack, {self.name} is empty")
-        else:
-            stackTop = self.stackArray[self.numElements-1]
-            self.stackArray[self.numElements-1] = None
-            self.numElements -= 1
-            return stackTop
-
-    def peek(self):
-        if self.isEmpty() == True:
-            raise IndexError(f"Can't access top item as the stack, {self.name} is empty")
-        else:
-            stackTop = self.stackArray[self.numElements-1]
-            return stackTop
 
     def isEmpty(self):
         if self.numElements == 0:
@@ -43,8 +17,20 @@ class DSAStack():
         else:
             return False
 
-    def isFull(self):
-        if self.numElements == self.size:
-            return True
+    def push(self, value):
+        self.linkedList.insertLast(value)
+        self.numElements += 1
+
+    def pop(self):
+        stackTop = self.linkedList.removeLast()
+        self.numElements -= 1
+        return stackTop
+
+    def peek(self):
+        if self.isEmpty():
+            raise Exception(f"Cannot peek top item as the stack, {self.name} is empty")
         else:
-            return False
+            stackTop = self.linkedList.peekLast()
+            return stackTop
+    def stackContents(self):
+        self.linkedList.printNodeValues()
