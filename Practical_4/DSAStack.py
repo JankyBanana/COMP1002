@@ -7,7 +7,7 @@ import LinkedList as ll
 
 class DSAStack():
     def __init__(self, name = None):
-        self.linkedList = ll.DSALinkedList(f"{name}")
+        self.linkedList = ll.DSALinkedList(name)
         self.numElements = 0
         self.name = name
 
