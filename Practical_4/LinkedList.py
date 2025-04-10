@@ -29,24 +29,24 @@ class DSALinkedList():
         self.head = None
         self.tail = None
         self.name = name
-        self.elements = 0
+        self.nodes = 0
 
     def isEmpty(self):
-        return self.elements == 0
+        return self.nodes == 0
 
     def peekFirst(self):
         if self.isEmpty():
-            raise Exception(f"Cannot peek as the list {self.name} is empty")
+            raise Exception(f"Cannot peek first node as the list {self.name} is empty")
         return self.head.getValue()
 
     def peekLast(self):
         if self.isEmpty():
-            raise Exception(f"Cannot peek as the list {self.name} is empty")
+            raise Exception(f"Cannot peek last node as the list {self.name} is empty")
         return self.tail.getValue()
 
     def removeFirst(self):
         if self.isEmpty():
-            raise Exception(f"Cannot remove as the list {self.name} is empty.")
+            raise Exception(f"Cannot remove first node as the list {self.name} is empty.")
         elif self.head == self.tail:
             nodeValue = self.head.getValue()
             self.head = None
@@ -56,12 +56,12 @@ class DSALinkedList():
             nodeValue = self.head.getValue()
             self.head = self.head.getNext()
             self.head.prev = None
-            self.elements -= 1
+            self.nodes -= 1
             return nodeValue
 
     def removeLast(self):
         if self.isEmpty():
-            raise Exception(f"Cannot remove as the list {self.name} is empty.")
+            raise Exception(f"Cannot remove last node as the list {self.name} is empty.")
         elif self.head == self.tail:
             nodeValue = self.head.getValue()
             self.head = None
@@ -71,7 +71,7 @@ class DSALinkedList():
             nodeValue = self.tail.getValue()
             self.tail = self.tail.getPrev()
             self.tail.next = None
-            self.elements -= 1
+            self.nodes -= 1
             return nodeValue
 
     def insertFirst(self, value: object):
@@ -83,7 +83,7 @@ class DSALinkedList():
             newNode = self._DSAListNode(value, self.head)
             self.head.prev = newNode
             self.head = newNode
-        self.elements += 1
+        self.nodes += 1
 
     def insertLast(self, value: object):
         if self.isEmpty():
@@ -94,7 +94,7 @@ class DSALinkedList():
             newNode = self._DSAListNode(value, None, self.tail)
             self.tail.next = newNode
             self.tail = newNode
-        self.elements += 1
+        self.nodes += 1
 
     def printNodeValues(self):
         if self.isEmpty():
@@ -106,4 +106,8 @@ class DSALinkedList():
             while nextNode is not None:
                 valueString += f"{str(nextNode.getValue())} "
                 nextNode = nextNode.getNext()
-            print(valueString + ")\n")
+            print(valueString + ")")
+
+    def listStats(self):
+        print(f"Head: {self.head}    Tail: {self.tail}    Nodes: {self.nodes}")
+        self.printNodeValues()
