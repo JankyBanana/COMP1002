@@ -36,13 +36,43 @@ class DSALinkedList():
 
     def peekFirst(self):
         if self.isEmpty():
-            raise Exception("Linked list is empty")
+            raise Exception(f"Cannot peek as the list {self.name} is empty")
         return self.head.getValue()
 
     def peekLast(self):
         if self.isEmpty():
-            raise Exception("Linked list is empty")
+            raise Exception(f"Cannot peek as the list {self.name} is empty")
         return self.tail.getValue()
+
+    def removeFirst(self):
+        if self.isEmpty():
+            raise Exception(f"Cannot remove as the list {self.name} is empty.")
+        elif self.head == self.tail:
+            nodeValue = self.head.getValue()
+            self.head = None
+            self.tail = None
+            return nodeValue
+        else:
+            nodeValue = self.head.getValue()
+            self.head = self.head.getNext()
+            self.head.prev = None
+            self.elements -= 1
+            return nodeValue
+
+    def removeLast(self):
+        if self.isEmpty():
+            raise Exception(f"Cannot remove as the list {self.name} is empty.")
+        elif self.head == self.tail:
+            nodeValue = self.head.getValue()
+            self.head = None
+            self.tail = None
+            return nodeValue
+        else:
+            nodeValue = self.tail.getValue()
+            self.tail = self.tail.getPrev()
+            self.tail.next = None
+            self.elements -= 1
+            return nodeValue
 
     def insertFirst(self, value: object):
         if self.isEmpty():
@@ -65,36 +95,6 @@ class DSALinkedList():
             self.tail.next = newNode
             self.tail = newNode
         self.elements += 1
-
-    def removeFirst(self):
-        if self.isEmpty():
-            raise Exception(f"Cannot remove as list {self.name} is empty.")
-        elif self.head == self.tail:
-            nodeValue = self.head.getValue()
-            self.head = None
-            self.tail = None
-            return nodeValue
-        else:
-            nodeValue = self.head.getValue()
-            self.head = self.head.getNext()
-            self.head.prev = None
-            self.elements -= 1
-            return nodeValue
-
-    def removeLast(self):
-        if self.isEmpty():
-            raise Exception(f"Cannot remove as list {self.name} is empty.")
-        elif self.head == self.tail:
-            nodeValue = self.head.getValue()
-            self.head = None
-            self.tail = None
-            return nodeValue
-        else:
-            nodeValue = self.tail.getValue()
-            self.tail = self.tail.getPrev()
-            self.tail.next = None
-            self.elements -= 1
-            return nodeValue
 
     def printNodeValues(self):
         if self.isEmpty():
