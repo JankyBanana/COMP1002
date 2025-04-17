@@ -31,32 +31,32 @@ class DSABinarySearchTree():
 
     #def display(self):
 
-    def height(self, currentNode=None):
-        if currentNode is None:
+    def height(self, current_node=None):
+        if current_node is None:
             return self._recHeight(self._root)
         else:
-            return self._recHeight(currentNode)
+            return self._recHeight(current_node)
 
-    def min(self, currentNode=None):
-        if currentNode is None:
+    def min(self, current_node=None):
+        if current_node is None:
             if self._root is None:
                 raise Exception("Binary search tree is empty")
             else:
                 return self.min(self._root)
         else:
-            if currentNode._left is not None:
-                return self.min(currentNode._left)
-            return currentNode._key
+            if current_node._left is not None:
+                return self.min(current_node._left)
+            return current_node._key
 
-    def max(self, currentNode = None):
-        if currentNode is None:
+    def max(self, current_node = None):
+        if current_node is None:
             if self._root is None:
                 raise Exception("Binary search tree is empty")
             return self.max(self._root)
         else:
-            if currentNode._right is not None:
-                return self.max(currentNode._right)
-            return currentNode._key
+            if current_node._right is not None:
+                return self.max(current_node._right)
+            return current_node._key
 
     def balance(self):
         if self._root is None:
@@ -74,67 +74,67 @@ class DSABinarySearchTree():
 
 # --------------- Private class methods --------------- #
 
-    def _recFind(self, key, currentNode):
-        if currentNode == None:                             # i.e. _recFind is passed a child of a leaf node
+    def _recFind(self, key, current_node):
+        if current_node == None:                             # i.e. _recFind is passed a child of a leaf node
             raise ValueError(f"Key {key} not found")
 
-        if key == currentNode._key:                       # Key to insert already exists in the BST
-            return currentNode._data
-        elif key < currentNode._key:                        # Go down left sub-branch
-            return self._recFind(key, currentNode._left)
-        else:                                               # Go down right sub-branch
-            return self._recFind(key, currentNode._right)
+        if key == current_node._key:                         # Key to insert already exists in the BST
+            return current_node._data
+        elif key < current_node._key:                        # Go down left sub-branch
+            return self._recFind(key, current_node._left)
+        else:                                                # Go down right sub-branch
+            return self._recFind(key, current_node._right)
 
-    def _recInsert(self, key, data, currentNode):
-        if key == currentNode._key:
+    def _recInsert(self, key, data, current_node):
+        if key == current_node._key:
             raise ValueError("Key already in use. Key must be unique")
-        elif key < currentNode._key:
-            if currentNode._left is None:
-                currentNode._left = self._DSATreeNode(key, data)
+        elif key < current_node._key:
+            if current_node._left is None:
+                current_node._left = self._DSATreeNode(key, data)
             else:
-                self._recInsert(key, data, currentNode._left)
+                self._recInsert(key, data, current_node._left)
         else:
-            if currentNode._right is None:
-                currentNode._right = self._DSATreeNode(key, data)
+            if current_node._right is None:
+                current_node._right = self._DSATreeNode(key, data)
             else:
-                self._recInsert(key, data, currentNode._right)
+                self._recInsert(key, data, current_node._right)
 
-    def _recHeight(self, currentNode):
-        if currentNode is None:
+    def _recHeight(self, current_node):
+        if current_node is None:
             currentHeight = -1
-
-        leftHt = self._recHeight(currentNode._left)
-        rightHt = self._recHeight(currentNode._right)
-
-        if leftHt > rightHt:
-            currentHeight = leftHt + 1
         else:
-            currentHeight = rightHt + 1
+            leftHt = self._recHeight(current_node._left)
+            rightHt = self._recHeight(current_node._right)
+
+            if leftHt > rightHt:
+                currentHeight = leftHt + 1
+            else:
+                currentHeight = rightHt + 1
         return currentHeight
 
-    def _minLeafDepth(self, currentNode, depth=0):
-        if currentNode is None:
+    def _minLeafDepth(self, current_node, depth=0):
+        if current_node is None:
             return float("inf")
 
-        if currentNode._left is None and currentNode._right is None:
+        if current_node._left is None and current_node._right is None:
             return depth
 
-        leftChild = self._minLeafDepth(currentNode._left, depth + 1)
-        rightChild = self._minLeafDepth(currentNode._right, depth + 1)
+        leftChild = self._minLeafDepth(current_node._left, depth + 1)
+        rightChild = self._minLeafDepth(current_node._right, depth + 1)
 
-        if leftChild > rightChild:
+        if leftChild > rightChild:      # Returns min value
             return rightChild
         return leftChild
 
-    def _maxLeafDepth(self, currentNode, depth=0):
-        if currentNode is None:
+    def _maxLeafDepth(self, current_node, depth=0):
+        if current_node is None:
             return -1  # No depth from empty node
 
-        if currentNode._left is None and currentNode._right is None:
+        if current_node._left is None and current_node._right is None:
             return depth
 
-        leftChild = self._maxLeafDepth(currentNode._left, depth + 1)
-        rightChild = self._maxLeafDepth(currentNode._right, depth + 1)
+        leftChild = self._maxLeafDepth(current_node._left, depth + 1)
+        rightChild = self._maxLeafDepth(current_node._right, depth + 1)
 
         if leftChild > rightChild:
             return leftChild
