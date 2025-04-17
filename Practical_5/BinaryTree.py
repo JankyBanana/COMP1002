@@ -25,33 +25,18 @@ class DSABinarySearchTree():
     def find(self, key):
         return self._recFind(key, self._root)
 
-    def insert(self, key, data, currentNode=None):
-        if currentNode is None:
-            if self._root is None:
-                self._root = self._DSATreeNode(key, data)
-            else:
-                self.insert(key, data, self._root)
-
-        elif key == currentNode._key:
-            raise ValueError("Key already in use. Key must be unique")
-
-        elif key < currentNode._key:
-            if currentNode._left is None:
-                currentNode._left = self._DSATreeNode(key, data)
-            else:
-                self.insert(key, data, currentNode._left)
-
+    def insert(self, key, data):
+        if self._root is None:
+            self._root = self._DSATreeNode(key, data)
         else:
-            if currentNode._right is None:
-                currentNode._right = self._DSATreeNode(key, data)
-            else:
-                self.insert(key, data, currentNode._right)
+            self.recInsert(key, data, self._root)
 
     #def delete(self, key):
 
     #def display(self):
 
-    #def height(self):
+    def height(self):
+
 
     def min(self, currentNode=None):
         if currentNode is None:
@@ -77,6 +62,8 @@ class DSABinarySearchTree():
             else:
                 return currentNode._key
 
+# --------------- Private class methods --------------- #
+
     def _recFind(self, key, current_node):
         data = None
         if current_node == None:                                 # Case 1: not found
@@ -91,3 +78,19 @@ class DSABinarySearchTree():
         else:                                           # Case 4: go right
             data = self._recFind(key, current_node._right)
         return data
+
+    def recInsert(self, key, data, currentNode):
+        if key == currentNode._key:
+            raise ValueError("Key already in use. Key must be unique")
+
+        elif key < currentNode._key:
+            if currentNode._left is None:
+                currentNode._left = self._DSATreeNode(key, data)
+            else:
+                self.recInsert(key, data, currentNode._left)
+
+        else:
+            if currentNode._right is None:
+                currentNode._right = self._DSATreeNode(key, data)
+            else:
+                self.recInsert(key, data, currentNode._right)
