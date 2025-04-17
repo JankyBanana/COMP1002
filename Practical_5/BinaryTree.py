@@ -65,7 +65,17 @@ class DSABinarySearchTree():
             else:
                 return currentNode._key
 
-    #def max(self):
+    def max(self, currentNode = None):
+        if currentNode is None:
+            if self._root is None:
+                raise Exception("Binary search tree is empty")
+            else:
+                return self.max(self._root)
+        else:
+            if currentNode._right is not None:
+                return self.max(currentNode._right)
+            else:
+                return currentNode._key
 
     def _recFind(self, key, current_node):
         data = None
