@@ -2,6 +2,7 @@
 # Implementation of the Binary Search Tree data structure for practical 5
 #
 from adodbapi import OperationalError
+from nbformat.current import current_nbformat
 
 
 class DSABinarySearchTree():
@@ -29,14 +30,14 @@ class DSABinarySearchTree():
         if self._root is None:
             self._root = self._DSATreeNode(key, data)
         else:
-            self.recInsert(key, data, self._root)
+            self._recInsert(key, data, self._root)
 
     #def delete(self, key):
 
     #def display(self):
 
     def height(self):
-
+        return self._recHeight(self._root)
 
     def min(self, currentNode=None):
         if currentNode is None:
@@ -64,33 +65,41 @@ class DSABinarySearchTree():
 
 # --------------- Private class methods --------------- #
 
-    def _recFind(self, key, current_node):
+    def _recFind(self, key, currentNode):
         data = None
-        if current_node == None:                                 # Case 1: not found
+        if currentNode == None:                                 # Case 1: not found
             raise ValueError(f"Key {key} not found")
-
-        elif key == current_node._key:                           # Case 2: found
-            data = current_node._data
-
-        elif key < current_node._key:                            # Case 3: go left
-            data = self._recFind(key, current_node._left)
-
+        elif key == currentNode._key:                           # Case 2: found
+            data = currentNode._data
+        elif key < currentNode._key:                            # Case 3: go left
+            data = self._recFind(key, currentNode._left)
         else:                                           # Case 4: go right
-            data = self._recFind(key, current_node._right)
+            data = self._recFind(key, currentNode._right)
         return data
 
-    def recInsert(self, key, data, currentNode):
+    def _recInsert(self, key, data, currentNode):
         if key == currentNode._key:
             raise ValueError("Key already in use. Key must be unique")
-
         elif key < currentNode._key:
             if currentNode._left is None:
                 currentNode._left = self._DSATreeNode(key, data)
             else:
-                self.recInsert(key, data, currentNode._left)
+                self._recInsert(key, data, currentNode._left)
 
         else:
             if currentNode._right is None:
                 currentNode._right = self._DSATreeNode(key, data)
             else:
-                self.recInsert(key, data, currentNode._right)
+                self._recInsert(key, data, currentNode._right)
+
+    def _recHeight(self, currentNode):
+        if currentNode is None:
+            currentHeight = -1
+        else:
+            leftHt = self._recHeight(currentNode._left)
+            rightHt = self._recHeight(currentNode._right)
+            if leftHt > rightHt:
+                currentHeight = leftHt + 1
+            else:
+                currentHeight = rightHt + 1
+        return currentHeight
