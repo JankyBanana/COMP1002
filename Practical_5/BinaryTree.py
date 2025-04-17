@@ -36,8 +36,11 @@ class DSABinarySearchTree():
 
     #def display(self):
 
-    def height(self):
-        return self._recHeight(self._root)
+    def height(self, currentNode = None):
+        if currentNode is None:
+            return self._recHeight(self._root)
+        else:
+            return self._recHeight(currentNode)
 
     def min(self, currentNode=None):
         if currentNode is None:
@@ -62,6 +65,20 @@ class DSABinarySearchTree():
                 return self.max(currentNode._right)
             else:
                 return currentNode._key
+
+    def balance(self):
+        if self._root is None:
+            return 100
+
+        minLeaf = self._minLeafDepth(self._root)
+        maxLeaf = self._maxLeafDepth(self._root)
+        height = self._recHeight(self._root)
+
+        if height == 0:
+            return 100
+        else:
+            balance = (1 - ((maxLeaf-minLeaf)/height))*100
+            return balance
 
 # --------------- Private class methods --------------- #
 
@@ -103,3 +120,32 @@ class DSABinarySearchTree():
             else:
                 currentHeight = rightHt + 1
         return currentHeight
+
+    def _minLeafDepth(self, currentNode, depth=0):
+        if currentNode is None:
+            return 99999999
+        elif currentNode._left is None and currentNode._right is None:
+            return depth
+
+        leftChild = self._minLeafDepth(currentNode._left, depth + 1)
+        rightChild = self._minLeafDepth(currentNode._right, depth + 1)
+
+        if leftChild > rightChild:
+            return rightChild
+        else:
+            return leftChild
+
+    def _maxLeafDepth(self, currentNode, depth=0):
+        if currentNode is None:
+            return -1  # No depth from empty node
+
+        if currentNode._left is None and currentNode._right is None:
+            return depth
+
+        leftChild = self._maxLeafDepth(currentNode._left, depth + 1)
+        rightChild = self._maxLeafDepth(currentNode._right, depth + 1)
+
+        if leftChild > rightChild:
+            return leftChild
+        else:
+            return rightChild
