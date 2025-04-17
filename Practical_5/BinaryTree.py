@@ -63,13 +63,12 @@ class DSABinarySearchTree():
             return 100
 
         minLeaf = self._minLeafDepth(self._root)
-        maxLeaf = self._maxLeafDepth(self._root)
-        height = self._recHeight(self._root)
+        maxLeaf = self._recHeight(self._root)       # maxLeaf depth = BST height
 
-        if height == 0:
+        if maxLeaf== 0:
             return 100
 
-        balance = (1 - ((maxLeaf-minLeaf)/height))*100
+        balance = (1 - ((maxLeaf-minLeaf)/maxLeaf))*100
         return balance
 
 # --------------- Private class methods --------------- #
@@ -125,17 +124,3 @@ class DSABinarySearchTree():
         if leftChild > rightChild:      # Returns min value
             return rightChild
         return leftChild
-
-    def _maxLeafDepth(self, current_node, depth=0):
-        if current_node is None:
-            return -1  # No depth from empty node
-
-        if current_node._left is None and current_node._right is None:
-            return depth
-
-        leftChild = self._maxLeafDepth(current_node._left, depth + 1)
-        rightChild = self._maxLeafDepth(current_node._right, depth + 1)
-
-        if leftChild > rightChild:
-            return leftChild
-        return rightChild
