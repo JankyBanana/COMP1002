@@ -11,17 +11,35 @@ class DSABinarySearchTree():
             self._right = None
 
         def __str__(self):
+            """Print 'Key: self._key  Data: self._data' when calling the node object"""
             print(f"Key: {self._key}  Data: {self._data}")
 
     def __init__(self):
-        self.root = None
+        self._root = None
 
-    #def find(self):
+    def find(self, key):
+        return self._recFind(key, self._root)
 
-    #def insert(self, key, value):
+    # def insert(self, key, value):
+    #     cur = self._root
 
     #def delete(self, key):
 
     #def display(self):
 
     #def height(self):
+
+    def _recFind(self, key, current_node):
+        value = None
+        if current_node == None:                                 # Case 1: not found
+            raise ValueError(f"Key {key} not found")
+
+        elif key == current_node._key:                           # Case 2: found
+            value = current_node._data
+
+        elif key < current_node._key:                            # Case 3: go left
+            value = self._recFind(key, current_node._left)
+
+        else:                                           # Case 4: go right
+            value = self._recFind(key, current_node._right)
+        return value
