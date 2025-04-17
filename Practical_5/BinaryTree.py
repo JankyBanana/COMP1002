@@ -3,6 +3,9 @@
 #
 
 
+import LinkedList as ll
+
+
 class DSABinarySearchTree():
     class _DSATreeNode():
         def __init__(self, key, data):
@@ -33,7 +36,10 @@ class DSABinarySearchTree():
 
     def height(self, currentNode=None):
         if currentNode is None:
-            return self._recHeight(self._root)
+            if self._root is None:
+                raise Exception("Binary search tree is empty")
+            else:
+                return self._recHeight(self._root)
         else:
             return self._recHeight(currentNode)
 
@@ -43,19 +49,22 @@ class DSABinarySearchTree():
                 raise Exception("Binary search tree is empty")
             else:
                 return self.min(self._root)
+
+        if currentNode._left is not None:
+            return self.min(currentNode._left)
         else:
-            if currentNode._left is not None:
-                return self.min(currentNode._left)
             return currentNode._key
 
     def max(self, currentNode = None):
         if currentNode is None:
             if self._root is None:
                 raise Exception("Binary search tree is empty")
-            return self.max(self._root)
+            else:
+                return self.max(self._root)
+
+        if currentNode._right is not None:
+            return self.max(currentNode._right)
         else:
-            if currentNode._right is not None:
-                return self.max(currentNode._right)
             return currentNode._key
 
     def balance(self):
@@ -70,6 +79,25 @@ class DSABinarySearchTree():
 
         balance = (1 - ((maxLeaf-minLeaf)/maxLeaf))*100
         return balance
+
+    def inorder(self, currentNode=None):
+        keyList = ll.DSALinkedList("keyList")
+
+        if currentNode is None:
+            if self._root is None:
+                raise Exception("Binary search tree is empty")
+            else:
+                self._inorder(self._root, keyList)
+        else:
+            keyList =  self._inorder(currentNode, keyList)
+        return keyList
+
+    def preorder(self):
+        pass
+
+    def postorder(self):
+        pass
+
 
 # --------------- Private class methods --------------- #
 
@@ -114,8 +142,7 @@ class DSABinarySearchTree():
     def _minLeafDepth(self, currentNode, depth=0):
         if currentNode is None:
             return float("inf")
-
-        if currentNode._left is None and currentNode._right is None:
+        elif currentNode._left is None and currentNode._right is None:
             return depth
 
         leftChild = self._minLeafDepth(currentNode._left, depth + 1)
@@ -124,3 +151,13 @@ class DSABinarySearchTree():
         if leftChild > rightChild:      # Returns min value
             return rightChild
         return leftChild
+
+    def _inorder(self, currentNode, keyList):
+        if currentNode._left is not None:
+            keyList = self._inorder(currentNode._left, keyList)
+
+        keyList.insertLast(currentNode._key)
+
+        if currentNode._right is not None:
+            keyList = self._inorder(currentNode._right, keyList)
+        return keyList
