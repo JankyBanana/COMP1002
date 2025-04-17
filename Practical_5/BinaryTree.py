@@ -3,7 +3,7 @@
 #
 
 
-import LinkedList as ll
+import LinkedList as LL
 
 
 class DSABinarySearchTree():
@@ -22,7 +22,8 @@ class DSABinarySearchTree():
         self._root = None
 
     def find(self, key):
-        return self._recFind(key, self._root)
+        nodeData =  self._recFind(key, self._root)
+        return nodeData._data
 
     def insert(self, key, data):
         if self._root is None:
@@ -30,9 +31,9 @@ class DSABinarySearchTree():
         else:
             self._recInsert(key, data, self._root)
 
-    #def delete(self, key):
+    def delete(self, key):
+        self.find(key)
 
-    #def display(self):
 
     def height(self, currentNode=None):
         if currentNode is None:
@@ -81,7 +82,7 @@ class DSABinarySearchTree():
         return balance
 
     def traverse(self,method: str, currentNode=None):
-        keyList = ll.DSALinkedList("keyList")
+        keyList = LL.DSALinkedList("keyList")
 
         if currentNode is None:
             if self._root is None:
@@ -112,8 +113,8 @@ class DSABinarySearchTree():
         if currentNode is None:                             # i.e. _recFind is passed a child of a leaf node
             raise ValueError(f"Key {key} not found")
 
-        if key == currentNode._key:                         # Key to insert already exists in the BST
-            return currentNode._data
+        if key == currentNode._key:                         # Found key
+            return currentNode
         elif key < currentNode._key:                        # Go down left sub-branch
             return self._recFind(key, currentNode._left)
         else:                                                # Go down right sub-branch
