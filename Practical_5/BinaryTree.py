@@ -180,4 +180,11 @@ class DSABinarySearchTree():
         return keyList
 
     def _postorder(self, currentNode, keyList):
-        pass
+        if currentNode._left is not None:
+            keyList = self._postorder(currentNode._left, keyList)
+
+        if currentNode._right is not None:
+            keyList = self._postorder(currentNode._right, keyList)
+
+        keyList.insertLast(currentNode._key)
+        return keyList
