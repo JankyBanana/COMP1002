@@ -91,9 +91,9 @@ class DSALinkedList():
             self.tail = newNode
         self.nodes += 1
 
-    def display(self):
+    def values(self):
         nextNode = self.head
-        valueString = "Contents of list are: "
+        valueString = ""
 
         for i in range(self.nodes):
             valueString += f"{str(nextNode._getValue())} "
