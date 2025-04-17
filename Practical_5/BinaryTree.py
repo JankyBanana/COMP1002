@@ -80,24 +80,31 @@ class DSABinarySearchTree():
         balance = (1 - ((maxLeaf-minLeaf)/maxLeaf))*100
         return balance
 
-    def inorder(self, currentNode=None):
+    def traverse(self,method: str, currentNode=None):
         keyList = ll.DSALinkedList("keyList")
 
         if currentNode is None:
             if self._root is None:
                 raise Exception("Binary search tree is empty")
             else:
-                self._inorder(self._root, keyList)
+                if method == "inorder":
+                    keyList = self._inorder(self._root, keyList)
+                elif method == "postorder":
+                    keyList = self._postorder(self._root, keyList)
+                elif method == "preorder":
+                    keyList = self._preorder(self._root, keyList)
+                else:
+                    raise ValueError("Invalid traversal method provided.")
         else:
-            keyList =  self._inorder(currentNode, keyList)
+            if method == "inorder":
+                keyList = self._inorder(self._root, keyList)
+            elif method == "postorder":
+                keyList = self._postorder(self._root, keyList)
+            elif method == "preorder":
+                keyList = self._preorder(self._root, keyList)
+            else:
+                raise ValueError("Invalid traversal method provided.")
         return keyList
-
-    def preorder(self):
-        pass
-
-    def postorder(self):
-        pass
-
 
 # --------------- Private class methods --------------- #
 
@@ -130,13 +137,13 @@ class DSABinarySearchTree():
         if currentNode is None:
             currentHeight = -1
         else:
-            leftHight = self._recHeight(currentNode._left)
-            rightHight = self._recHeight(currentNode._right)
+            leftHeight = self._recHeight(currentNode._left)
+            rightHeight = self._recHeight(currentNode._right)
 
-            if leftHight > rightHight:
-                currentHeight = leftHight + 1
+            if leftHeight > rightHeight:
+                currentHeight = leftHeight + 1
             else:
-                currentHeight = rightHight + 1
+                currentHeight = rightHeight + 1
         return currentHeight
 
     def _minLeafDepth(self, currentNode, depth=0):
@@ -161,3 +168,16 @@ class DSABinarySearchTree():
         if currentNode._right is not None:
             keyList = self._inorder(currentNode._right, keyList)
         return keyList
+
+    def _preorder(self, currentNode, keyList):
+        keyList.insertLast(currentNode._key)
+
+        if currentNode._left is not None:
+            keyList = self._preorder(currentNode._left, keyList)
+
+        if currentNode._right is not None:
+            keyList = self._preorder(currentNode._right, keyList)
+        return keyList
+
+    def _postorder(self, currentNode, keyList):
+        pass
