@@ -20,8 +20,20 @@ class DSABinarySearchTree():
     def find(self, key):
         return self._recFind(key, self._root)
 
-    # def insert(self, key, value):
-    #     cur = self._root
+    def insert(self, key, data, currentNode):
+        updateNode = currentNode
+        if currentNode == None:
+            newNode = self._DSATreeNode(key, data)
+            updateNode = newNode
+
+        elif key == currentNode._key:
+            raise ValueError("Key already in use. Key must be unique")
+
+        elif key < currentNode._key:
+            self.insert(key, data, currentNode._left)
+
+        else:
+            self.insert(key, data, currentNode._right)
 
     #def delete(self, key):
 
@@ -30,16 +42,16 @@ class DSABinarySearchTree():
     #def height(self):
 
     def _recFind(self, key, current_node):
-        value = None
+        data = None
         if current_node == None:                                 # Case 1: not found
             raise ValueError(f"Key {key} not found")
 
         elif key == current_node._key:                           # Case 2: found
-            value = current_node._data
+            data = current_node._data
 
         elif key < current_node._key:                            # Case 3: go left
-            value = self._recFind(key, current_node._left)
+            data = self._recFind(key, current_node._left)
 
         else:                                           # Case 4: go right
-            value = self._recFind(key, current_node._right)
-        return value
+            data = self._recFind(key, current_node._right)
+        return data
