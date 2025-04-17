@@ -1,8 +1,6 @@
 #
 # Implementation of the Binary Search Tree data structure for practical 5
 #
-from adodbapi import OperationalError
-from nbformat.current import current_nbformat
 
 
 class DSABinarySearchTree():
@@ -15,13 +13,10 @@ class DSABinarySearchTree():
 
         def __str__(self):
             """Print 'Key: self._key  Data: self._data' when calling the node object"""
-            print(f"Key: {self._key}  Data: {self._data}")
+            return f"Key: {self._key}  Data: {self._data}"
 
     def __init__(self):
         self._root = None
-
-    def __str__(self):
-        return self._root
 
     def find(self, key):
         return self._recFind(key, self._root)
@@ -36,7 +31,7 @@ class DSABinarySearchTree():
 
     #def display(self):
 
-    def height(self, currentNode = None):
+    def height(self, currentNode=None):
         if currentNode is None:
             return self._recHeight(self._root)
         else:
@@ -51,20 +46,17 @@ class DSABinarySearchTree():
         else:
             if currentNode._left is not None:
                 return self.min(currentNode._left)
-            else:
-                return currentNode._key
+            return currentNode._key
 
     def max(self, currentNode = None):
         if currentNode is None:
             if self._root is None:
                 raise Exception("Binary search tree is empty")
-            else:
-                return self.max(self._root)
+            return self.max(self._root)
         else:
             if currentNode._right is not None:
                 return self.max(currentNode._right)
-            else:
-                return currentNode._key
+            return currentNode._key
 
     def balance(self):
         if self._root is None:
@@ -76,23 +68,22 @@ class DSABinarySearchTree():
 
         if height == 0:
             return 100
-        else:
-            balance = (1 - ((maxLeaf-minLeaf)/height))*100
-            return balance
+
+        balance = (1 - ((maxLeaf-minLeaf)/height))*100
+        return balance
 
 # --------------- Private class methods --------------- #
 
     def _recFind(self, key, currentNode):
-        data = None
-        if currentNode == None:                                 # Case 1: not found
+        if currentNode == None:                             # i.e. _recFind is passed a child of a leaf node
             raise ValueError(f"Key {key} not found")
-        elif key == currentNode._key:                           # Case 2: found
-            data = currentNode._data
-        elif key < currentNode._key:                            # Case 3: go left
-            data = self._recFind(key, currentNode._left)
-        else:                                           # Case 4: go right
-            data = self._recFind(key, currentNode._right)
-        return data
+
+        if key == currentNode._key:                       # Key to insert already exists in the BST
+            return currentNode._data
+        elif key < currentNode._key:                        # Go down left sub-branch
+            return self._recFind(key, currentNode._left)
+        else:                                               # Go down right sub-branch
+            return self._recFind(key, currentNode._right)
 
     def _recInsert(self, key, data, currentNode):
         if key == currentNode._key:
@@ -102,7 +93,6 @@ class DSABinarySearchTree():
                 currentNode._left = self._DSATreeNode(key, data)
             else:
                 self._recInsert(key, data, currentNode._left)
-
         else:
             if currentNode._right is None:
                 currentNode._right = self._DSATreeNode(key, data)
@@ -112,19 +102,21 @@ class DSABinarySearchTree():
     def _recHeight(self, currentNode):
         if currentNode is None:
             currentHeight = -1
+
+        leftHt = self._recHeight(currentNode._left)
+        rightHt = self._recHeight(currentNode._right)
+
+        if leftHt > rightHt:
+            currentHeight = leftHt + 1
         else:
-            leftHt = self._recHeight(currentNode._left)
-            rightHt = self._recHeight(currentNode._right)
-            if leftHt > rightHt:
-                currentHeight = leftHt + 1
-            else:
-                currentHeight = rightHt + 1
+            currentHeight = rightHt + 1
         return currentHeight
 
     def _minLeafDepth(self, currentNode, depth=0):
         if currentNode is None:
-            return 99999999
-        elif currentNode._left is None and currentNode._right is None:
+            return float("inf")
+
+        if currentNode._left is None and currentNode._right is None:
             return depth
 
         leftChild = self._minLeafDepth(currentNode._left, depth + 1)
@@ -132,8 +124,7 @@ class DSABinarySearchTree():
 
         if leftChild > rightChild:
             return rightChild
-        else:
-            return leftChild
+        return leftChild
 
     def _maxLeafDepth(self, currentNode, depth=0):
         if currentNode is None:
@@ -147,5 +138,4 @@ class DSABinarySearchTree():
 
         if leftChild > rightChild:
             return leftChild
-        else:
-            return rightChild
+        return rightChild
