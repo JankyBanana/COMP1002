@@ -1,6 +1,8 @@
 #
 # Implementation of the Binary Search Tree data structure for practical 5
 #
+from adodbapi import OperationalError
+
 
 class DSABinarySearchTree():
     class _DSATreeNode():
@@ -51,7 +53,17 @@ class DSABinarySearchTree():
 
     #def height(self):
 
-    #def min(self):
+    def min(self, currentNode=None):
+        if currentNode is None:
+            if self._root is None:
+                raise Exception("Binary search tree is empty")
+            else:
+                return self.min(self._root)
+        else:
+            if currentNode._left is not None:
+                return self.min(currentNode._left)
+            else:
+                return currentNode._key
 
     #def max(self):
 
