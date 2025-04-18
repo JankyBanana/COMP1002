@@ -3,12 +3,12 @@
 #
 
 
-import LinkedList as LL
+from Practical_5 import LinkedList as LL
 
 
 class DSABinarySearchTree():
     class _DSATreeNode():
-        def __init__(self, key, data):
+        def __init__(self, key, data=None):
             self._key = key
             self._data = data
             self._left = None
@@ -25,7 +25,7 @@ class DSABinarySearchTree():
         nodeData =  self._recFind(key, self._root)
         return nodeData._data
 
-    def insert(self, key, data):
+    def insert(self, key, data=None):
         if self._root is None:
             self._root = self._DSATreeNode(key, data)
         else:
@@ -58,7 +58,6 @@ class DSABinarySearchTree():
                 raise Exception("Binary search tree is empty")
             else:
                 return self.max(self._root)
-
         if currentNode._right is not None:
             return self.max(currentNode._right)
         else:
@@ -127,7 +126,7 @@ class DSABinarySearchTree():
                 currentNode._left = self._DSATreeNode(key, data)
             else:
                 self._recInsert(key, data, currentNode._left)
-        else:
+        elif key > currentNode._key:
             if currentNode._right is None:
                 currentNode._right = self._DSATreeNode(key, data)
             else:
