@@ -31,10 +31,6 @@ class DSABinarySearchTree():
         else:
             self._recInsert(key, data, self._root)
 
-    def delete(self, key):
-        self.find(key)
-
-
     def height(self, currentNode=None):
         if currentNode is None:
             if self._root is None:
@@ -106,6 +102,9 @@ class DSABinarySearchTree():
             else:
                 raise ValueError("Invalid traversal method provided.")
         return keyList
+
+    def delete(self, key):
+        self._root = self._recDelete(key, self._root)
 
 # --------------- Private class methods --------------- #
 
@@ -189,3 +188,28 @@ class DSABinarySearchTree():
 
         keyList.insertLast(currentNode._key)
         return keyList
+
+    def _recDelete(self, key, currentNode):
+        if currentNode is None:
+            return ValueError(f"Key {key} not found in the tree")
+
+        if key < currentNode._key:
+            currentNode._left = self._recDelete(key, currentNode._left)
+        elif key > currentNode._key:
+            currentNode._right = self._recDelete(key, currentNode._right)
+        else:
+            if currentNode._left is None:
+                return currentNode._right
+            elif currentNode._right is None:
+                return currentNode._left
+            else:
+                successor = self._sucFind(currentNode._right)
+                currentNode._key = successor._key
+                currentNode._data = successor._data
+                currentNode._right = self._recDelete(currentNode._right, successor._key)  # Removes original successor from BST
+            return currentNode
+
+    def _sucFind(self, currentNode):
+        while currentNode._left is not None:
+            currentNode = currentNode._left
+        return currentNode
