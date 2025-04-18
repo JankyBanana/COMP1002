@@ -206,8 +206,8 @@ class DSABinarySearchTree():
                 successor = self._sucFind(currentNode._right)
                 currentNode._key = successor._key
                 currentNode._data = successor._data
-                currentNode._right = self._recDelete(currentNode._right, successor._key)  # Removes original successor from BST
-            return currentNode
+                currentNode._right = self._recDelete(successor._key, currentNode._right)  # Removes original successor from BST
+        return currentNode
 
     def _sucFind(self, currentNode):
         while currentNode._left is not None:
