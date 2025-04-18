@@ -1,6 +1,7 @@
 #
-# Implementation of the linked list ADS for practical 4
+# Implementation of the linked list ADS for practical 5
 #
+
 
 class DSALinkedList():
 
