@@ -3,14 +3,14 @@
 #
 
 
-class DSALinkedList():
+class DSALinkedList:
 
     # Defining the listNode class as a private inner class of the linkedList class
     class _DSAListNode():
-        def __init__(self, data, next=None, previous=None):
-            self._data = data
-            self._next = next
-            self._prev = previous
+        def __init__(self, _data, _next=None, _previous=None):
+            self._data = _data
+            self._next = _next
+            self._prev = _previous
 
         def _getValue(self):
             return self._data
