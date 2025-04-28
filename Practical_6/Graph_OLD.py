@@ -3,11 +3,11 @@
 #
 
 
-from Practical_6 import LinkedList as LL
+import linkedlist as LL
 
 
 class DSAGraph():
-    #----------- Private inner GraphNode class -----------#
+#---------------- Private inner GraphNode class ----------------#
     class _DSAGraphVertex():
         def __init__(self, _label: str=None, _data=None):
             self._label = _label
