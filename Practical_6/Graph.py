@@ -3,7 +3,7 @@
 #
 
 
-import LinkedList as LL
+from Practical_6 import LinkedList as LL
 
 
 class DSAGraph():
@@ -49,21 +49,14 @@ class DSAGraph():
 
     #--------------------- Graph class ---------------------#
     def __init__(self):
-        self.vertices = LL.DSALinkedList()
-
-    def vertexFind(self, label: str):
-        tempList = self.vertices
-
-        for i in range(self.vertices.nodes):
-            if tempList.removeFirst()._getLabel == label:
-                return True
-        return False
+        self.vertices = LL.DSALinkedList("Vertices")
 
     def addVertex(self, label: str, data=None):
         if self.vertexFind(label):
             raise ValueError("Vertex label already in use")
-
-        self.vertices.insertLast(self._DSAGraphVertex(label, data))
+        else:
+            newVertex = self._DSAGraphVertex(label, data)
+            self.vertices.insertLast(newVertex)
 
     def addEdge(self, sourceLabel: str, sinkLabel: str):
         sourceVertex = self.getVertex(sourceLabel)
@@ -75,6 +68,17 @@ class DSAGraph():
 
         self.getVertex(sourceLabel)._addEdge(sinkLabel)
         self.getVertex(sinkLabel)._outDegree += 1
+
+    def vertexFind(self, sourceLabel: str):
+        j = self.vertices.head
+
+        if j is None:
+            return False
+
+        for i in range(self.vertices.nodes):
+            if j._data._label == sourceLabel:
+                return True
+        return False
 
     def getVertex(self, sourceLabel: str):
         tempList = self.vertices
