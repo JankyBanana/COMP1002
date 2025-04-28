@@ -7,7 +7,6 @@ import linkedlist as ll
 
 
 class DSAGraph:
-# ---------------- Private inner GraphNode class ----------------#
     class DSAGraphVertex:
         def __init__(self, label: str, data: object):
             self.label = label
@@ -17,7 +16,7 @@ class DSAGraph:
             self.out_degree = 0
             self.edges = ll.DSALinkedList()
 
-        def get_adjacent_to(self):
+        def _get_adjacent_to(self):
             next_edge = self.edges.head
             adjacent_list = ll.DSALinkedList()
 
@@ -27,7 +26,7 @@ class DSAGraph:
                 next_edge = next_edge.next
             return adjacent_list
 
-        def get_adjacent_from(self):
+        def _get_adjacent_from(self):
             next_connection = self.edges.head
             adjacent_list = ll.DSALinkedList()
 
@@ -37,7 +36,7 @@ class DSAGraph:
                 next_connection = next_connection.next
             return adjacent_list
 
-        def add_edge(self, target_label: str, direction: str="o"):
+        def _add_edge(self, target_label: str, direction: str="o"):
             if direction == "o":
                 edge = self.label + target_label
             elif direction == "i":
@@ -52,6 +51,72 @@ class DSAGraph:
 
         def clear_visited(self):
             self.visited = False
+
+    def __init__(self):
+        self.vertices = ll.DSALinkedList()
+
+    def add_vertex(self):
+        pass
+
+    def add_edge(self):
+        pass
+
+    def has_vertex(self):
+        pass
+
+    def has_edge(self):
+        pass
+
+    def vertex_count(self):
+        pass
+
+    def edge_count(self):
+        pass
+
+    def get_vertex(self):
+        pass
+
+    def get_adjacent_to(self):
+        pass
+
+    def get_adjacent_from(self):
+        pass
+
+    def is_adjacent_to(self):
+        pass
+
+    def is_adjacent_from(self):
+        pass
+
+    def display_as_list(self):
+        pass
+
+    def display_as_matrix(self):
+        pass
+
+    def degree_in(self):
+        pass
+
+    def degree_out(self):
+        pass
+
+    def has_data(self):
+        pass
+
+    def next_vertex(self):
+        pass
+
+    def sort(self):
+        pass
+
+    def depth_search(self):
+        pass
+
+    def breadth_search(self):
+        pass
+
+
+
 
 
 demo = DSAGraph.DSAGraphVertex("A", 1)
