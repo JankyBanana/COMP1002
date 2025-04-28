@@ -2,8 +2,8 @@
 # Rebuild of directional graph class implementation for practical 6
 #
 
-import linkedlist as ll
 
+import linkedlist as ll
 
 
 class DSAGraph:
@@ -55,8 +55,15 @@ class DSAGraph:
     def __init__(self):
         self.vertices = ll.DSALinkedList()
 
-    def add_vertex(self):
-        pass
+    def add_vertex(self, label: str, data: object=None):
+        next_vertex = self.vertices.head
+
+        while next_vertex is not None:
+            if next_vertex == label:
+                raise ValueError("Label is already in use by another vertex in the graph")
+            next_vertex = next_vertex.next
+
+        self.vertices.insertLast(self.DSAGraphVertex(label, data))
 
     def add_edge(self):
         pass
@@ -114,17 +121,3 @@ class DSAGraph:
 
     def breadth_search(self):
         pass
-
-
-
-
-
-demo = DSAGraph.DSAGraphVertex("A", 1)
-
-demo.edges.insertLast("AB")
-demo.edges.insertLast("AC")
-demo.edges.insertLast("DA")
-demo.edges.insertLast("EA")
-
-print(demo.get_adjacent_to().display())
-print(demo.get_adjacent_from().display())
