@@ -6,22 +6,10 @@
 import numpy as np
 
 class DSAQueue():
-    defaultSize = 100
-
-    def __init__(self, name, size = defaultSize):
+    def __init__(self, size=100):
         self.size = size
         self.queueArray = np.full(self.size, None, dtype=object)
         self.numElements = 0
-        self.name = name
-
-    def enqueue(self, value):
-        raise NotImplementedError("enqueue must be implemented in subclass")
-
-    def dequeue(self):
-        raise NotImplementedError("dequeue must be implemented in subclass")
-
-    def peek(self):
-        raise NotImplementedError("peek must be implemented in subclass")
 
     def isEmpty(self):
         if self.numElements == 0:
@@ -37,26 +25,26 @@ class DSAQueue():
 
 class ShufflingQueue(DSAQueue):
     def enqueue(self, value):
-        if self.isFull():  # Same as saying if self.isFull == True
-            raise MemoryError(f"Can't add new item as the queue, {self.name} is full")
+        if self.isFull():
+            raise MemoryError(f"Can't add new item as the queue is full")
         else:
             self.queueArray[self.numElements] = value
             self.numElements += 1
 
     def dequeue(self):
         if self.isEmpty():
-            raise IndexError(f"Can't dequeue next item as the queue, {self.name} is empty")
+            raise IndexError(f"Can't dequeue next item as the queue is empty")
         else:
-            queueNext = self.queueArray[0]
+            queue_next = self.queueArray[0]
             for i in range(1, self.numElements):
                 self.queueArray[i-1] = self.queueArray[i]
             self.queueArray[self.numElements-1] = None
             self.numElements -= 1
-            return queueNext
+            return queue_next
 
     def peek(self):
-        if self.isEmpty() == True:
-            raise IndexError(f"Can't access next item as the queue, {self.name} is empty")
+        if self.isEmpty():
+            raise IndexError(f"Can't access next item as the queue is empty")
         else:
             return self.queueArray[0]
 
@@ -68,15 +56,15 @@ class CircularQueue(DSAQueue):
 
     def enqueue(self, value):
         if self.isFull():
-            raise MemoryError(f"Can't add new item as the queue, {self.name} is full")
+            raise MemoryError(f"Can't add new item as the queue is full")
         else:
             self.queueArray[self.queueEnd] = value
             self.queueEnd = (self.queueEnd+1) % self.size
             self.numElements += 1
 
     def dequeue(self):
-        if self.isEmpty() == True:
-            raise IndexError(f"Can't dequeue next item as the queue, {self.name} is empty")
+        if self.isEmpty():
+            raise IndexError(f"Can't dequeue next item as the queue is empty")
         else:
             queueNext = self.queueArray[self.queueStart]
             self.queueArray[self.queueStart] = None
@@ -85,7 +73,7 @@ class CircularQueue(DSAQueue):
             return queueNext
 
     def peek(self):
-        if self.isEmpty() == True:
-            raise IndexError(f"Can't access next item as the queue, {self.name} is empty")
+        if self.isEmpty():
+            raise IndexError(f"Can't access next item as the queue is empty")
         else:
             return self.queueArray[self.queueStart]
