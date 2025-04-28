@@ -17,34 +17,35 @@ class DSAGraph():
             self._outDegree = 0
             self._inDegree = 0
 
-        def _getLabel(self):
+        def getLabel(self):
             return self._label
 
-        def _getData(self):
+        def getData(self):
             return self._data
 
-        def _getNeighbours(self):
+        def getNeighbours(self):
             return self._connections.values()
 
-        def _getConnections(self):
-            connectionList = LL.DSALinkedList()
-            tempList = self._connections
+        def getConnections(self):
+            connectionString = ""
+            nextVertex = self._connections.head
 
-            for i in range(self._connections.nodes):
-                connectionList.insertLast(self._label + tempList.removeFirst())
+            while nextVertex._next is not None:
+                connectionList.insertLast(self._label + nextVertex._data._label)
+                nextVertex = nextVertex._next
             return connectionList
 
-        def _addEdge(self, sink: str):
+        def addEdge(self, sink: str):
             self._inDegree += 1
             self._connections.insertLast(sink)
 
-        def setVisited(self):
+        def _setVisited(self):
             self._visited = True
 
-        def clearVisited(self):
+        def _clearVisited(self):
             self._visited = False
 
-        def getVisited(self):
+        def _getVisited(self):
             return self._visited
 
     #--------------------- Graph class ---------------------#
@@ -66,7 +67,7 @@ class DSAGraph():
         elif sourceVertex._connections.find(sinkLabel):
             raise Exception("Edge between these vertices already exists")
 
-        self.getVertex(sourceLabel)._addEdge(sinkLabel)
+        self.getVertex(sourceLabel).addEdge(sinkLabel)
         self.getVertex(sinkLabel)._outDegree += 1
 
     def vertexFind(self, sourceLabel: str):
@@ -81,12 +82,12 @@ class DSAGraph():
         return False
 
     def getVertex(self, sourceLabel: str):
-        tempList = self.vertices
+        nextVertex = self.vertices.head
 
-        for i in range(self.vertices.nodes):
-            if tempList.peekFirst()._getLabel == sourceLabel:
-                return tempList.peekFirst()
-            tempList.removeFirst()
+        while nextVertex is not None:
+            if nextVertex._data._label == sourceLabel:
+                return nextVertex._data
+            nextVertex = nextVertex._next
         raise Exception("Vertex label not found")
 
     def getVertexCount(self):
@@ -94,10 +95,10 @@ class DSAGraph():
 
     def getEdgeCount(self):
         sumOutDegree = 0
-        tempList = self.vertices
+        nextVertex = self.vertices.head
 
-        for i in range(self.vertices.nodes):
-            sumOutDegree += tempList.removeFirst()._outDegree
+        while nextVertex is not None:
+            sumOutDegree += nextVertex._data()._outDegree
 
         return sumOutDegree
 
