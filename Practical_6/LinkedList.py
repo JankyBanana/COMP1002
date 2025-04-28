@@ -1,30 +1,21 @@
 #
 # Implementation of the linked list for the Graph class, imported from practical 5
-#
+# DSALinkedList object point to head/tail listNodes
+# --> ListNodes contain data in _data and point to adjacent listNodes
 
 
 class DSALinkedList:
 
-    # Defining the listNode class as a private inner class of the linkedList class
+    #----------  Inner ListNode Class  ----------#
     class _DSAListNode():
         def __init__(self, _data, _next=None, _previous=None):
             self._data = _data
             self._next = _next
             self._prev = _previous
-
-        def _getValue(self):
-            return self._data
-
-        def _getNext(self):
-            return self._next
-
-        def _getPrev(self):
-            return self._prev
-
-    def __init__(self, name = None):
+    #---------- LinkedList Class ----------#
+    def __init__(self):
         self.head = None
         self.tail = None
-        self.name = name
         self.nodes = 0
 
     def isEmpty(self):
@@ -32,40 +23,40 @@ class DSALinkedList:
 
     def peekFirst(self):
         if self.isEmpty():
-            raise Exception(f"Cannot peek first node as the list '{self.name}' is empty")
-        return self.head._getValue()
+            raise Exception(f"Cannot peek first node as the list is empty")
+        return self.head._data
 
     def peekLast(self):
         if self.isEmpty():
-            raise Exception(f"Cannot peek last node as the list '{self.name}' is empty")
-        return self.tail._getValue()
+            raise Exception(f"Cannot peek last node as the list is empty")
+        return self.tail._data
 
     def removeFirst(self):
         if self.isEmpty():
-            raise Exception(f"Cannot remove first node as the list '{self.name}' is empty.")
+            raise Exception(f"Cannot remove first node as the list is empty.")
         elif self.head == self.tail:
-            nodeValue = self.head._getValue()
+            nodeValue = self.head._data
             self.head = None
             self.tail = None
             return nodeValue
         else:
-            nodeValue = self.head._getValue()
-            self.head = self.head._getNext()
+            nodeValue = self.head._data
+            self.head = self.head._next
             self.head._prev = None
             self.nodes -= 1
-            return nodeValue
+            return nodeValue 
 
     def removeLast(self):
         if self.isEmpty():
             raise Exception(f"Cannot remove last node as the list '{self.name}' is empty.")
         elif self.head == self.tail:
-            nodeValue = self.head._getValue()
+            nodeValue = self.head._data
             self.head = None
             self.tail = None
             return nodeValue
         else:
-            nodeValue = self.tail._getValue()
-            self.tail = self.tail._getPrev()
+            nodeValue = self.tail._data
+            self.tail = self.tail._data
             self.tail._next = None
             self.nodes -= 1
             return nodeValue
@@ -92,25 +83,20 @@ class DSALinkedList:
             self.tail = newNode
         self.nodes += 1
 
-    def values(self):
+    def display(self):
         nextNode = self.head
         valueString = ""
 
         for i in range(self.nodes):
-            valueString += f"{str(nextNode._getValue())} "
-            nextNode = nextNode._getNext()
+            valueString += f"{str(nextNode._data)} "
+            nextNode = nextNode._next
         return valueString
 
-    def listStats(self):
-        print(f"Head: {self.head._getValue()}\n"
-              f"Tail: {self.tail._getValue()}\n"
-              f"Nodes: {self.nodes}")
-        self.display()
+    def find(self, data):
+        nextNode = self.head
 
-    def find(self, value):
-        tempList = self
-
-        for i in range(self.nodes):
-            if tempList.removeFirst() == value:
-                return True
-        return False
+        while nextNode is not None:
+            if nextNode._data == data:
+                return nextNode
+            nextNode = nextNode._next
+        raise Exception("Node with given data not found")
