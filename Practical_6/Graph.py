@@ -76,11 +76,11 @@ class DSAGraph():
         self.getVertex(sourceLabel)._addEdge(sinkLabel)
         self.getVertex(sinkLabel)._outDegree += 1
 
-    def getVertex(self, label: str):
+    def getVertex(self, sourceLabel: str):
         tempList = self.vertices
 
         for i in range(self.vertices.nodes):
-            if tempList.peekFirst()._getLabel == label:
+            if tempList.peekFirst()._getLabel == sourceLabel:
                 return tempList.peekFirst()
             tempList.removeFirst()
         raise Exception("Vertex label not found")
@@ -97,20 +97,22 @@ class DSAGraph():
 
         return sumOutDegree
 
-    def getAdjacentTo(self):
-        pass
+    def getAdjacentTo(self, sourceLabel: str):
+        return self.getVertex(sourceLabel)._connections
 
     def getAdjacentFrom(self):
-        pass
+        raise NotImplementedError
 
-    def isAdjacentTo(self):
-        pass
+    def isAdjacentTo(self,sourceLabel,  sinkLabel: str):
+        if sinkLabel in self.getVertex(sinkLabel)._connections:
+            return True
+        return False
 
     def isAdjacentFrom(self):
-        pass
+        raise NotImplementedError
 
     def displayAsList(self):
-        pass
+        raise NotImplementedError
 
     def displayAsMatrix(self):
-        pass
+        raise NotImplementedError
