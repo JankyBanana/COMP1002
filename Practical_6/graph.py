@@ -66,7 +66,7 @@ class DSAGraph:
 
         self.vertices.insertLast(self.DSAGraphVertex(label, data))
 
-    def add_edge(self):
+    def add_edge(self, source, sink):
         pass
 
     def has_vertex(self):
@@ -111,20 +111,32 @@ class DSAGraph:
     def has_data(self):
         pass
 
-    def next_vertex(self, mode: str=None):
+    def next_vertex(self, mode: str=None, type: str="n"):
         if self.current_vertex is None:
             self.current_vertex = self.vertices.head
-            return self.current_vertex.data
+
+            if type == "n":
+                return self.current_vertex
+            elif type == "v":
+                return self.current_vertex.data
         elif mode == "c":
             self.current_vertex = None
             return None
 
         if self.current_vertex.next is not None:
             self.current_vertex = self.current_vertex.next
-            return self.current_vertex.data
+
+            if type == "n":
+                return self.current_vertex
+            elif type == "v":
+                return self.current_vertex.data
         else:
             self.current_vertex = self.vertices.head
-            return self.current_vertex.data
+
+            if type == "n":
+                return self.current_vertex
+            elif type == "v":
+                return self.current_vertex.data
 
     def sort(self):
         pass
