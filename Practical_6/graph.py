@@ -44,6 +44,12 @@ class DSAGraph:
             else:
                 raise ValueError("Invalid direction arg")
 
+            current_edge = self.edges.head
+            while current_edge is not None:
+                if edge == current_edge.data:
+                    raise ValueError("Edge already present")
+                current_edge = current_edge.next
+
             self.edges.insertLast(edge)
 
         def set_visited(self):
@@ -60,14 +66,36 @@ class DSAGraph:
         next_vertex = self.vertices.head
 
         while next_vertex is not None:
-            if next_vertex == label:
+            if next_vertex.data.label == label:
                 raise ValueError("Label is already in use by another vertex in the graph")
             next_vertex = next_vertex.next
 
         self.vertices.insertLast(self.DSAGraphVertex(label, data))
 
-    def add_edge(self, source, sink):
-        pass
+    def add_edge(self, source: str, sink: str):
+        next_vertex = self.vertices.head
+
+        source_exist = False
+        sink_exist = False
+
+        while next_vertex is not None:
+            if next_vertex.data.label == source:
+                source_exist = True
+                source_vertex = next_vertex
+
+            if next_vertex.data.label == sink:
+                sink_exist = True
+                sink_vertex= next_vertex
+
+            next_vertex = next_vertex.next
+
+        if not source_exist:
+            raise Exception("Source not found")
+        elif not sink_exist:
+            raise Exception("Sink not found")
+
+        source_vertex.data._add_edge(sink, "o")
+        sink_vertex.data._add_edge(source, "i")
 
     def has_vertex(self):
         pass
@@ -131,12 +159,8 @@ class DSAGraph:
             elif type == "v":
                 return self.current_vertex.data
         else:
-            self.current_vertex = self.vertices.head
-
-            if type == "n":
-                return self.current_vertex
-            elif type == "v":
-                return self.current_vertex.data
+            self.current_vertex = self.current_vertex.next
+            return self.current_vertex
 
     def sort(self):
         pass
