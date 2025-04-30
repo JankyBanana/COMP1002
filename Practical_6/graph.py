@@ -112,9 +112,12 @@ class DSAGraph:
         pass
 
     def next_vertex(self, mode: str=None):
-        if self.current_vertex is None or mode == "c":
+        if self.current_vertex is None:
             self.current_vertex = self.vertices.head
             return self.current_vertex.data
+        elif mode == "c":
+            self.current_vertex = None
+            return None
 
         if self.current_vertex.next is not None:
             self.current_vertex = self.current_vertex.next
