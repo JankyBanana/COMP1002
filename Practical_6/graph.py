@@ -54,6 +54,7 @@ class DSAGraph:
 
     def __init__(self):
         self.vertices = ll.DSALinkedList()
+        self.current_vertex = None
 
     def add_vertex(self, label: str, data: object=None):
         next_vertex = self.vertices.head
@@ -110,8 +111,17 @@ class DSAGraph:
     def has_data(self):
         pass
 
-    def next_vertex(self):
-        pass
+    def next_vertex(self, mode: str=None):
+        if self.current_vertex is None or mode == "c":
+            self.current_vertex = self.vertices.head
+            return self.current_vertex.data
+
+        if self.current_vertex.next is not None:
+            self.current_vertex = self.current_vertex.next
+            return self.current_vertex.data
+        else:
+            self.current_vertex = self.vertices.head
+            return self.current_vertex.data
 
     def sort(self):
         pass
