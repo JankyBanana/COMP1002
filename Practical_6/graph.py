@@ -126,8 +126,15 @@ class DSAGraph:
         else:
             raise Exception("Sum of in-degrees and out-degrees do not match")
 
-    def get_vertex(self):
-        pass
+    def get_vertex(self, vertex_label: str):
+        next_vertex = self.vertices.head
+
+        while next_vertex is not None:
+            if next_vertex.data.label == vertex_label:
+                return next_vertex
+            next_vertex = next_vertex.next
+
+        return ValueError("Vertex not found")
 
     def get_adjacent_to(self):
         pass
