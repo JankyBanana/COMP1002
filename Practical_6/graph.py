@@ -97,8 +97,14 @@ class DSAGraph:
         source_vertex.data._add_edge(sink, "o")
         sink_vertex.data._add_edge(source, "i")
 
-    def has_vertex(self):
-        pass
+    def has_vertex(self, vertex_label: str):
+        next_vertex = self.vertices.head
+
+        while next_vertex is not None:
+            if next_vertex.data.label == vertex_label:
+                return True
+            next_vertex = next_vertex.next
+        return False
 
     def has_edge(self):
         pass
