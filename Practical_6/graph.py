@@ -117,6 +117,68 @@ class DSAGraph:
         source_vertex.data._add_edge(sink, "o")
         sink_vertex.data._add_edge(source, "i")
 
+    def delete_vertex(self, label: str):
+        current_node = self.vertices.head
+
+        while current_node is not None:
+            edge_node = current_node.data.edges.head
+            prev_edge_node = None
+
+            while edge_node is not None:
+                edge = edge_node.data
+
+                if edge[0] == label or edge[1] == label:
+                    if edge[0] == current_node.data.label:
+                        current_node.data.out_degree -= 1
+                    elif edge[1] == current_node.data.label:
+                        current_node.data.in_degree -= 1
+
+                    current_node.data.edges.remove(edge)
+                    edge_node = current_node.data.edges.head
+                    continue
+                edge_node = edge_node.next
+            current_node = current_node.next
+
+        current_node = self.vertices.head
+        prev_node = None
+        while current_node is not None:
+            if current_node.data.label == label:
+                self.vertices.remove(current_node.data)
+                return
+            prev_node = current_node
+            current_node = current_node.next
+
+        raise ValueError("Vertex not found")
+
+    def delete_edge(self, source: str, sink: str):
+        source_vertex = self.get_vertex(source)
+        sink_vertex = self.get_vertex(sink)
+        edge_removed = False
+
+        edge_label = source + sink
+        current_edge = source_vertex.data.edges.head
+        while current_edge is not None:
+            if current_edge.data == edge_label:
+                source_vertex.data.edges.remove(edge_label)
+                source_vertex.data.out_degree -= 1
+                edge_removed = True
+                break
+
+            current_edge = current_edge.next
+
+        reverse_edge = sink + source
+        current_edge = sink_vertex.data.edges.head
+        while current_edge is not None:
+            if current_edge.data == reverse_edge:
+                sink_vertex.data.edges.remove(reverse_edge)
+                sink_vertex.data.in_degree -= 1
+                break
+
+            current_edge = current_edge.next
+
+        if not edge_removed:
+            raise ValueError("Edge not found")
+
     def has_vertex(self, vertex_label: str):
         next_vertex = self.vertices.head
 
