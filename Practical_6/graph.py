@@ -1,7 +1,7 @@
 #
 # Rebuild of directional graph class implementation for practical 6
 #
-
+from anyio import current_effective_deadline
 
 from Practical_6 import linkedlist as ll
 import numpy as np
@@ -168,19 +168,25 @@ class DSAGraph:
         return False
 
     def display_as_list(self):
-        display_string = ""
-        next_vertex = self.vertices.head
+        self.sort()
 
-        while next_vertex is not None:
-            next_edge = next_vertex.data.edges.head
+        display_list = ""
+        current_vertex = self.vertices.head
 
-            for i in range(next_vertex.data.edges.nodes):
-                if (next_edge is not None and next_edge.data not in display_string
-                        and next_edge.data[0] == next_vertex.data.label):
-                    display_string += next_edge.data + " "
-                next_edge = next_edge.next
-            next_vertex = next_vertex.next
-        print(display_string)
+        while current_vertex is not None:
+            display_list += current_vertex.data.label + " |"
+            current_edge = current_vertex.data.edges.head
+
+            while current_edge is not None:
+                if (current_edge.data[0] == current_vertex.data.label
+                    and current_edge.data[1] != current_vertex.data.label):
+                    display_list += " " + current_edge.data[1]
+                current_edge = current_edge.next
+            display_list += "\n"
+            current_vertex = current_vertex.next
+        print(f"Graph as an adjacency list:\n\n"
+              f"{display_list}")
+
 
     def display_as_matrix(self):
         self.sort()
@@ -212,7 +218,9 @@ class DSAGraph:
                 else:
                     display_matrix += " 0"
             current_vertex = current_vertex.next
-        print(f"Label lookup:\n{vertex_array}\n\n{display_matrix}")
+        print(f"Graph as adjacency matrix:\n"
+              f"Label lookup:\n{vertex_array}\n\n"
+              f"{display_matrix}")
 
     def degree_in(self):
         pass
