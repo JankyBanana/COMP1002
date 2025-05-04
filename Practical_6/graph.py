@@ -135,7 +135,18 @@ class DSAGraph:
         return False
 
     def display_as_list(self):
-        pass
+        display_string = ""
+        next_vertex = self.vertices.head
+
+        while next_vertex is not None:
+            next_edge = next_vertex.data.edges.head
+
+            while next_edge is not None and next_edge.data not in display_string:
+                display_string += next_edge.data + " "
+                next_edge = next_edge.next
+            next_vertex = next_vertex.next
+
+        print(display_string)
 
     def display_as_matrix(self):
         pass
