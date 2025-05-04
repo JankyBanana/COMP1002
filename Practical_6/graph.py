@@ -136,11 +136,10 @@ class DSAGraph:
 
         return ValueError("Vertex not found")
 
-    def get_adjacent_to(self):
-        pass
+    def get_adjacent(self, vertex_label: str):
+        vertex = self.get_vertex(vertex_label)
 
-    def get_adjacent_from(self):
-        pass
+        return vertex.data.edges
 
     def is_adjacent_to(self):
         pass
