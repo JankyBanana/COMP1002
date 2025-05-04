@@ -185,33 +185,34 @@ class DSAGraph:
     def display_as_matrix(self):
         self.sort()
 
-        vertex_array = np.zeros(self.vertices.nodes, dtype=str)
+        vertex_array = np.zeros((self.vertices.nodes, 2), dtype=str)
         size = self.vertices.nodes
         display_matrix = "  |"
         current_vertex = self.vertices.head
 
         for i in range(self.vertices.nodes):
-            display_matrix += " " + current_vertex.data.label
-            vertex_array[i] = current_vertex.data.label
+            display_matrix += f" {i}"
+            vertex_array[i, 1] = current_vertex.data.label
+            vertex_array[i, 0] = i
             current_vertex = current_vertex.next
 
         display_matrix += "\n--+" + "--"*size
         current_vertex = self.vertices.head
 
-        while current_vertex is not None:
-            display_matrix += "\n" + current_vertex.data.label + " |"
+        for i in range(self.vertices.nodes):
+            display_matrix += f"\n{i} |"
             current_vertex.data._sort()
             vertex_edges = current_vertex.data.edges.display()
 
             for i in range(self.vertices.nodes):
-                edge = current_vertex.data.label + vertex_array[i]
+                edge = current_vertex.data.label + vertex_array[i, 1]
 
                 if edge in vertex_edges:
                     display_matrix += " 1"
                 else:
                     display_matrix += " 0"
             current_vertex = current_vertex.next
-        print(display_matrix)
+        print(f"Label lookup:\n{vertex_array}\n\n{display_matrix}")
 
     def degree_in(self):
         pass
