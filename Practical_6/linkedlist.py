@@ -100,3 +100,34 @@ class DSALinkedList:
                 return nextNode
             nextNode = nextNode.next
         raise Exception("Node with given data not found")
+
+    def remove(self, value):
+        if self.isEmpty():
+            raise Exception("Cannot remove from an empty list.")
+
+        current = self.head
+
+        while current is not None:
+            if current.data == value:
+                if current == self.head:
+                    self.head = current.next
+
+                    if self.head is not None:
+                        self.head.prev = None
+                    else:
+                        self.tail = None
+                elif current == self.tail:
+                    self.tail = current.prev
+
+                    if self.tail is not None:
+                        self.tail.next = None
+                    else:
+                        self.head = None
+                else:
+                    current.prev.next = current.next
+                    current.next.prev = current.prev
+
+                self.nodes -= 1
+                return
+            current = current.next
+        raise ValueError("Value not found in the list.")
