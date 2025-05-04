@@ -1,18 +1,20 @@
 #
 # Rebuild of directional graph class implementation for practical 6
 #
-from anyio import current_effective_deadline
 
-from Practical_6 import linkedlist as ll
+
+import linkedlist as ll
 import numpy as np
+import DSAstack
+import DSAqueue
 
 
 def alpha_order(char:str):
     ascii_value = ord(char)
 
-    if ascii_value >= 97 and ascii_value <= 122:
+    if 97 <= ascii_value <= 122:
         return ascii_value - 70
-    elif ascii_value >= 65 and ascii_value <= 90:
+    elif 65 <= ascii_value <= 90:
         return ascii_value - 64
 
 class DSAGraph:
@@ -187,7 +189,6 @@ class DSAGraph:
         print(f"Graph as an adjacency list:\n\n"
               f"{display_list}")
 
-
     def display_as_matrix(self):
         self.sort()
 
@@ -273,8 +274,83 @@ class DSAGraph:
 
             current_vertex = current_vertex.next
 
-    def depth_search(self):
-        pass
+    def depth_first_search(self):
+        self.sort()
+        self.clear_visited()
 
-    def breadth_search(self):
-        pass
+        output_string = ""
+        vertex_stack = DSAstack.DSAStack()
+
+        current_vertex_node = self.vertices.head
+        while current_vertex_node is not None:
+            if not current_vertex_node.data.visited:
+                output_string = self._dfs(current_vertex_node, output_string, vertex_stack)
+            current_vertex_node = current_vertex_node.next
+
+        return output_string
+
+    def breadth_first_search(self):
+        self.sort()
+        self.clear_visited()
+
+        output_string = ""
+        vertex_queue = DSAqueue.ShufflingQueue()
+
+        current_vertex_node = self.vertices.head
+
+        while current_vertex_node is not None:
+            if not current_vertex_node.data.visited:
+                current_vertex_node.data.visited = True
+                vertex_queue.enqueue(current_vertex_node)
+
+                while not vertex_queue.is_empty():
+                    current_vertex = vertex_queue.dequeue()
+                    edge_node = current_vertex.data.edges.head
+
+                    while edge_node is not None:
+                        if edge_node.data[0] == current_vertex.data.label:
+                            sink_vertex_node = self.get_vertex(edge_node.data[1])
+
+                            if not sink_vertex_node.data.visited:
+                                sink_vertex_node.data.visited = True
+                                vertex_queue.enqueue(sink_vertex_node)
+                                output_string += current_vertex.data.label + sink_vertex_node.data.label + " "
+                        edge_node = edge_node.next
+
+            current_vertex_node = current_vertex_node.next
+
+        return output_string.strip()
+
+    def clear_visited(self):
+        current_node = self.vertices.head
+
+        while current_node is not None:
+            current_node.data.visited = False
+            current_node = current_node.next
+
+    def _dfs(self, source_vertex, output_string, vertex_stack):
+        vertex_stack.push(source_vertex)
+        source_vertex.data.visited = True
+
+        while not vertex_stack.is_empty():
+            current_vertex = vertex_stack.peek()
+            current_edge = current_vertex.data.edges.head
+
+            found_unvisited = False
+            while current_edge is not None:
+                if current_edge.data[0] == current_vertex.data.label:
+                    sink_vertex = self.get_vertex(current_edge.data[1])
+
+                    if not sink_vertex.data.visited:
+                        output_string += current_vertex.data.label + sink_vertex.data.label + " "
+                        sink_vertex.data.visited = True
+                        vertex_stack.push(sink_vertex)
+                        found_unvisited = True
+                        break
+
+                current_edge = current_edge.next
+
+            if not found_unvisited:
+                vertex_stack.pop()
+
+        return output_string
