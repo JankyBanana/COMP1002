@@ -3,8 +3,17 @@
 #
 
 
-import linkedlist as ll
+from Practical_6 import linkedlist as ll
+import numpy as np
 
+
+def alpha_order(char:str):
+    ascii_value = ord(char)
+
+    if ascii_value >= 97 and ascii_value <= 122:
+        return ascii_value - 70
+    elif ascii_value >= 65 and ascii_value <= 90:
+        return ascii_value - 64
 
 class DSAGraph:
     class DSAGraphVertex:
@@ -141,15 +150,35 @@ class DSAGraph:
         while next_vertex is not None:
             next_edge = next_vertex.data.edges.head
 
-            while next_edge is not None and next_edge.data not in display_string:
-                display_string += next_edge.data + " "
+            for i in range(next_vertex.data.edges.nodes):
+                if (next_edge is not None and next_edge.data not in display_string
+                        and next_edge.data[0] == next_vertex.data.label):
+                    display_string += next_edge.data + " "
                 next_edge = next_edge.next
             next_vertex = next_vertex.next
-
         print(display_string)
 
     def display_as_matrix(self):
-        pass
+        size = self.vertices.nodes
+        display_matrix = "  |"
+        next_vertex = self.vertices.head
+
+        while next_vertex is not None:
+            display_matrix += " " + next_vertex.data.label
+            next_vertex = next_vertex.next
+        display_matrix += "--+" + "--"*size
+
+        next_vertex = self.vertices.head
+
+        while next_vertex is not None:
+            display_matrix += next_vertex.data.label + " |"
+            next_edge = next_vertex.data.edges.head
+
+            while next_edge is not None:
+                if next_edge.data[0] == next_vertex.data.label:
+                    pass
+
+
 
     def degree_in(self):
         pass
@@ -184,7 +213,23 @@ class DSAGraph:
             return self.current_vertex
 
     def sort(self):
-        pass
+        current_vertex = self.vertices.head
+
+        while current_vertex is not None:
+            next_vertex = current_vertex.next
+            smallest_vertex = current_vertex
+
+            while next_vertex is not None:
+                if alpha_order(next_vertex.data.label) < alpha_order(smallest_vertex.data.label):
+                    smallest_vertex = next_vertex
+                next_vertex = next_vertex.next
+
+            if smallest_vertex is not current_vertex:
+                temp_data = current_vertex.data
+                current_vertex.data = smallest_vertex.data
+                smallest_vertex.data = temp_data
+
+            current_vertex = current_vertex.next
 
     def depth_search(self):
         pass
