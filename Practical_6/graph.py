@@ -39,8 +39,10 @@ class DSAGraph:
         def _add_edge(self, target_label: str, direction: str="o"):
             if direction == "o":
                 edge = self.label + target_label
+                self.out_degree += 1
             elif direction == "i":
                 edge = target_label + self.label
+                self.in_degree += 1
             else:
                 raise ValueError("Invalid direction arg")
 
@@ -110,7 +112,19 @@ class DSAGraph:
         return self.vertices.nodes
 
     def edge_count(self):
-        pass
+        next_vertex = self.vertices.head
+        in_degree_sum = 0
+        out_degree_sum = 0
+
+        while next_vertex is not None:
+            in_degree_sum = in_degree_sum + next_vertex.data.in_degree
+            out_degree_sum = out_degree_sum + next_vertex.data.out_degree
+            next_vertex = next_vertex.next
+
+        if in_degree_sum - out_degree_sum == 0:
+            return in_degree_sum
+        else:
+            raise Exception("Sum of in-degrees and out-degrees do not match")
 
     def get_vertex(self):
         pass
