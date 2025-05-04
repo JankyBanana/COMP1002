@@ -106,11 +106,8 @@ class DSAGraph:
             next_vertex = next_vertex.next
         return False
 
-    def has_edge(self):
-        pass
-
     def vertex_count(self):
-        pass
+        return self.vertices.nodes
 
     def edge_count(self):
         pass
