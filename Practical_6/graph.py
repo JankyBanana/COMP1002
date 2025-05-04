@@ -141,11 +141,16 @@ class DSAGraph:
 
         return vertex.data.edges
 
-    def is_adjacent_to(self):
-        pass
+    def is_adjacent(self, source: str, sink: str):
+        source_vertex = self.get_vertex(source)
+        next_edge = source_vertex.data.edges.head
 
-    def is_adjacent_from(self):
-        pass
+        while next_edge is not None:
+            if next_edge.data[0] == sink or next_edge.data[1] == sink:
+                return True
+
+            next_edge = next_edge.next
+        return False
 
     def display_as_list(self):
         pass
