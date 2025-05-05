@@ -55,7 +55,7 @@ class HashTable:
                 hash_index = (hash_index + 1) % self.hash_array.size
                 if hash_index == original_index:
                     stop = True
-            elif hash_entry_key == key:
+            elif self.has_key(key):
                 raise ValueError("key already in use")
             else:
                 self.hash_array[hash_index].key = key
