@@ -36,14 +36,19 @@ class HashTable:
             self.value = value
             self.state = 0  # 0 = Never used, 1 = Currently used, -1 = Previously used
 
+        def _remove(self):
+            self.key = ""
+            self.value = None
+            self.state = -1
+
     def __init__(self, size: int = 31):
         self.size = size
         self.actual_size = next_prime(self.size)
         self.hash_array = np.full(self.actual_size, fill_value=None, dtype=object)
         for i in range(self.actual_size):
-            self.hash_array[i] = self.HashEntry(value=i)
+            self.hash_array[i] = self.HashEntry(value=None)
 
-    def put(self, key: str):
+    def put(self, key: str, value: object):
         hash_index = self.hash(key)
         original_index = hash_index
         stop = False
@@ -59,6 +64,7 @@ class HashTable:
                 raise ValueError("key already in use")
             else:
                 self.hash_array[hash_index].key = key
+                self.hash_array[hash_index].value = value
                 self.hash_array[hash_index].state = 1
                 stop = True
 
@@ -85,14 +91,9 @@ class HashTable:
 
     def remove(self, key: str):
         if not self.has_key(key):
-            return False
-
-        for i in range(self.hash_array.size):
-            hash_element = self.hash_array[i]
-
-            if hash_element.key == key:
-                hash_element.key = ""
-                hash_element.state = -1
+            raise ValueError("key not found")
+        else:
+            self.find(key)._remove()
 
     def has_key(self, key: str):
         for i in range(self.hash_array.size):
@@ -108,7 +109,7 @@ class HashTable:
             if self.hash_array[i].key == key:
                 return self.hash_array[i]
 
-        return False
+        return None
 
     def display(self):
         for i in range(self.hash_array.size):
