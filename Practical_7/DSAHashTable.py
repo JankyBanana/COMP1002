@@ -34,7 +34,7 @@ class HashTable:
         def __init__(self, key: str = "", value: object = None):
             self.key = key
             self.value = value
-            self.state = 0          # 0 = Never used, 1 = Currently used, -1 = Previously used
+            self.state = 0  # 0 = Never used, 1 = Currently used, -1 = Previously used
 
     def __init__(self, size: int = 31):
         self.size = size
@@ -43,8 +43,8 @@ class HashTable:
         for i in range(self.actual_size):
             self.hash_array[i] = self.HashEntry(value=i)
 
-    def put(self, key):
-        hash_index = self.hash(str(key))
+    def put(self, key: str):
+        hash_index = self.hash(key)
         original_index = hash_index
         stop = False
 
@@ -62,8 +62,8 @@ class HashTable:
                 self.hash_array[hash_index].state = 1
                 stop = True
 
-    def get(self, key):
-        hash_index = self.hash(str(key))
+    def get(self, key: str):
+        hash_index = self.hash(key)
         original_index = hash_index
         found = False
         stop = False
@@ -86,8 +86,12 @@ class HashTable:
     def remove(self):
         pass
 
-    def has_key(self):
-        pass
+    def has_key(self, key: str):
+        for i in range(self.hash_array.size):
+            hash_element = self.hash_array[i]
+            if hash_element.key == key:
+                return True
+        return False
 
     def find(self):
         pass
