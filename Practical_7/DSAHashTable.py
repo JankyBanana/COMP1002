@@ -93,8 +93,11 @@ class HashTable:
                 return True
         return False
 
-    def find(self):
-        pass
+    def find(self, key: str):  # Returns the HashElement object with the given key
+        for i in range(self.hash_array.size):
+            if self.hash_array[i].key == key:
+                return self.hash_array[i]
+        return False
 
     def display(self):
         for i in range(self.hash_array.size):
