@@ -44,8 +44,12 @@ class HashTable:
         for i in range(self.actual_size):
             self.hash_array[i] = self.HashEntry(value=i)
 
+    def put(self, key: str):
+        hash_index = self.hash(key)
+        self.hash_array[hash_index].key = key
+
     def get(self, key: str):
-        hash_index = self.strange_hash(key)
+        hash_index = self.hash(key)
         original_index = hash_index
         found = False
         stop = False
@@ -66,12 +70,20 @@ class HashTable:
 
         return self.hash_array[hash_index].value
 
+    def remove(self):
+        pass
+
+    def has_key(self):
+        pass
+
+    def find(self):
+        pass
+
     @staticmethod
-    def strange_hash(key: str):
+    def hash(key: str):
         hash_index = 0
 
         for i in range(len(key)):
             hash_index = (31 * hash_index) + ord(key[i])
 
         return hash_index % 31
-
