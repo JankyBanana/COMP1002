@@ -4,14 +4,13 @@
 
 
 import numpy as np
-from pandas.core.util.hashing import hash_array
 
 
 def next_prime(start_value: int):
     if start_value % 2 == 0:
         prime_value = start_value - 1
     else:
-        prime_value = start_value
+        prime_value = start_value - 2
 
     is_prime = False
 
@@ -35,9 +34,9 @@ class HashTable:
         def __init__(self, key: str = "", value: object = None):
             self.key = key
             self.value = value
-            self.used = 0
+            self.state = 0          # 0 = Never used, 1 = Currently used, -1 = Previously used
 
-    def __init__(self, size: int):
+    def __init__(self, size: int = 31):
         self.size = size
         self.actual_size = next_prime(self.size)
         self.hash_array = np.full(self.actual_size, fill_value=None, dtype=object)
@@ -46,7 +45,22 @@ class HashTable:
 
     def put(self, key):
         hash_index = self.hash(str(key))
-        self.hash_array[hash_index].key = key
+        original_index = hash_index
+        stop = False
+
+        while not stop:
+            hash_entry_key = self.hash_array[hash_index].key
+
+            if hash_entry_key != "":
+                hash_index = (hash_index + 1) % self.hash_array.size
+                if hash_index == original_index:
+                    stop = True
+            elif hash_entry_key == key:
+                raise ValueError("key already in use")
+            else:
+                self.hash_array[hash_index].key = key
+                self.hash_array[hash_index].state = 1
+                stop = True
 
     def get(self, key):
         hash_index = self.hash(str(key))
@@ -55,13 +69,12 @@ class HashTable:
         stop = False
 
         while not found and not stop:
-            if self.hash_array[hash_index] == 0 and not stop:
+            if self.hash_array[hash_index].state == 0:
                 stop = True
             elif self.hash_array[hash_index].key == key:
                 found = True
             else:
                 hash_index = (hash_index + 1) % self.hash_array.size
-
                 if hash_index == original_index:
                     stop = True
 
@@ -78,6 +91,11 @@ class HashTable:
 
     def find(self):
         pass
+
+    def display(self):
+        for i in range(self.hash_array.size):
+            hash_entry = self.hash_array[i]
+            print(f"Key: {hash_entry.key} Value: {hash_entry.value}")
 
     @staticmethod
     def hash(key: str):
