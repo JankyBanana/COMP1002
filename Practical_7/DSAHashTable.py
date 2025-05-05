@@ -83,20 +83,31 @@ class HashTable:
 
         return self.hash_array[hash_index].value
 
-    def remove(self):
-        pass
+    def remove(self, key: str):
+        if not self.has_key(key):
+            return False
+
+        for i in range(self.hash_array.size):
+            hash_element = self.hash_array[i]
+
+            if hash_element.key == key:
+                hash_element.key = ""
+                hash_element.state = -1
 
     def has_key(self, key: str):
         for i in range(self.hash_array.size):
             hash_element = self.hash_array[i]
+
             if hash_element.key == key:
                 return True
+
         return False
 
     def find(self, key: str):  # Returns the HashElement object with the given key
         for i in range(self.hash_array.size):
             if self.hash_array[i].key == key:
                 return self.hash_array[i]
+
         return False
 
     def display(self):
