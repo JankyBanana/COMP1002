@@ -71,9 +71,9 @@ while 1:
         elif inputs[0] == "DAM":
             demo.display_as_matrix()
         elif inputs[0] == "BFS":
-            demo.breadth_first_search()
+            print(demo.breadth_first_search())
         elif inputs[0] == "DFS":
-            demo.depth_first_search()
+            print(demo.depth_first_search())
         elif inputs[0] == "EXIT":
             break
         else:
