@@ -44,12 +44,12 @@ class HashTable:
         for i in range(self.actual_size):
             self.hash_array[i] = self.HashEntry(value=i)
 
-    def put(self, key: str):
-        hash_index = self.hash(key)
+    def put(self, key):
+        hash_index = self.hash(str(key))
         self.hash_array[hash_index].key = key
 
-    def get(self, key: str):
-        hash_index = self.hash(key)
+    def get(self, key):
+        hash_index = self.hash(str(key))
         original_index = hash_index
         found = False
         stop = False
