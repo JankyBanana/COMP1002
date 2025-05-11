@@ -57,7 +57,7 @@ class HashTable:
             hash_entry_key = self.hash_array[hash_index].key
 
             if hash_entry_key != "":
-                hash_index = (hash_index + 1) % self.hash_array.size
+                hash_index = (hash_index + self.step_hash(self.hash(key))) % self.hash_array.size
                 if hash_index == original_index:
                     stop = True
             elif self.has_key(key):
@@ -80,7 +80,7 @@ class HashTable:
             elif self.hash_array[hash_index].key == key:
                 found = True
             else:
-                hash_index = (hash_index + 1) % self.hash_array.size
+                hash_index = (hash_index + self.step_hash(self.hash(key))) % self.hash_array.size
                 if hash_index == original_index:
                     stop = True
 
@@ -124,3 +124,6 @@ class HashTable:
             hash_index = (31 * hash_index) + ord(key[i])
 
         return hash_index % 31
+
+    def step_hash(self, key):
+        return self.actual_size - ( key % self.actual_size)
