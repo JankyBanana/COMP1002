@@ -6,7 +6,7 @@
 import numpy as np
 
 
-def next_prime(start_value: int):
+def next_prime(start_value):
     if start_value % 2 == 0:
         prime_value = start_value - 1
     else:
@@ -43,9 +43,9 @@ class HashTable:
 
     def __init__(self, size: int = 31):
         self.size = size
-        self.actual_size = next_prime(self.size)
-        self.hash_array = np.full(self.actual_size, fill_value=None, dtype=object)
-        for i in range(self.actual_size):
+        self.initial_size = next_prime(self.size)
+        self.hash_array = np.full(self.initial_size, fill_value=None, dtype=object)
+        for i in range(self.initial_size):
             self.hash_array[i] = self.HashEntry(value=None)
 
     def put(self, key: str, value: object):
@@ -93,6 +93,7 @@ class HashTable:
         if not self.has_key(key):
             raise ValueError("key not found")
         else:
+            print(f"Removing key {key}\n")
             self.find(key)._remove()
 
     def has_key(self, key: str):
@@ -126,4 +127,37 @@ class HashTable:
         return hash_index % 31
 
     def step_hash(self, key):
-        return self.actual_size - ( key % self.actual_size)
+        return self.initial_size - ( key % self.initial_size)
+
+    def elements(self):
+        element_count = 0
+
+        for i in range(self.hash_array.size):
+            if self.hash_array[i].value is not None:
+                element_count += 1
+
+        return element_count
+
+    def load_factor(self):
+        return self.elements()/self.hash_array.size
+
+    def resize(self):
+        if self.load_factor() > 0.7:
+            new_size = next_prime(int(self.hash_array.size * 1.5))
+        elif self.load_factor() < 0.4:
+            new_size = next_prime(int(self.hash_array.size / 1.5))
+        else:
+            print("Resize not required")
+
+        new_array = np.full(new_size, fill_value=None, dtype=object)
+        for i in range(new_size):
+            new_array[i] = self.HashEntry(value=None)
+
+        if self.load_factor() > 0.7:
+            for i in range(self.hash_array.size):
+                new_array[i] = self.hash_array[i]
+        elif self.load_factor() < 0.4:
+            for i in range(new_array.size):
+                new_array[i] = self.hash_array[i]
+
+        self.hash_array = new_array
