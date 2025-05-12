@@ -64,7 +64,8 @@ class DSAHashTable:
         self.hash_array[hash_index]._put(key, data)
 
     def get(self, key: str):
-        pass
+        hash_index = self._find(key)
+        return self.hash_array[hash_index]._get()
 
     def remove(self, key: str):
         pass
@@ -110,7 +111,9 @@ class DSAHashTable:
             hash_element = self.hash_array[hash_index]
 
             if hash_element.state == 1:
-                if hash_index == original_index:
+                if hash_element.key == key:
+                    return hash_index
+                elif hash_index == original_index:
                     stop = True
                 else:
                     probe_step = self.step_hash(key)
