@@ -72,7 +72,10 @@ class DSAHashTable:
         self.hash_array[hash_index]._remove()
 
     def has_key(self, key: str):
-        pass
+        if self._find(key) is not None:
+            return True
+        else:
+            return False
 
     def hash(self, key: str):
         hash_index = 0
