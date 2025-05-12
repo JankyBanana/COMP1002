@@ -59,7 +59,12 @@ class DSAHashTable:
 
     def step_hash(self, key: str):
         max_step = self.actual_size
-        probe_step = max_step - (ord(key) % max_step)
+        string_ascii = 0
+
+        for i in range(len(key)):
+            string_ascii += ord(key[i])
+
+        probe_step = max_step - (string_ascii % max_step)
         return probe_step
 
     def display(self):
