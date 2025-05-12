@@ -60,22 +60,8 @@ class DSAHashTable:
             self.hash_array[i] = DSAHashEntry()
 
     def put(self, key: str, data: object):
-        hash_index = self.hash(key)
-        original_index = hash_index
-        stop = False
-
-        while not stop:
-            hash_element = self.hash_array[hash_index]
-
-            if hash_element.state == 1:
-                if hash_index == original_index:
-                    stop = True
-                else:
-                    probe_step = self.step_hash(key)
-                    hash_index += probe_step
-            else:
-                hash_element._put(key, data)
-                stop = True
+        hash_index = self._find(key)
+        self.hash_array[hash_index]._put(key, data)
 
     def get(self, key: str):
         pass
@@ -115,5 +101,19 @@ class DSAHashTable:
     def resize(self):
         pass
 
-    def _find(self):
-        pass
+    def _find(self, key: str):
+        hash_index = self.hash(key)
+        original_index = hash_index
+        stop = False
+
+        while not stop:
+            hash_element = self.hash_array[hash_index]
+
+            if hash_element.state == 1:
+                if hash_index == original_index:
+                    stop = True
+                else:
+                    probe_step = self.step_hash(key)
+                    hash_index += probe_step
+            else:
+                return hash_index
