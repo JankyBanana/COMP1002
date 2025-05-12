@@ -7,13 +7,13 @@ import numpy as np
 
 
 def next_prime(start_value):
+    start_value = int(start_value)+1
     if start_value % 2 == 0:
         prime_value = start_value - 1
     else:
         prime_value = start_value - 2
 
     is_prime = False
-
     while not is_prime:
         prime_value += 2
         divisor = 3
@@ -31,22 +31,20 @@ def next_prime(start_value):
 
 class HashTable:
     class HashEntry:
-        def __init__(self, key: str = "", value: object = None):
+        def __init__(self, key: str = None, value: object = None):
             self.key = key
             self.value = value
             self.state = 0  # 0 = Never used, 1 = Currently used, -1 = Previously used
 
         def _remove(self):
-            self.key = ""
+            self.key = None
             self.value = None
             self.state = -1
 
     def __init__(self, size: int = 31):
         self.size = size
         self.initial_size = next_prime(self.size)
-        self.hash_array = np.full(self.initial_size, fill_value=None, dtype=object)
-        for i in range(self.initial_size):
-            self.hash_array[i] = self.HashEntry(value=None)
+        self.hash_array = np.full(shape=self.initial_size, fill_value=self.HashEntry(None, None), dtype=object)
 
     def put(self, key: str, value: object):
         hash_index = self.hash(key)
@@ -152,12 +150,5 @@ class HashTable:
         new_array = np.full(new_size, fill_value=None, dtype=object)
         for i in range(new_size):
             new_array[i] = self.HashEntry(value=None)
-
-        if self.load_factor() > 0.7:
-            for i in range(self.hash_array.size):
-                new_array[i] = self.hash_array[i]
-        elif self.load_factor() < 0.4:
-            for i in range(new_array.size):
-                new_array[i] = self.hash_array[i]
 
         self.hash_array = new_array
