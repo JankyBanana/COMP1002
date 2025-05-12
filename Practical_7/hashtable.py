@@ -7,7 +7,7 @@ import numpy as np
 
 
 def next_prime(start_value):
-    start_value = int(start_value) + 1
+    start_value = int(start_value)
 
     if start_value % 2 == 0:
         prime_value = start_value - 1
@@ -31,14 +31,51 @@ def next_prime(start_value):
     return prime_value
 
 
+class DSAHashEntry:
+    def __init__(self):
+        self.key: str = None
+        self.data: object = None
+        self.state = 0  # 0 = Never used, 1 = Currently used, -1 = Previously used
+
+    def _put(self, key: str, data: object):
+        self.key = key
+        self.data = data
+        self.state = 1
+
+    def _get(self):
+        return self.data
+
+    def _remove(self):
+        self.key: str = None
+        self.data: object = None
+        self.state = -1
+
 class DSAHashTable:
     def __init__(self, init_size: int = 31):
         self.init_size = init_size
         self.actual_size = next_prime(init_size)
-        self.hash_array = np.full(shape=self.actual_size, fill_value=DSAHashEntry(), dtype=object)
+        self.hash_array = np.full(shape=self.actual_size, fill_value=None, dtype=object)
+
+        for i in range(self.actual_size):
+            self.hash_array[i] = DSAHashEntry()
 
     def put(self, key: str, data: object):
-        pass
+        hash_index = self.hash(key)
+        original_index = hash_index
+        stop = False
+
+        while not stop:
+            hash_element = self.hash_array[hash_index]
+
+            if hash_element.state == 1:
+                if hash_index == original_index:
+                    stop = True
+                else:
+                    probe_step = self.step_hash(key)
+                    hash_index += probe_step
+            else:
+                hash_element._put(key, data)
+                stop = True
 
     def get(self, key: str):
         pass
@@ -68,7 +105,9 @@ class DSAHashTable:
         return probe_step
 
     def display(self):
-        pass
+        for i in range(self.hash_array.size):
+            hash_entry = self.hash_array[i]
+            print(f"Key: {hash_entry.key} Value: {hash_entry.value}")
 
     def load_factor(self):
         pass
@@ -78,23 +117,3 @@ class DSAHashTable:
 
     def _find(self):
         pass
-
-
-class DSAHashEntry:
-    def __init__(self):
-        self.key: str = None
-        self.data: object = None
-        self.state = 0  # 0 = Never used, 1 = Currently used, -1 = Previously used
-
-    def _put(self, key: str, data: object):
-        self.key = key
-        self.data = data
-        self.state = 1
-
-    def _get(self):
-        return self.data
-
-    def _remove(self):
-        self.key: str = None
-        self.data: object = None
-        self.state = -1
