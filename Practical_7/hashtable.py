@@ -95,7 +95,6 @@ class DSAHashTable:
         except:
             return False
 
-
     def hash(self, key: str):
         hash_index = 0
 
@@ -154,8 +153,6 @@ class DSAHashTable:
 
                 while self.hash_array[hash_index].state == 1:
                     hash_index = (hash_index + probe_step) % self.actual_size
-                    if hash_index == original_index:
-                        raise ValueError("Hash table is full")
 
                 self.hash_array[hash_index]._put(key, data)
 
