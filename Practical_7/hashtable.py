@@ -68,7 +68,8 @@ class DSAHashTable:
         return self.hash_array[hash_index]._get()
 
     def remove(self, key: str):
-        pass
+        hash_index = self._find(key)
+        self.hash_array[hash_index]._remove()
 
     def has_key(self, key: str):
         pass
