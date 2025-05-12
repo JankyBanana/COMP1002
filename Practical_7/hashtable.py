@@ -46,8 +46,8 @@ class DSAHashEntry:
         return self.data
 
     def _remove(self):
-        self.key: str = None
-        self.data: object = None
+        self.key = None
+        self.data = None
         self.state = -1
 
 
@@ -56,27 +56,45 @@ class DSAHashTable:
         self.init_size = init_size
         self.actual_size = next_prime(init_size)
         self.hash_array = np.full(shape=self.actual_size, fill_value=None, dtype=object)
-
         for i in range(self.actual_size):
             self.hash_array[i] = DSAHashEntry()
+        self.num_elements = 0
 
     def put(self, key: str, data: object):
         hash_index = self._find(key)
+
+        if self.hash_array[hash_index].state != 1:
+            self.num_elements += 1
+
         self.hash_array[hash_index]._put(key, data)
+        lf = self.load_factor()
+
+        if lf > 0.7 or lf < 0.4:
+            self.resize()
 
     def get(self, key: str):
         hash_index = self._find(key)
+        if self.hash_array[hash_index].state != 1:
+            raise KeyError(f"Key '{key}' not found")
         return self.hash_array[hash_index]._get()
 
     def remove(self, key: str):
         hash_index = self._find(key)
-        self.hash_array[hash_index]._remove()
+        if self.hash_array[hash_index].state == 1:
+            self.num_elements -= 1
+            self.hash_array[hash_index]._remove()
+
+        lf = self.load_factor()
+        if lf > 0.7 or lf < 0.4:
+            self.resize()
 
     def has_key(self, key: str):
-        for i in range(self.actual_size):
-            if self.hash_array[i].key == key:
-                return True
-        return False
+        try:
+            hash_index = self._find(key)
+            return self.hash_array[hash_index].state == 1
+        except:
+            return False
+
 
     def hash(self, key: str):
         hash_index = 0
@@ -99,36 +117,61 @@ class DSAHashTable:
     def display(self):
         for i in range(self.hash_array.size):
             hash_entry = self.hash_array[i]
-            print(f"Key: {hash_entry.key} Data: {hash_entry.data}")
+            print(f"Key: {hash_entry.key} Data: {hash_entry.data} Index: {i} State: {hash_entry.state}")
         print(f'Load factor: {self.load_factor()}\n')
 
     def load_factor(self):
-        num_elements = 0
-
-        for i in range(self.actual_size):
-            hash_element = self.hash_array[i]
-
-            if hash_element.key is not None:
-                num_elements += 1
-
-        return num_elements / self.actual_size
+        return self.num_elements / self.actual_size
 
     def resize(self):
-        pass
+        lf = self.load_factor()
+
+        if lf > 0.7:
+            new_size = int(self.actual_size * 1.5)
+            new_actual_size = next_prime(new_size)
+        elif lf < 0.4:
+            new_size = int(self.actual_size / 1.5)
+            new_actual_size = next_prime(new_size)
+        else:
+            return
+
+        old_array = self.hash_array
+        old_size = self.actual_size
+
+        self.actual_size = new_actual_size
+        self.hash_array = np.full(shape=self.actual_size, fill_value=None, dtype=object)
+        for i in range(self.actual_size):
+            self.hash_array[i] = DSAHashEntry()
+
+        for i in range(old_size):
+            if old_array[i].state == 1:
+                key = old_array[i].key
+                data = old_array[i].data
+
+                hash_index = self.hash(key)
+                probe_step = self.step_hash(key)
+                original_index = hash_index
+
+                while self.hash_array[hash_index].state == 1:
+                    hash_index = (hash_index + probe_step) % self.actual_size
+                    if hash_index == original_index:
+                        raise ValueError("Hash table is full")
+
+                self.hash_array[hash_index]._put(key, data)
 
     def _find(self, key: str):
         hash_index = self.hash(key)
+        probe_step = self.step_hash(key)
         original_index = hash_index
-        stop = False
 
-        while not stop:
-            if self.hash_array[hash_index].state == 1:
-                probe_step = self.step_hash(key)
-                hash_index = (hash_index + probe_step) % self.actual_size
+        while True:
+            hash_entry = self.hash_array[hash_index]
 
-                if self.hash_array[hash_index].key == key:
-                    return hash_index
-                elif hash_index == original_index:
-                    stop = True
-            else:
+            if hash_entry.state == 0:
                 return hash_index
+            elif hash_entry.state == 1 and hash_entry.key == key:
+                return hash_index
+            else:
+                hash_index = (hash_index + probe_step) % self.actual_size
+                if hash_index == original_index:
+                    raise RuntimeError("Hashtable full or key not found.")
