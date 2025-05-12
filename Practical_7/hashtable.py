@@ -101,7 +101,16 @@ class DSAHashTable:
             print(f"Key: {hash_entry.key} Value: {hash_entry.value}")
 
     def load_factor(self):
-        pass
+        num_elements = 0
+
+
+        for i in range(self.actual_size):
+            hash_element = self.hash_array[i]
+
+            if hash_element.key is not None:
+                num_elements += 1
+
+        return num_elements/self.actual_size
 
     def resize(self):
         pass
