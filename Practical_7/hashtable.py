@@ -50,6 +50,7 @@ class DSAHashEntry:
         self.data: object = None
         self.state = -1
 
+
 class DSAHashTable:
     def __init__(self, init_size: int = 31):
         self.init_size = init_size
@@ -72,10 +73,10 @@ class DSAHashTable:
         self.hash_array[hash_index]._remove()
 
     def has_key(self, key: str):
-        if self._find(key) is not None:
-            return True
-        else:
-            return False
+        for i in range(self.actual_size):
+            if self.hash_array[i].key == key:
+                return True
+        return False
 
     def hash(self, key: str):
         hash_index = 0
@@ -98,11 +99,11 @@ class DSAHashTable:
     def display(self):
         for i in range(self.hash_array.size):
             hash_entry = self.hash_array[i]
-            print(f"Key: {hash_entry.key} Value: {hash_entry.value}")
+            print(f"Key: {hash_entry.key} Data: {hash_entry.data}")
+        print(f'Load factor: {self.load_factor()}\n')
 
     def load_factor(self):
         num_elements = 0
-
 
         for i in range(self.actual_size):
             hash_element = self.hash_array[i]
@@ -110,7 +111,7 @@ class DSAHashTable:
             if hash_element.key is not None:
                 num_elements += 1
 
-        return num_elements/self.actual_size
+        return num_elements / self.actual_size
 
     def resize(self):
         pass
@@ -121,15 +122,13 @@ class DSAHashTable:
         stop = False
 
         while not stop:
-            hash_element = self.hash_array[hash_index]
+            if self.hash_array[hash_index].state == 1:
+                probe_step = self.step_hash(key)
+                hash_index = (hash_index + probe_step) % self.actual_size
 
-            if hash_element.state == 1:
-                if hash_element.key == key:
+                if self.hash_array[hash_index].key == key:
                     return hash_index
                 elif hash_index == original_index:
                     stop = True
-                else:
-                    probe_step = self.step_hash(key)
-                    hash_index += probe_step
             else:
                 return hash_index
