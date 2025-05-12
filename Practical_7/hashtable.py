@@ -151,10 +151,17 @@ class DSAHashTable:
                 probe_step = self.step_hash(key)
                 original_index = hash_index
 
-                while self.hash_array[hash_index].state == 1:
-                    hash_index = (hash_index + probe_step) % self.actual_size
+                while True:
+                    hash_entry = self.hash_array[hash_index]
 
-                self.hash_array[hash_index]._put(key, data)
+                    if hash_entry.state == 0:
+                        return hash_index
+                    elif hash_entry.state == 1 and hash_entry.key == key:
+                        return hash_index
+                    else:
+                        hash_index = (hash_index + probe_step) % self.actual_size
+                        if hash_index == original_index:
+                            raise RuntimeError("Hashtable full or key not found.")
 
     def _find(self, key: str):
         hash_index = self.hash(key)
