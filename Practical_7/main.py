@@ -6,33 +6,47 @@
 import hashtable as ht
 
 csv_hash = ht.DSAHashTable()
-
 csv_data = open('RandomNames7000.csv', 'r')
-line = csv_data.readline()
-increment = 0
-while line:
+line_number = 0
+
+while True:
+    line = csv_data.readline()
+    if not line:
+        break
+
+    line_number += 1
+
     key = ''
     data = ''
     comma_index = 0
     comma_found = False
 
-    while not comma_found:
-        for i in range(len(line)):
-            if line[i] != ',':
-                data += line[i]
-                comma_index += 1
-            else:
-                comma_found = True
-                break
+    for i in range(len(line)):
+        if line[i] == ',':
+            comma_found = True
+            comma_index = i
+            break
 
-    for i in range(comma_index+1, len(line)-1):
+    for i in range(comma_index):
+        data += line[i]
+
+    for i in range(comma_index + 1, len(line) - 1):
         key += line[i]
-    print(f"Key: {key} Data: {data}\n")
-    csv_hash.put(key, data)
 
-    print(increment, line)
-    increment += 1
-    line = csv_data.readline()
+    csv_hash.put(key, data)
+    print(f"Line number: {line_number} Line: {line}Key: {key} Data: {data}\n")
+csv_data.close()
+
+print(csv_hash.num_elements)
+
+with open('demotext.txt', 'w') as f:
+    csv_string = ''
+
+    for i in range(csv_hash.actual_size):
+        hash_element = csv_hash.hash_array[i]
+        csv_string += f'{hash_element.data},{hash_element.key}\n'
+    f.write(csv_string)
+f.close()
 
 # Code test suite
 # demo = ht.DSAHashTable()
