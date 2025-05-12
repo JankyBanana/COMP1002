@@ -3,14 +3,19 @@
 #
 
 
+import numpy as np
+
+
 def next_prime(start_value):
     start_value = int(start_value) + 1
+
     if start_value % 2 == 0:
         prime_value = start_value - 1
     else:
         prime_value = start_value - 2
 
     is_prime = False
+
     while not is_prime:
         prime_value += 2
         divisor = 3
@@ -29,24 +34,33 @@ def next_prime(start_value):
 class DSAHashTable:
     def __init__(self, init_size: int = 31):
         self.init_size = init_size
+        self.actual_size = next_prime(init_size)
+        self.hash_array = np.full(shape=self.actual_size, fill_value=DSAHashEntry(), dtype=object)
 
-    def put(self):
+    def put(self, key: str, data: object):
         pass
 
-    def get(self):
+    def get(self, key: str):
         pass
 
-    def remove(self):
+    def remove(self, key: str):
         pass
 
-    def has_key(self):
+    def has_key(self, key: str):
         pass
 
-    def hash(self):
-        pass
+    def hash(self, key: str):
+        hash_index = 0
 
-    def step_hash(self):
-        pass
+        for i in range(len(key)):
+            hash_index += ord(key[i])
+
+        return hash_index % self.actual_size
+
+    def step_hash(self, key: str):
+        max_step = self.actual_size
+        probe_step = max_step - (ord(key) % max_step)
+        return probe_step
 
     def display(self):
         pass
