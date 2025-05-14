@@ -20,7 +20,7 @@ class DSAHeap:
 
     def add(self, priority: int, data: object):
         if self.count == self.size:
-            raise OverflowError("Cannot add to a full heap array")
+            raise IndexError("Cannot add to a full heap array")
         elif self.count == 0:
             self.heap_array[0] = DSAHeapEntry(priority, data)
             self.count += 1
@@ -31,7 +31,18 @@ class DSAHeap:
             self.count += 1
 
     def remove(self):
-        pass
+        if self.count == 0:
+            raise IndexError("Cannot remove from an empty heap array")
+        elif self.count == 1:
+            top = self.heap_array[0]
+            self.heap_array[0] = None
+            self.count -= 1
+            return top
+        else:
+            self.count -= 1
+            top = self.heap_array[0]
+            self.heap_array[0] = self.heap_array[self.count]
+            self.heap_array[self.count] = None
 
     def display(self):
         print("Displaying heap array.")
@@ -46,15 +57,32 @@ class DSAHeap:
                 temp = heap_array[parent_idx]
                 heap_array[parent_idx] = heap_array[current_idx]
                 heap_array[current_idx] = temp
-
                 return self._trickle_up(parent_idx, heap_array)
             else:
                 return heap_array
         else:
             return heap_array
 
-    def _trickle_down(self, index: int):
-        pass
+    def _trickle_down(self, current_idx, heap_array):
+        left_child = current_idx * 2 + 1
+        right_child = left_child + 1
+
+        if left_child < self.count:
+            bigger_child = left_child
+
+            if right_child < self.count:
+                if heap_array[left_child].priority < heap_array[right_child].priority:
+                    bigger_child = right_child
+
+            if heap_array[bigger_child].priority > heap_array[current_idx].priority:
+                temp = heap_array[bigger_child]
+                heap_array[bigger_child] = heap_array[current_idx]
+                heap_array[current_idx] = temp
+                return self._trickle_down(bigger_child, heap_array)
+            else:
+                return heap_array
+        else:
+            return heap_array
 
 
 def heat_sort(array):
