@@ -39,12 +39,11 @@ csv_data.close()
 
 print(csv_hash.num_elements)
 
-with open('demotext.txt', 'w') as f:
+with open('RandomNames7000_Hashed.csv', 'w') as f:
     csv_string = ''
 
-    for i in range(csv_hash.actual_size):
-        hash_element = csv_hash.hash_array[i]
-        csv_string += f'{hash_element.data},{hash_element.key}\n'
+    for entry in csv_hash.hash_array:
+        csv_string += f'{entry.data},{entry.key}\n'
     f.write(csv_string)
 
 # Code test suite
