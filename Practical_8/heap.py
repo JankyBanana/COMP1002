@@ -86,6 +86,19 @@ class DSAHeap:
         else:
             return heap_array
 
+    def heapify(self, array):
+        last_parent = int((self.count / 2) - 1)
 
-def heat_sort(array):
-    pass
+        for i in range(last_parent, -1, -1):
+            array = self._trickle_down(i, array)
+        return array
+
+
+    def heap_sort(self, array):
+        heap_array = self.heapify(array)
+
+        for i in range(self.count - 1, 0, -1):
+            temp = heap_array[i]
+            heap_array[i] = heap_array[0]
+            heap_array[0] = temp
+            heap_array = self._trickle_down(0, heap_array)
