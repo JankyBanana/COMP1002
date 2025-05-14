@@ -43,6 +43,8 @@ class DSAHeap:
             top = self.heap_array[0]
             self.heap_array[0] = self.heap_array[self.count]
             self.heap_array[self.count] = None
+            self.heap_array = self._trickle_down(0, self.heap_array)
+            return top
 
     def display(self):
         print("Displaying heap array.")
