@@ -8,7 +8,7 @@ import numpy as np
 
 class DSAHeapEntry:
     def __init__(self, priority: int, data: object = None):
-        self.prior = priority
+        self.priority = priority
         self.data = data
 
 
@@ -34,7 +34,9 @@ class DSAHeap:
         pass
 
     def display(self):
-        pass
+        print("Displaying heap array.")
+        for i in range(self.count):
+            print(f"[Idx Priority Data]: {i} {self.heap_array[i].priority} {self.heap_array[i].data}")
 
     def _trickle_up(self, current_idx, heap_array):
         if current_idx > 0:
@@ -44,6 +46,7 @@ class DSAHeap:
                 temp = heap_array[parent_idx]
                 heap_array[parent_idx] = heap_array[current_idx]
                 heap_array[current_idx] = temp
+
                 return self._trickle_up(parent_idx, heap_array)
             else:
                 return heap_array
