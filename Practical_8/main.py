@@ -33,13 +33,17 @@ for x in range(7000):
         data += line[i]
 
     array[x] = DSAHeapEntry(priority, data)
+csv_file.close()
 
 sorted_array = DSAHeap.heap_sort(array)
-print(sorted_array[0].priority)
-print(sorted_array[1].priority)
-print(sorted_array[2].priority)
 
+with open("RandomNames7000_HeapSorted.txt", "w") as f:
+    txt_string = ''
 
+    for i in range(7000):
+        txt_string += f'{sorted_array[i].priority},{sorted_array[i].data}\n'
+    f.write(txt_string)
+f.close()
 
 # Testing code for heap.py
 # def int_to_char(num):
