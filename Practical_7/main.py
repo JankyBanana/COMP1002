@@ -46,7 +46,6 @@ with open('demotext.txt', 'w') as f:
         hash_element = csv_hash.hash_array[i]
         csv_string += f'{hash_element.data},{hash_element.key}\n'
     f.write(csv_string)
-f.close()
 
 # Code test suite
 # demo = ht.DSAHashTable()
