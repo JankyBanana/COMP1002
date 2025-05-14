@@ -1,5 +1,5 @@
 #
-# Implementation of a max-heap data structure and HeapSort algorithm for COMP1002 practical 8
+# Implementation of a max-heap priority structure and HeapSort algorithm for COMP1002 practical 8
 #
 
 
@@ -86,19 +86,44 @@ class DSAHeap:
         else:
             return heap_array
 
-    def heapify(self, array):
-        last_parent = int((self.count / 2) - 1)
+    @staticmethod
+    def heapify(array):
+        count = len(array)
 
-        for i in range(last_parent, -1, -1):
-            array = self._trickle_down(i, array)
+        for i in range((count // 2) - 1, -1, -1):
+            array = DSAHeap.static_trickle_down(i, array, count)
         return array
 
+    @staticmethod
+    def heap_sort(array):
+        heap_array = DSAHeap.heapify(array)
 
-    def heap_sort(self, array):
-        heap_array = self.heapify(array)
-
-        for i in range(self.count - 1, 0, -1):
+        for i in range(array.size - 1, 0, -1):
             temp = heap_array[i]
             heap_array[i] = heap_array[0]
             heap_array[0] = temp
-            heap_array = self._trickle_down(0, heap_array)
+            heap_array = DSAHeap.static_trickle_down(0, heap_array, i)
+
+        return heap_array
+
+    @staticmethod
+    def static_trickle_down(current_idx, heap_array, count):
+        left_child = current_idx * 2 + 1
+        right_child = left_child + 1
+
+        if left_child < count:
+            bigger_child = left_child
+
+            if right_child < count:
+                if heap_array[left_child].priority < heap_array[right_child].priority:
+                    bigger_child = right_child
+
+            if heap_array[bigger_child].priority > heap_array[current_idx].priority:
+                temp = heap_array[bigger_child]
+                heap_array[bigger_child] = heap_array[current_idx]
+                heap_array[current_idx] = temp
+                return DSAHeap.static_trickle_down(bigger_child, heap_array, count)
+            else:
+                return heap_array
+        else:
+            return heap_array
