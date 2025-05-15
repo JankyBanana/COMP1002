@@ -110,12 +110,15 @@ class DSAHeap:
             self._trickle_down(0, self.heap_array)
         self.count = original_count
 
-# print("----- Code Demo -----")
-# x = DSAHeap(size=30)
-#
-# for i in range(0, 5):
-#     x.add(i, int_to_char(i))
-# x.display()
-#
-# x.heap_sort()
-# x.display()
+print("----- Code Demo -----")
+x = DSAHeap(size=30)
+
+for i in range(0, 5):
+    x.add(i, int_to_char(i))
+x.display()
+
+x.remove()
+x.display()
+
+x.heap_sort()
+x.display()
