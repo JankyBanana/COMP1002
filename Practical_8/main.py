@@ -52,6 +52,14 @@ with open("csv_heap_raw.txt", "w") as f:
         txt_string += f'{entry.priority},{entry.data}\n'
     f.write(txt_string)
 
+csv_heap.heapify()
+with open("csv_heap_heapify.txt", "w") as f:
+    txt_string = ''
+
+    for entry in csv_heap.heap_array:
+        txt_string += f'{entry.priority},{entry.data}\n'
+    f.write(txt_string)
+
 # heapSorting and saving csv heap
 csv_heap.heap_sort()
 with open("RandomNames_HeapSort.txt", "w") as f:

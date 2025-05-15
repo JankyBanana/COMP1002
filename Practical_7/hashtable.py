@@ -114,9 +114,8 @@ class DSAHashTable:
         return probe_step
 
     def display(self):
-        for i in range(self.hash_array.size):
-            hash_entry = self.hash_array[i]
-            print(f"Key: {hash_entry.key} Data: {hash_entry.data} Index: {i} State: {hash_entry.state}")
+        for entry in self.hash_array:
+            print(f"Key: {entry.key} Data: {entry.data} State: {entry.state}")
         print(f'Load factor: {self.load_factor()}\n')
 
     def load_factor(self):
