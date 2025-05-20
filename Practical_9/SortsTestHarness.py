@@ -15,6 +15,8 @@
 #** Date:    August 2017
 #** Modified (python): Hayden Richards
 #** Date:    March 2018
+#** Modified (python): Luke Lummis
+#** Date:    May 2025
 
 import numpy as np
 import sys
