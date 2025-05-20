@@ -7,35 +7,25 @@
 #
 
 def bubbleSort(A):
-    swapped = True
-
-    while swapped:
-        swapped = False
-        for index in range(len(A) - 1):
-            if A[index] > A[index + 1]:
-                A[index], A[index + 1] = A[index + 1], A[index]
-                swapped = True
+    for passes in range(A.size - 1):
+        for i in range(A.size - passes - 1):
+            if A[i] > A[i + 1]:
+                A[i], A[i + 1] = A[i + 1], A[i]
 
 def insertionSort(A):
-    for sortIndex in range(1, len(A)):
-        key = A[sortIndex]
-        subArrayIndex = sortIndex - 1
-
-        while subArrayIndex >= 0 and key < A[subArrayIndex]:
-            A[subArrayIndex + 1] = A[subArrayIndex]
-            subArrayIndex -= 1
-            A[subArrayIndex + 1] = key
+    for p in range(1, A.size):
+        i = p
+        while i > 0 and A[i - 1] > A[i]:
+            A[i], A[i - 1] = A[i - 1], A[i]
+            i -= 1
 
 def selectionSort(A):
-    for index in range(len(A)):
-        minValIndex = index
-        for unsortIndex in range(index + 1, len(A)):
-            if A[unsortIndex] < A[minValIndex]:
-                minValIndex = unsortIndex
-
-        minVal = A[minValIndex]
-        A[minValIndex] = A[index]
-        A[index] = minVal
+    for p in range(A.size - 1):
+        min_index = p
+        for i in range(min_index + 1, A.size):
+            if A[i] < A[min_index]:
+                min_index = i
+        A[min_index], A[p] = A[p], A[min_index]
 
 def mergeSort(A):
     """ mergeSort - front-end for kick-starting the recursive algorithm
