@@ -8,11 +8,13 @@
 
 import numpy as np
 
+
 def bubbleSort(A):
     for passes in range(A.size - 1):
         for i in range(A.size - passes - 1):
             if A[i] > A[i + 1]:
                 A[i], A[i + 1] = A[i + 1], A[i]
+
 
 def insertionSort(A):
     for p in range(1, A.size):
@@ -20,6 +22,7 @@ def insertionSort(A):
         while i > 0 and A[i - 1] > A[i]:
             A[i], A[i - 1] = A[i - 1], A[i]
             i -= 1
+
 
 def selectionSort(A):
     for p in range(A.size - 1):
@@ -29,10 +32,12 @@ def selectionSort(A):
                 min_index = i
         A[min_index], A[p] = A[p], A[min_index]
 
+
 def mergeSort(A):
     left_index = 0
     right_index = A.size
     mergeSortRecurse(A, left_index, right_index)
+
 
 def mergeSortRecurse(A, left_index, right_index):
     if left_index < right_index:
@@ -43,6 +48,7 @@ def mergeSortRecurse(A, left_index, right_index):
 
         merge(A, left_index, mid_index, right_index)
     return A
+
 
 def merge(A, left_index, mid_index, right_index):
     temp_size = right_index - left_index + 1
@@ -73,15 +79,38 @@ def merge(A, left_index, mid_index, right_index):
 
     return A
 
+
 def quickSort(A):
-    """ quickSort - front-end for kick-starting the recursive algorithm
-    """
-    ...
-
-def quickSortRecurse(A, leftIdx, rightIdx):
-    ...
-
-def doPartitioning(A, leftIdx, rightIdx, pivotIdx):
-    ...
+    left_index = 0
+    right_index = A.size
+    quickSortRecurse(A, left_index, right_index)
 
 
+def quickSortRecurse(array, left_index, right_index):
+    if right_index > left_index:  # Making sure array has size
+        pivot_index = (left_index + right_index) // 2  # Middle element selection
+        new_pivot_index = doPartitioning(array, left_index, right_index, pivot_index)
+
+        quickSortRecurse(array, left_index, new_pivot_index - 1)  # Sort left partition
+        quickSortRecurse(array, new_pivot_index + 1, right_index)  # Sort right partition
+    return array
+
+
+def doPartitioning(array, left_index, right_index, pivot_index):
+    pivot_value = array[pivot_index]
+    # Moves pivot to end for easier sorting of smaller values into left sub-array
+    array[pivot_index], array[right_index] = array[right_index], pivot_value
+
+    current_index = left_index  # The inserting index of left sub-array
+
+    for ii in range(left_index, right_index):
+        if array[ii] < pivot_value:  # Array element is smaller than pivot
+            array[ii], array[current_index] = array[current_index], array[ii]
+            current_index += 1
+
+    new_pivot_index = current_index  # Accounts for uneven array sizes
+    # Moving start of right sub-array to end of right sub-array
+    array[right_index] = array[new_pivot_index]
+    array[new_pivot_index] = pivot_value  # Re-placing pivot at end of left array
+
+    return new_pivot_index
