@@ -164,5 +164,4 @@ def medianOf3(array, low, high):
     else:
         median_index = high_index
 
-    print(f"Low: {low}  Mid: {mid}  High: {high}  Median: {array[median_index]}  Median Index: {median_index}")
     return median_index
