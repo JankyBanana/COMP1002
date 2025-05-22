@@ -29,6 +29,7 @@ import DSAsorts
 REPEATS = 3  # No times to run sorts to get mean time
 NEARLY_PERCENT = 0.10  # % of items to move in nearly sorted array
 RANDOM_TIMES = 100  # No times to randomly swap elements in array
+sys.setrecursionlimit(10000)
 
 
 def usage():
@@ -124,3 +125,5 @@ else:
             runningTotal += (endTime - startTime)
 
         print(sortType + arrayType + " " + str(n) + " " + str((runningTotal / (REPEATS - 1)) * 1000), '\n')
+
+sys.setrecursionlimit(1000)
