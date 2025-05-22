@@ -1,5 +1,5 @@
 # **
-# ** Testharness to generate various different types of arrays of integers
+# ** Test harness to generate various different types of arrays of integers
 # ** and then sort them using various sorts.
 # **
 # ** Each sort is run REPEATS times, with the first result discarded,
@@ -54,7 +54,7 @@ def doSort(n, sortType, arrayType):
     A = np.arange(1, n + 1, 1)  # create array with values from 1 to n
 
     if arrayType == 'a':
-        ...
+        print("Ascending: ", A)
     elif arrayType == 'd':  # convert to descending
         for i in range(0, int(n / 2)):
             temp = A[i]
