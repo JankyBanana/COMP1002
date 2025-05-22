@@ -96,6 +96,38 @@ def quickSortRecurse(array, left_index, right_index):
     return array
 
 
+def quickSortMedian3(array):
+    left_index = 0
+    right_index = len(array) - 1
+    quickSortRecurseMedain3(array, left_index, right_index)
+
+
+def quickSortRecurseMedain3(array, left_index, right_index):
+    if right_index > left_index:  # Making sure array has size
+        pivot_index = medianOf3(array, left_index, right_index)  # Median of 3 elements selection
+        new_pivot_index = doPartitioning(array, left_index, right_index, pivot_index)
+
+        quickSortRecurseMedain3(array, left_index, new_pivot_index - 1)  # Sort left partition
+        quickSortRecurseMedain3(array, new_pivot_index + 1, right_index)  # Sort right partition
+    return array
+
+
+def quickSortRandom(A):
+    left_index = 0
+    right_index = len(A) - 1
+    quickSortRecurseRandom(A, left_index, right_index)
+
+
+def quickSortRecurseRandom(array, left_index, right_index):
+    if right_index > left_index:  # Making sure array has size
+        pivot_index = np.random.randint(left_index, right_index + 1)  # Random element selection
+        new_pivot_index = doPartitioning(array, left_index, right_index, pivot_index)
+
+        quickSortRecurseRandom(array, left_index, new_pivot_index - 1)  # Sort left partition
+        quickSortRecurseRandom(array, new_pivot_index + 1, right_index)  # Sort right partition
+    return array
+
+
 def doPartitioning(array, left_index, right_index, pivot_index):
     pivot_value = array[pivot_index]
     # Moves pivot to end for easier sorting of smaller values into left sub-array
@@ -114,22 +146,6 @@ def doPartitioning(array, left_index, right_index, pivot_index):
     array[new_pivot_index] = pivot_value  # Re-placing pivot at end of left array
 
     return new_pivot_index
-
-
-def quickSortMedian3(array):
-    left_index = 0
-    right_index = len(array) - 1
-    quickSortRecurseMedain3(array, left_index, right_index)
-
-
-def quickSortRecurseMedain3(array, left_index, right_index):
-    if right_index > left_index:  # Making sure array has size
-        pivot_index = medianOf3(array, left_index, right_index)  # Median of 3 elements selection
-        new_pivot_index = doPartitioning(array, left_index, right_index, pivot_index)
-
-        quickSortRecurseMedain3(array, left_index, new_pivot_index - 1)  # Sort left partition
-        quickSortRecurseMedain3(array, new_pivot_index + 1, right_index)  # Sort right partition
-    return array
 
 
 def medianOf3(array, low, high):

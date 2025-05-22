@@ -40,7 +40,8 @@ def usage():
     print("           i - insertion sort")
     print("           s - selection sort")
     print("           q - quicksort")
-    print("           qm3 - median 3 quicksort")
+    print("           qm - median of 3 pivot quicksort")
+    print("           qr - random pivot quicksort")
     print("           m - mergesort")
     print("        y is one of")
     print("           a - 1..n ascending")
@@ -89,8 +90,10 @@ def doSort(n, sortType, arrayType):
         DSAsorts.mergeSort(A)
     elif sortType == "q":
         DSAsorts.quickSort(A)
-    elif sortType == "qm3":
+    elif sortType == "qm":
         DSAsorts.quickSortMedian3(A)
+    elif sortType == "qr":
+        DSAsorts.quickSortRandom(A)
     else:
         print("Unsupported sort algorithm")
     print(A)
