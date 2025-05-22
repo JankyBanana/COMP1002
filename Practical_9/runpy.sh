@@ -47,7 +47,7 @@ function runEm()
     {
     for i in `awk 'BEGIN{for(i=1;i<='"$max"';i*=2)print i;exit}'`
     do
-        python3 SortsTestHarness.py $i $sorts
+        python SortsTestHarness.py $i $sorts
     done
     }
 
