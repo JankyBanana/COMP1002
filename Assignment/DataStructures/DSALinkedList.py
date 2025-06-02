@@ -4,8 +4,8 @@
 #
 
 
-class LinkedList:
-    class ListNode:
+class DSALinkedList:
+    class DSAListNode:
         def __init__(self, data, next=None, previous=None):
             self.data = data
             self.next = next
@@ -30,7 +30,7 @@ class LinkedList:
         return self.tail.data
 
     def insert_first(self, data: object):
-        new_node = self.ListNode(data)
+        new_node = self.DSAListNode(data)
 
         if self.is_empty():
             self.head = new_node
@@ -42,7 +42,7 @@ class LinkedList:
         self.count += 1
 
     def insert_last(self, data: object):
-        new_node = self.ListNode(data, self.head)
+        new_node = self.DSAListNode(data, self.head)
 
         if self.is_empty():
             self.head = new_node
