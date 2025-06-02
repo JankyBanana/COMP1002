@@ -1,11 +1,11 @@
 #
-# Implementation of the linked list for the Graph class, imported from practical 5
-# DSALinkedList object point to head/tail listNodes
-# --> ListNodes contain data in data and point to adjacent listNodes
+# Implementation of a double-headed, doubly linked list for the COMP1002 Assignment.
+# Based on linkedlist.py from the Practical_6 submission
+#
 
 
-class DSALinkedList:
-    class DSAListNode:
+class LinkedList:
+    class ListNode:
         def __init__(self, data, next=None, previous=None):
             self.data = data
             self.next = next
@@ -14,10 +14,10 @@ class DSALinkedList:
     def __init__(self):
         self.head = None
         self.tail = None
-        self.nodes = 0
+        self.count = 0
 
     def is_empty(self):
-        return self.nodes == 0
+        return self.count == 0
 
     def peek_first(self):
         if self.is_empty():
@@ -29,103 +29,113 @@ class DSALinkedList:
             raise Exception(f"Cannot peek last node as the list is empty")
         return self.tail.data
 
+    def insert_first(self, data: object):
+        new_node = self.ListNode(data)
+
+        if self.is_empty():
+            self.head = new_node
+            self.tail = new_node
+        else:
+            self.head.prev = new_node
+            self.head = new_node
+
+        self.count += 1
+
+    def insert_last(self, data: object):
+        new_node = self.ListNode(data, self.head)
+
+        if self.is_empty():
+            self.head = new_node
+            self.tail = new_node
+        else:
+            new_node.prev = self.tail
+            self.tail.next = new_node
+            self.tail = new_node
+
+        self.count += 1
+
     def remove_first(self):
         if self.is_empty():
             raise Exception(f"Cannot remove the first node from an empty list")
-        elif self.head == self.tail:
-            node_value = self.head.data
+
+        node_data = self.head.data
+
+        if self.head == self.tail:
             self.head = None
             self.tail = None
-            return node_value
         else:
-            node_value = self.head.data
             self.head = self.head.next
-            self.head._prev = None
-            self.nodes -= 1
-            return node_value
+            self.head.prev = None
+        self.count -= 1
+
+        return node_data
 
     def remove_last(self):
         if self.is_empty():
             raise Exception(f"Cannot remove the last node from an empty list")
-        elif self.head == self.tail:
-            node_value = self.head.data
+
+        node_data = self.tail.data
+
+        if self.head == self.tail:
             self.head = None
             self.tail = None
-            return node_value
         else:
-            node_value = self.tail.data
             self.tail = self.tail.data
             self.tail.next = None
-            self.nodes -= 1
-            return node_value
 
-    def insert_first(self, value: object):
-        if self.is_empty():
-            new_node = self.DSAListNode(value)
-            self.head = new_node
-            self.tail = new_node
-        else:
-            new_node = self.DSAListNode(value, self.head)
-            self.head.prev = new_node
-            self.head = new_node
-        self.nodes += 1
+        self.count -= 1
+        return node_data
 
-    def insert_last(self, value: object):
-        if self.is_empty():
-            new_node = self.DSAListNode(value, self.head)
-            self.head = new_node
-            self.tail = new_node
-        else:
-            new_node = self.DSAListNode(value, None, self.tail)
-            self.tail.next = new_node
-            self.tail = new_node
-        self.nodes += 1
-
-    def display(self):
-        next_node = self.head
-        value_string = ""
-
-        for i in range(self.nodes):
-            value_string += f"{str(next_node.data)} "
-            next_node = next_node.next
-        return value_string
-
-    def find(self, data):
-        next_node = self.head
-
-        while next_node is not None:
-            if next_node.data == data:
-                return next_node
-            next_node = next_node.next
-        raise Exception("Node with given data not found")
-
-    def remove(self, value):
+    def remove(self, data):
         if self.is_empty():
             raise Exception("Cannot remove from an empty list.")
 
         current = self.head
 
         while current is not None:
-            if current.data == value:
+            if current.data == data:
                 if current == self.head:
-                    self.head = current.next
-
-                    if self.head is not None:
-                        self.head.prev = None
+                    if self.head == self.tail:
+                        self.head = 0
+                        self.tail = 0
                     else:
-                        self.tail = None
+                        self.head = current.next
+                        self.head.prev = None
+
                 elif current == self.tail:
                     self.tail = current.prev
+                    self.tail.next = None
 
-                    if self.tail is not None:
-                        self.tail.next = None
-                    else:
-                        self.head = None
                 else:
                     current.prev.next = current.next
                     current.next.prev = current.prev
 
-                self.nodes -= 1
-                return
+                self.count -= 1
+                return True
+
             current = current.next
-        raise ValueError("Value not found in the list.")
+
+        return False
+
+    def find(self, data):
+        current_node = self.head
+
+        while current_node is not None:
+            if current_node.data == data:
+                return current_node
+            current_node = current_node.next
+
+        return None
+
+    def display(self):
+        if self.is_empty():
+            return ""
+
+        current_node = self.head
+        display_string = ""
+
+        while current_node is not None:
+            display_string += f"{str(current_node.data)} "
+            current_node = current_node.next
+
+        return display_string
