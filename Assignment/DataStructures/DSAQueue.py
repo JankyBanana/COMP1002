@@ -5,10 +5,11 @@
 
 import numpy as np
 
+
 class DSAQueue:
     default_size = 100
 
-    def __init__(self, size = default_size):
+    def __init__(self, size=default_size):
         self.size = size
         self.queueArray = np.full(self.size, None, dtype=object)
         self.numElements = 0
@@ -34,6 +35,7 @@ class DSAQueue:
         else:
             return False
 
+
 class ShufflingQueue(DSAQueue):
     def enqueue(self, value):
         if self.is_full():  # Same as saying if self.is_full == True
@@ -48,8 +50,8 @@ class ShufflingQueue(DSAQueue):
         else:
             queue_next = self.queueArray[0]
             for i in range(1, self.numElements):
-                self.queueArray[i-1] = self.queueArray[i]
-            self.queueArray[self.numElements-1] = None
+                self.queueArray[i - 1] = self.queueArray[i]
+            self.queueArray[self.numElements - 1] = None
             self.numElements -= 1
             return queue_next
 
@@ -58,6 +60,7 @@ class ShufflingQueue(DSAQueue):
             raise IndexError(f"Can't access next item as the queue is empty")
         else:
             return self.queueArray[0]
+
 
 class CircularQueue(DSAQueue):
     def __init__(self, name):
@@ -70,7 +73,7 @@ class CircularQueue(DSAQueue):
             raise MemoryError(f"Can't add new item as the queue is full")
         else:
             self.queueArray[self.queueEnd] = value
-            self.queueEnd = (self.queueEnd+1) % self.size
+            self.queueEnd = (self.queueEnd + 1) % self.size
             self.numElements += 1
 
     def dequeue(self):

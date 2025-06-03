@@ -5,10 +5,11 @@
 
 import numpy as np
 
+
 class DSAStack:
     defaultSize = 100
 
-    def __init__(self, size = defaultSize):
+    def __init__(self, size=defaultSize):
         self.size = size
         self.stackArray = np.full(self.size, None, dtype=object)
         self.numElements = 0
@@ -24,8 +25,8 @@ class DSAStack:
         if self.is_empty():
             raise IndexError(f"Can't access top item as the stack is empty")
         else:
-            stack_top = self.stackArray[self.numElements-1]
-            self.stackArray[self.numElements-1] = None
+            stack_top = self.stackArray[self.numElements - 1]
+            self.stackArray[self.numElements - 1] = None
             self.numElements -= 1
             return stack_top
 
@@ -33,7 +34,7 @@ class DSAStack:
         if self.is_empty():
             raise IndexError(f"Can't access top item as the stack is empty")
         else:
-            stack_top = self.stackArray[self.numElements-1]
+            stack_top = self.stackArray[self.numElements - 1]
             return stack_top
 
     def is_empty(self):
