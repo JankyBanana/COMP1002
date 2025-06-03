@@ -21,12 +21,12 @@ class DSALinkedList:
 
     def peek_first(self):
         if self.is_empty():
-            raise Exception(f"Can't peek the first node of an empty list")
+            raise Exception(f"Cannot peek the first node of an empty list")
         return self.head.data
 
     def peek_last(self):
         if self.is_empty():
-            raise Exception(f"Can't peek last node as the list is empty")
+            raise Exception(f"Cannot peek last node as the list is empty")
         return self.tail.data
 
     def insert_first(self, data: object):
@@ -56,7 +56,7 @@ class DSALinkedList:
 
     def remove_first(self):
         if self.is_empty():
-            raise Exception(f"Can't remove the first node from an empty list")
+            raise Exception(f"Cannot remove the first node from an empty list")
 
         node_data = self.head.data
 
@@ -66,13 +66,13 @@ class DSALinkedList:
         else:
             self.head = self.head.next
             self.head.prev = None
-
         self.count -= 1
+
         return node_data
 
     def remove_last(self):
         if self.is_empty():
-            raise Exception(f"Can't remove the last node from an empty list")
+            raise Exception(f"Cannot remove the last node from an empty list")
 
         node_data = self.tail.data
 
@@ -88,7 +88,7 @@ class DSALinkedList:
 
     def remove(self, data):
         if self.is_empty():
-            raise Exception("Can't remove from an empty list.")
+            raise Exception("Cannot remove from an empty list.")
 
         current = self.head
 
