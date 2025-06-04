@@ -9,7 +9,7 @@ import DSAStack
 import DSAQueue
 
 
-def alpha_order(char:str):
+def alpha_order(char: str):
     ascii_value = ord(char)
 
     if 97 <= ascii_value <= 122:
@@ -17,36 +17,29 @@ def alpha_order(char:str):
     elif 65 <= ascii_value <= 90:
         return ascii_value - 64
 
+
 class DSAGraph:
     class DSAGraphVertex:
         def __init__(self, label: str, data: object):
             self.label = label
             self.data = data
             self.visited = False
-            self.in_degree = 0
-            self.out_degree = 0
+            self.degree = 0
             self.edges = ll.DSALinkedList()
 
         def _get_adjacent(self):
             return self.edges
 
-        def _add_edge(self, target_label: str, direction: str="o"):
-            if direction == "o":
-                edge = self.label + target_label
-                self.out_degree += 1
-            elif direction == "i":
-                edge = target_label + self.label
-                self.in_degree += 1
-            else:
-                raise ValueError("Invalid direction arg")
+        def _add_edge(self, target_label: str):
+            self.degree += 1
 
             current_edge = self.edges.head
             while current_edge is not None:
-                if edge == current_edge.data:
+                if target_label == current_edge.data:
                     raise ValueError("Edge already present")
                 current_edge = current_edge.next
 
-            self.edges.insertLast(edge)
+            self.edges.insertLast(target_label)
 
         def set_visited(self):
             self.visited = True
@@ -82,7 +75,7 @@ class DSAGraph:
         self.vertices = ll.DSALinkedList()
         self.current_vertex = None
 
-    def add_vertex(self, label: str, data: object=None):
+    def add_vertex(self, label: str, data: object = None):
         next_vertex = self.vertices.head
 
         while next_vertex is not None:
@@ -105,7 +98,7 @@ class DSAGraph:
 
             if next_vertex.data.label == sink:
                 sink_exist = True
-                sink_vertex= next_vertex
+                sink_vertex = next_vertex
 
             next_vertex = next_vertex.next
 
@@ -243,7 +236,7 @@ class DSAGraph:
 
             while current_edge is not None:
                 if (current_edge.data[0] == current_vertex.data.label
-                    and current_edge.data[1] != current_vertex.data.label):
+                        and current_edge.data[1] != current_vertex.data.label):
                     display_list += " " + current_edge.data[1]
                 current_edge = current_edge.next
             display_list += "\n"
@@ -265,7 +258,7 @@ class DSAGraph:
             vertex_array[i, 0] = i
             current_vertex = current_vertex.next
 
-        display_matrix += "\n--+" + "--"*size
+        display_matrix += "\n--+" + "--" * size
         current_vertex = self.vertices.head
 
         for i in range(self.vertices.nodes):
@@ -294,7 +287,7 @@ class DSAGraph:
     def has_data(self):
         pass
 
-    def next_vertex(self, mode: str=None, type: str="n"):
+    def next_vertex(self, mode: str = None, type: str = "n"):
         if self.current_vertex is None:
             self.current_vertex = self.vertices.head
 
