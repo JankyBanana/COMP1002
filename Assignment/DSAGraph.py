@@ -6,7 +6,6 @@
 import DSALinkedList as ll
 import DSAStack
 import DSAQueue
-import numpy as np
 
 
 def alpha_order(char: str):
@@ -357,21 +356,18 @@ class DSAGraph:
         return output_string
 
     def get_all_edges(self):
-        edges = []
+        edges = ll.DSALinkedList()
         current_vertex = self.vertices.head
 
         while current_vertex is not None:
             current_edge = current_vertex.data.edges.head
             while current_edge is not None:
                 if current_vertex.data.label <= current_edge.data.target_label:
-                    edges.append({
-                        'source': current_vertex.data.label,
-                        'target': current_edge.data.target_label,
-                        'weight': current_edge.data.weight
-                    })
+                    edges.insert_last(f" source: {current_vertex.data.label} "
+                                      f"target: {current_edge.data.target_label}"
+                                      f"weight: {current_edge.data.weight}")
                 current_edge = current_edge.next
             current_vertex = current_vertex.next
-
         return edges
 
     def get_vertex_degree(self, vertex_label: str):
@@ -379,3 +375,4 @@ class DSAGraph:
         if vertex is None:
             raise ValueError(f"Vertex '{vertex_label}' not found")
         return vertex.data.degree
+
