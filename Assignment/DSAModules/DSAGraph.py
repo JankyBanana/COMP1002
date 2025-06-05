@@ -94,7 +94,7 @@ class DSAGraph:
                         smallest_edge = next_edge
                     next_edge = next_edge.next
 
-                if smallest_edge is not current_edge:
+                if smallest_edge != current_edge:
                     temp_data = current_edge.data
                     current_edge.data = smallest_edge.data
                     smallest_edge.data = temp_data
@@ -117,136 +117,104 @@ class DSAGraph:
         self.vertices.insert_last(new_vertex)
 
     def add_edge(self, source: str, sink: str, weight: float = 1.0):
-        next_vertex = self.vertices.head
+        source_vertex = self.get_vertex(source)
+        sink_vertex = self.get_vertex(sink)
 
-        source_exist = False
-        sink_exist = False
+        if source_vertex is None:
+            raise ValueError(f"Source vertex '{source}' not found")
+        if sink_vertex is None:
+            raise ValueError(f"Sink vertex '{sink}' not found")
 
-        while next_vertex is not None:
-            if next_vertex.data.label == source:
-                source_exist = True
-                source_vertex = next_vertex
-
-            if next_vertex.data.label == sink:
-                sink_exist = True
-                sink_vertex = next_vertex
-
-            next_vertex = next_vertex.next
-
-        if not source_exist:
-            raise Exception("Source not found")
-        elif not sink_exist:
-            raise Exception("Sink not found")
-        else:
-            source_vertex.data._add_edge(sink)
-            sink_vertex.data._add_edge(source)
+        source_vertex.data._add_edge(sink, weight)
+        if source is not sink:
+            sink_vertex.data._add_edge(source, weight)
 
     def delete_vertex(self, target_label: str):
         current_vertex = self.vertices.head
 
         while current_vertex is not None:
-            vertex_edge = current_vertex.data.edges.head
-
-            while vertex_edge is not None:
-                edge_label = vertex_edge.data
-
-                if edge_label == target_label:
-                    current_vertex.data.edges.remove(edge_label)
-                    vertex_edge = current_vertex.data.edges.head
-                    current_vertex.data.degree -= 1
-
-                vertex_edge = vertex_edge.next
+            if current_vertex.data._remove_edge(target_label):
+                pass
             current_vertex = current_vertex.next
 
         current_vertex = self.vertices.head
 
         while current_vertex is not None:
             if current_vertex.data.label == target_label:
-                self.vertices.remove(current_vertex.data)
+                self.vertices.remove(target_label)
                 return
             current_vertex = current_vertex.next
 
-        raise ValueError("Vertex not found")
+        raise ValueError(f"Vertex '{target_label}' not found")
 
     def delete_edge(self, source: str, sink: str):
         source_vertex = self.get_vertex(source)
         sink_vertex = self.get_vertex(sink)
-        edge_removed = False
 
-        edge_label = source + sink
-        current_edge = source_vertex.data.edges.head
-        while current_edge is not None:
-            if current_edge.data == edge_label:
-                source_vertex.data.edges.remove(edge_label)
-                source_vertex.data.out_degree -= 1
-                edge_removed = True
-                break
+        if source_vertex is None:
+            raise ValueError(f"Source vertex '{source}' not found")
+        if sink_vertex is None:
+            raise ValueError(f"Sink vertex '{sink}' not found")
 
-            current_edge = current_edge.next
+        source_removed = source_vertex.data._remove_edge(sink)
 
-        reverse_edge = sink + source
-        current_edge = sink_vertex.data.edges.head
-        while current_edge is not None:
-            if current_edge.data == reverse_edge:
-                sink_vertex.data.edges.remove(reverse_edge)
-                sink_vertex.data.in_degree -= 1
-                break
+        if source != sink:
+            sink_vertex.data._remove_edge(source)
 
-            current_edge = current_edge.next
-
-        if not edge_removed:
-            raise ValueError("Edge not found")
+        if not source_removed:
+            raise ValueError(f"Edge from '{source}' to '{sink}' not found")
 
     def has_vertex(self, vertex_label: str):
-        next_vertex = self.vertices.head
-
-        while next_vertex is not None:
-            if next_vertex.data.label == vertex_label:
-                return True
-            next_vertex = next_vertex.next
-        return False
+        return self.get_vertex(vertex_label) is not None
 
     def vertex_count(self):
         return self.vertices.count
 
     def edge_count(self):
-        next_vertex = self.vertices.head
-        in_degree_sum = 0
-        out_degree_sum = 0
+        total_edges = 0
+        current_vertex = self.vertices.head
 
-        while next_vertex is not None:
-            in_degree_sum = in_degree_sum + next_vertex.data.in_degree
-            out_degree_sum = out_degree_sum + next_vertex.data.out_degree
-            next_vertex = next_vertex.next
+        while current_vertex is not None:
+            current_edge = current_vertex.data.edges.head
 
-        if in_degree_sum - out_degree_sum == 0:
-            return in_degree_sum
-        else:
-            raise Exception("Sum of in-degrees and out-degrees do not match")
+            while current_edge is not None:
+                if current_vertex.data.label <= current_edge.data.target_label:
+                    total_edges += 1
+                current_edge = current_edge.next
+            current_vertex = current_vertex.next
+
+        return  total_edges
 
     def get_vertex(self, vertex_label: str):
-        next_vertex = self.vertices.head
+        current_vertex = self.vertices.head
 
-        while next_vertex is not None:
-            if next_vertex.data.label == vertex_label:
-                return next_vertex
-            next_vertex = next_vertex.next
+        while current_vertex is not None:
+            if current_vertex.data.label == vertex_label:
+                return current_vertex
+            current_vertex = current_vertex.next
 
-        return ValueError("Vertex not found")
+        return None
 
     def get_adjacent(self, vertex_label: str):
         vertex = self.get_vertex(vertex_label)
+
+        if vertex is None:
+            raise ValueError(f"Vertex '{vertex_label}' not found")
         return vertex.data.get_adjacent()
 
     def is_adjacent(self, source: str, sink: str):
         source_vertex = self.get_vertex(source)
-        next_edge = source_vertex.data.edges.head
 
-        while next_edge is not None:
-            if next_edge.data[0] == sink or next_edge.data[1] == sink:
+        if source_vertex is None:
+            return False
+
+        current_edge = source_vertex.data.edges.head
+
+        while current_edge is not None:
+            if current_edge.data == sink:
                 return True
+            current_edge = current_edge.next
 
-            next_edge = next_edge.next
         return False
 
     def display_as_list(self):
@@ -256,86 +224,23 @@ class DSAGraph:
         current_vertex = self.vertices.head
 
         while current_vertex is not None:
-            display_list += current_vertex.data.label + " |"
+            current_vertex.data._sort_edges()
+            display_list += f"{current_vertex.data.label} |"
             current_edge = current_vertex.data.edges.head
 
             while current_edge is not None:
-                if (current_edge.data[0] == current_vertex.data.label
-                        and current_edge.data[1] != current_vertex.data.label):
-                    display_list += " " + current_edge.data[1]
+                display_list += f" {current_edge.data.target_label}({current_edge.data.weight})"
                 current_edge = current_edge.next
+
             display_list += "\n"
             current_vertex = current_vertex.next
-        print(f"Graph as an adjacency list:\n\n"
-              f"{display_list}")
 
-    def display_as_matrix(self):
-        self.sort()
-
-        vertex_array = np.zeros((self.vertices.count, 2), dtype=str)
-        size = self.vertices.count
-        display_matrix = "  |"
-        current_vertex = self.vertices.head
-
-        for i in range(self.vertices.count):
-            display_matrix += f" {i}"
-            vertex_array[i, 1] = current_vertex.data.label
-            vertex_array[i, 0] = i
-            current_vertex = current_vertex.next
-
-        display_matrix += "\n--+" + "--" * size
-        current_vertex = self.vertices.head
-
-        for i in range(self.vertices.count):
-            display_matrix += f"\n{i} |"
-            current_vertex.data._sort()
-            vertex_edges = current_vertex.data.edges.display()
-
-            for i in range(self.vertices.count):
-                edge = current_vertex.data.label + vertex_array[i, 1]
-
-                if edge in vertex_edges:
-                    display_matrix += " 1"
-                else:
-                    display_matrix += " 0"
-            current_vertex = current_vertex.next
-        print(f"Graph as adjacency matrix:\n"
-              f"Label lookup:\n{vertex_array}\n\n"
-              f"{display_matrix}")
-
-    def degree_in(self):
-        pass
-
-    def degree_out(self):
-        pass
-
-    def has_data(self):
-        pass
-
-    def next_vertex(self, mode: str = None, type: str = "n"):
-        if self.current_vertex is None:
-            self.current_vertex = self.vertices.head
-
-            if type == "n":
-                return self.current_vertex
-            elif type == "v":
-                return self.current_vertex.data
-        elif mode == "c":
-            self.current_vertex = None
-            return None
-
-        if self.current_vertex.next is not None:
-            self.current_vertex = self.current_vertex.next
-
-            if type == "n":
-                return self.current_vertex
-            elif type == "v":
-                return self.current_vertex.data
-        else:
-            self.current_vertex = self.current_vertex.next
-            return self.current_vertex
+        print(f"Graph adjacency list:\n\n{display_list}")
 
     def sort(self):
+        if self.vertices.count <= 1:
+            return
+
         current_vertex = self.vertices.head
 
         while current_vertex is not None:
@@ -347,56 +252,53 @@ class DSAGraph:
                     smallest_vertex = next_vertex
                 next_vertex = next_vertex.next
 
-            if smallest_vertex is not current_vertex:
+            if smallest_vertex != current_vertex:
                 temp_data = current_vertex.data
                 current_vertex.data = smallest_vertex.data
                 smallest_vertex.data = temp_data
 
             current_vertex = current_vertex.next
 
-    def depth_first_search(self):
+    def depth_first_search(self, start_label: str = None):
         self.sort()
         self.clear_visited()
 
         output_string = ""
         vertex_stack = DSAStack.DSAStack()
 
+        if start_label:
+            start_vertex = self.get_vertex(start_label)
+            if start_vertex is None:
+                raise ValueError(f"Start vertex '{start_label}' not found")
+            output_string = self._dfs(start_vertex, output_string, vertex_stack)
+
         current_vertex_node = self.vertices.head
+
         while current_vertex_node is not None:
             if not current_vertex_node.data.visited:
                 output_string = self._dfs(current_vertex_node, output_string, vertex_stack)
             current_vertex_node = current_vertex_node.next
 
-        return output_string
+        return output_string.strip()
 
-    def breadth_first_search(self):
+    def breadth_first_search(self, start_label: str = None):
         self.sort()
         self.clear_visited()
 
         output_string = ""
         vertex_queue = DSAQueue.ShufflingQueue()
 
+        if start_label:
+            start_vertex = self.get_vertex(start_label)
+            if start_vertex is None:
+                raise ValueError(f"Start vertex '{start_label}' not found")
+            output_string = self._bfs(start_vertex, output_string, vertex_queue)
+
         current_vertex_node = self.vertices.head
 
         while current_vertex_node is not None:
             if not current_vertex_node.data.visited:
-                current_vertex_node.data.visited = True
-                vertex_queue.enqueue(current_vertex_node)
-
-                while not vertex_queue.is_empty():
-                    current_vertex = vertex_queue.dequeue()
-                    edge_node = current_vertex.data.edges.head
-
-                    while edge_node is not None:
-                        if edge_node.data[0] == current_vertex.data.label:
-                            sink_vertex_node = self.get_vertex(edge_node.data[1])
-
-                            if not sink_vertex_node.data.visited:
-                                sink_vertex_node.data.visited = True
-                                vertex_queue.enqueue(sink_vertex_node)
-                                output_string += current_vertex.data.label + sink_vertex_node.data.label + " "
-                        edge_node = edge_node.next
-
+                output_string = self._bfs(current_vertex_node, output_string, vertex_queue)
             current_vertex_node = current_vertex_node.next
 
         return output_string.strip()
@@ -418,15 +320,14 @@ class DSAGraph:
 
             found_unvisited = False
             while current_edge is not None:
-                if current_edge.data[0] == current_vertex.data.label:
-                    sink_vertex = self.get_vertex(current_edge.data[1])
+                sink_vertex = self.get_vertex(current_edge.data.target_label)
 
-                    if not sink_vertex.data.visited:
-                        output_string += current_vertex.data.label + sink_vertex.data.label + " "
-                        sink_vertex.data.visited = True
-                        vertex_stack.push(sink_vertex)
-                        found_unvisited = True
-                        break
+                if sink_vertex and not sink_vertex.data.visited:
+                    output_string += f"{current_vertex.data.label}{sink_vertex.data.label} "
+                    sink_vertex.data.visited = True
+                    vertex_stack.push(sink_vertex)
+                    found_unvisited = True
+                    break
 
                 current_edge = current_edge.next
 
@@ -434,3 +335,47 @@ class DSAGraph:
                 vertex_stack.pop()
 
         return output_string
+
+    def _bfs(self, start_vertex, output_string, vertex_queue):
+        start_vertex.data.visited = True
+        vertex_queue.enqueue(start_vertex)
+
+        while not vertex_queue.is_empty():
+            current_vertex = vertex_queue.dequeue()
+            edge_node = current_vertex.data.edges.head
+
+            while edge_node is not None:
+                sink_vertex_node = self.get_vertex(edge_node.data.target_label)
+
+                if sink_vertex_node and not sink_vertex_node.data.visited:
+                    sink_vertex_node.data.visited = True
+                    vertex_queue.enqueue(sink_vertex_node)
+                    output_string += f"{current_vertex.data.label}{sink_vertex_node.data.label} "
+
+                edge_node = edge_node.next
+
+        return output_string
+
+    def get_all_edges(self):
+        edges = []
+        current_vertex = self.vertices.head
+
+        while current_vertex is not None:
+            current_edge = current_vertex.data.edges.head
+            while current_edge is not None:
+                if current_vertex.data.label <= current_edge.data.target_label:
+                    edges.append({
+                        'source': current_vertex.data.label,
+                        'target': current_edge.data.target_label,
+                        'weight': current_edge.data.weight
+                    })
+                current_edge = current_edge.next
+            current_vertex = current_vertex.next
+
+        return edges
+
+    def get_vertex_degree(self, vertex_label: str):
+        vertex = self.get_vertex(vertex_label)
+        if vertex is None:
+            raise ValueError(f"Vertex '{vertex_label}' not found")
+        return vertex.data.degree
