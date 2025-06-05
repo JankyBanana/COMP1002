@@ -4,9 +4,9 @@
 
 
 import DSALinkedList as ll
-import numpy as np
 import DSAStack
 import DSAQueue
+import numpy as np
 
 
 def alpha_order(char: str):
@@ -19,27 +19,59 @@ def alpha_order(char: str):
 
 
 class DSAGraph:
+    class DSAGraphEdge:
+        def __init__(self, target_label: str, weight: float = 1.0):
+            self.target_label = target_label
+            self.weight = weight
+
+        def __str__(self):
+            return f"{self.target_label}({self.weight})"
+
     class DSAGraphVertex:
-        def __init__(self, label: str, data: object):
+        def __init__(self, label: str, data: object = None):
             self.label = label
             self.data = data
             self.visited = False
             self.degree = 0
             self.edges = ll.DSALinkedList()
 
+        def _add_edge(self, target_label: str, weight: float = 1.0):
+            current_edge = self.edges.head
+
+            while current_edge is not None:
+                if current_edge.data.target_label == target_label:
+                    current_edge.data.weight = weight
+                    return
+                current_edge = current_edge.next
+
+            new_edge = DSAGraph.DSAGraphEdge(target_label, weight)
+            self.edges.insert_last(new_edge)
+            self.degree += 1
+
+        def remove_edge(self, target_label: str):
+            current_edge = self.edges.head
+
+            while current_edge is not None:
+                if current_edge.data.target_label == target_label:
+                    self.edges.remove(current_edge.data)
+                    self.degree -= 1
+                    return True
+                current_edge = current_edge.next
+
+            return False
+
         def _get_adjacent(self):
             return self.edges
 
-        def _add_edge(self, target_label: str):
-            self.degree += 1
-
+        def _get_edge_weight(self, target_label):
             current_edge = self.edges.head
+
             while current_edge is not None:
-                if target_label == current_edge.data:
-                    raise ValueError("Edge already present")
+                if current_edge.data.target_label == target_label:
+                    return current_edge.data.weight
                 current_edge = current_edge.next
 
-            self.edges.insertLast(target_label)
+            return None
 
         def set_visited(self):
             self.visited = True
@@ -47,7 +79,10 @@ class DSAGraph:
         def clear_visited(self):
             self.visited = False
 
-        def _sort(self):
+        def _sort_edges(self):
+            if self.edges.count <= 1:
+                return
+
             current_edge = self.edges.head
 
             while current_edge is not None:
@@ -55,14 +90,9 @@ class DSAGraph:
                 smallest_edge = current_edge
 
                 while next_edge is not None:
-                    if alpha_order(next_edge.data[0]) == alpha_order(smallest_edge.data[0]):
-                        if alpha_order(next_edge.data[1]) < alpha_order(smallest_edge.data[1]):
-                            smallest_edge = next_edge
-                        next_edge = next_edge.next
-                    elif alpha_order(next_edge.data[0]) != alpha_order(smallest_edge.data[0]):
-                        if alpha_order(next_edge.data[0]) < alpha_order(smallest_edge.data[0]):
-                            smallest_edge = next_edge
-                        next_edge = next_edge.next
+                    if alpha_order(next_edge.data.target_label) < alpha_order(smallest_edge.data.target_label):
+                        smallest_edge = next_edge
+                    next_edge = next_edge.next
 
                 if smallest_edge is not current_edge:
                     temp_data = current_edge.data
@@ -76,16 +106,17 @@ class DSAGraph:
         self.current_vertex = None
 
     def add_vertex(self, label: str, data: object = None):
-        next_vertex = self.vertices.head
+        current_vertex = self.vertices.head
 
-        while next_vertex is not None:
-            if next_vertex.data.label == label:
-                raise ValueError("Label is already in use by another vertex in the graph")
-            next_vertex = next_vertex.next
+        while current_vertex is not None:
+            if current_vertex.data.label == label:
+                raise ValueError(f"Vertex with label '{label}' already exists")
+            current_vertex = current_vertex.next
 
-        self.vertices.insertLast(self.DSAGraphVertex(label, data))
+        new_vertex = self.DSAGraphVertex(label, data)
+        self.vertices.insert_last(new_vertex)
 
-    def add_edge(self, source: str, sink: str):
+    def add_edge(self, source: str, sink: str, weight: float = 1.0):
         next_vertex = self.vertices.head
 
         source_exist = False
@@ -106,40 +137,34 @@ class DSAGraph:
             raise Exception("Source not found")
         elif not sink_exist:
             raise Exception("Sink not found")
+        else:
+            source_vertex.data._add_edge(sink)
+            sink_vertex.data._add_edge(source)
 
-        source_vertex.data._add_edge(sink, "o")
-        sink_vertex.data._add_edge(source, "i")
+    def delete_vertex(self, target_label: str):
+        current_vertex = self.vertices.head
 
-    def delete_vertex(self, label: str):
-        current_node = self.vertices.head
+        while current_vertex is not None:
+            vertex_edge = current_vertex.data.edges.head
 
-        while current_node is not None:
-            edge_node = current_node.data.edges.head
-            prev_edge_node = None
+            while vertex_edge is not None:
+                edge_label = vertex_edge.data
 
-            while edge_node is not None:
-                edge = edge_node.data
+                if edge_label == target_label:
+                    current_vertex.data.edges.remove(edge_label)
+                    vertex_edge = current_vertex.data.edges.head
+                    current_vertex.data.degree -= 1
 
-                if edge[0] == label or edge[1] == label:
-                    if edge[0] == current_node.data.label:
-                        current_node.data.out_degree -= 1
-                    elif edge[1] == current_node.data.label:
-                        current_node.data.in_degree -= 1
+                vertex_edge = vertex_edge.next
+            current_vertex = current_vertex.next
 
-                    current_node.data.edges.remove(edge)
-                    edge_node = current_node.data.edges.head
-                    continue
-                edge_node = edge_node.next
-            current_node = current_node.next
+        current_vertex = self.vertices.head
 
-        current_node = self.vertices.head
-        prev_node = None
-        while current_node is not None:
-            if current_node.data.label == label:
-                self.vertices.remove(current_node.data)
+        while current_vertex is not None:
+            if current_vertex.data.label == target_label:
+                self.vertices.remove(current_vertex.data)
                 return
-            prev_node = current_node
-            current_node = current_node.next
+            current_vertex = current_vertex.next
 
         raise ValueError("Vertex not found")
 
@@ -182,7 +207,7 @@ class DSAGraph:
         return False
 
     def vertex_count(self):
-        return self.vertices.nodes
+        return self.vertices.count
 
     def edge_count(self):
         next_vertex = self.vertices.head
@@ -211,7 +236,7 @@ class DSAGraph:
 
     def get_adjacent(self, vertex_label: str):
         vertex = self.get_vertex(vertex_label)
-        return vertex.data._get_adjacent()
+        return vertex.data.get_adjacent()
 
     def is_adjacent(self, source: str, sink: str):
         source_vertex = self.get_vertex(source)
@@ -247,12 +272,12 @@ class DSAGraph:
     def display_as_matrix(self):
         self.sort()
 
-        vertex_array = np.zeros((self.vertices.nodes, 2), dtype=str)
-        size = self.vertices.nodes
+        vertex_array = np.zeros((self.vertices.count, 2), dtype=str)
+        size = self.vertices.count
         display_matrix = "  |"
         current_vertex = self.vertices.head
 
-        for i in range(self.vertices.nodes):
+        for i in range(self.vertices.count):
             display_matrix += f" {i}"
             vertex_array[i, 1] = current_vertex.data.label
             vertex_array[i, 0] = i
@@ -261,12 +286,12 @@ class DSAGraph:
         display_matrix += "\n--+" + "--" * size
         current_vertex = self.vertices.head
 
-        for i in range(self.vertices.nodes):
+        for i in range(self.vertices.count):
             display_matrix += f"\n{i} |"
             current_vertex.data._sort()
             vertex_edges = current_vertex.data.edges.display()
 
-            for i in range(self.vertices.nodes):
+            for i in range(self.vertices.count):
                 edge = current_vertex.data.label + vertex_array[i, 1]
 
                 if edge in vertex_edges:
