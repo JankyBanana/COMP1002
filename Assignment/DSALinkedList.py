@@ -42,7 +42,7 @@ class DSALinkedList:
         self.count += 1
 
     def insert_last(self, data: object):
-        new_node = self.DSAListNode(data, self.head)
+        new_node = self.DSAListNode(data, None, self.head)
 
         if self.is_empty():
             self.head = new_node
