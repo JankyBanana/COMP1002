@@ -267,6 +267,7 @@ class DSAGraph:
 
         if start_label:
             start_vertex = self.get_vertex(start_label)
+
             if start_vertex is None:
                 raise ValueError(f"Start vertex '{start_label}' not found")
 
@@ -280,7 +281,7 @@ class DSAGraph:
         while current_vertex_node is not None:
             if not current_vertex_node.data.visited:
                 if current_vertex_node.data.edges.count == 0:
-                    current_vertex_node.data.visited = True  # Mark as visited but don't process
+                    current_vertex_node.data.visited = True
                 else:
                     output_string = self._dfs(current_vertex_node, output_string, vertex_stack)
             current_vertex_node = current_vertex_node.next
@@ -296,6 +297,7 @@ class DSAGraph:
 
         if start_label:
             start_vertex = self.get_vertex(start_label)
+
             if start_vertex is None:
                 raise ValueError(f"Start vertex '{start_label}' not found")
 
@@ -309,7 +311,7 @@ class DSAGraph:
         while current_vertex_node is not None:
             if not current_vertex_node.data.visited:
                 if current_vertex_node.data.edges.count == 0:
-                    current_vertex_node.data.visited = True  # Mark as visited but don't process
+                    current_vertex_node.data.visited = True
                 else:
                     output_string = self._bfs(current_vertex_node, output_string, vertex_queue)
             current_vertex_node = current_vertex_node.next
