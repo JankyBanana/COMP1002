@@ -3,9 +3,9 @@
 #
 
 
-import DSALinkedList as ll
-import DSAStack
-import DSAQueue
+from Assignment.DSAModules import DSALinkedList as ll
+from Assignment.DSAModules import DSAStack
+from Assignment.DSAModules import DSAQueue
 
 
 def alpha_order(char: str):
@@ -47,7 +47,7 @@ class DSAGraph:
             self.edges.insert_last(new_edge)
             self.degree += 1
 
-        def remove_edge(self, target_label: str):
+        def _remove_edge(self, target_label: str):
             current_edge = self.edges.head
 
             while current_edge is not None:
@@ -182,7 +182,7 @@ class DSAGraph:
                 current_edge = current_edge.next
             current_vertex = current_vertex.next
 
-        return  total_edges
+        return total_edges
 
     def get_vertex(self, vertex_label: str):
         current_vertex = self.vertices.head
@@ -375,4 +375,3 @@ class DSAGraph:
         if vertex is None:
             raise ValueError(f"Vertex '{vertex_label}' not found")
         return vertex.data.degree
-
