@@ -20,8 +20,8 @@ def main():
                        f" Delete Vertex          [DELV <LABEL>]\n"
                        f" Delete Edge            [DELE <SOURCE> <SINK>]\n"
                        f" Display as List        [DAL]\n"
-                       f" Breadth First Search   [BFS]\n"
-                       f" Depth First Search     [DFS]\n"
+                       f" Breadth First Search   [BFS <START VERTEX>]\n"
+                       f" Depth First Search     [DFS <START VERTEX>]\n"
                        f" Import graph           [IMPORT <filename.txt>]\n"
                        f"------------------------\n"
                        f"Input: ")
@@ -59,10 +59,10 @@ def main():
                 route_graph.display_as_list()
 
             elif inputs[0] == "BFS":
-                print(route_graph.breadth_first_search())
+                print(route_graph.breadth_first_search(inputs[1]))
 
             elif inputs[0] == "DFS":
-                print(route_graph.depth_first_search())
+                print(route_graph.depth_first_search(inputs[1]))
 
             elif inputs[0] == "IMPORT":
                 with open(inputs[1], 'r') as graph_file:
