@@ -34,22 +34,26 @@ def main():
             inputs[0] = inputs[0].upper()
 
             if inputs[0] == "ADDV":
+                label = inputs[1]
                 try:
-                    route_graph.add_vertex(inputs[1], inputs[2])
+                    data = inputs[2]
                 except IndexError:
-                    route_graph.add_vertex(inputs[1], None)
+                    data = None
+
+                route_graph.add_vertex(label, data)
+                print(f"Adding vertex with label '{label}' and data '{data}'")
 
             elif inputs[0] == "ADDE":
-                try:
-                    route_graph.add_edge(inputs[1], inputs[2], inputs[3])
-                except IndexError:
-                    raise Exception
+                route_graph.add_edge(inputs[1], inputs[2], inputs[3])
+                print(f"Adding edge from '{inputs[1]}' to '{inputs[2]}' with weight '{inputs[3]}'")
 
             elif inputs[0] == "DELV":
                 route_graph.delete_vertex(inputs[1])
+                print(f"Deleting vertex with label '{inputs[1]}'")
 
             elif inputs[0] == "DELE":
                 route_graph.delete_edge(inputs[1], inputs[2])
+                print(f"Deleting edge from vertex '{inputs[1]}' to vertex '{inputs[2]}'")
 
             elif inputs[0] == "DAL":
                 route_graph.display_as_list()
@@ -61,29 +65,27 @@ def main():
                 print(route_graph.depth_first_search())
 
             elif inputs[0] == "IMPORT":
-                try:
-                    with open(inputs[1], 'r') as graph_file:
+                with open(inputs[1], 'r') as graph_file:
 
-                        line = graph_file.readline()
-                        line_idx = 0
+                    print(f"Importing graph from {inputs[1]}")
+                    line = graph_file.readline()
+                    line_idx = 0
 
-                        for i in range(len(line)):
-                            if line[line_idx] != ',' and line[line_idx] != '\n':
-                                route_graph.add_vertex(line[line_idx])
-                                print(f"Adding vertex with label '{line[line_idx]}'")
-                            line_idx += 1
+                    for i in range(len(line)):
+                        if line[line_idx] != ',' and line[line_idx] != '\n':
+                            route_graph.add_vertex(line[line_idx])
+                            print(f"Adding vertex with label '{line[line_idx]}'")
+                        line_idx += 1
 
+                    line = graph_file.readline().strip('\n')
+
+                    while line:
+                        route_graph.add_edge(line[0], line[1], float(line[3:]))
+                        print(f"Adding edge from '{line[0]}' to '{line[1]}' with weight '{line[3:]}'")
                         line = graph_file.readline().strip('\n')
 
-                        while line:
-                            route_graph.add_edge(line[0], line[1], float(line[3:]))
-                            print(f"Adding edge from '{line[0]}' to '{line[1]}' with weight '{line[3:]}'")
-                            line = graph_file.readline().strip('\n')
-
-                except FileNotFoundError as e:
-                    print(e)
-
             elif inputs[0] == "EXIT":
+                print("Exiting")
                 break
 
             else:
