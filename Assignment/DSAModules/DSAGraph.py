@@ -115,7 +115,7 @@ class DSAGraph:
         new_vertex = self.DSAGraphVertex(label, data)
         self.vertices.insert_last(new_vertex)
 
-    def add_edge(self, source: str, sink: str, weight: float = 1.0):
+    def add_edge(self, source: str, sink: str, weight: float):
         source_vertex = self.get_vertex(source)
         sink_vertex = self.get_vertex(sink)
 
@@ -234,7 +234,7 @@ class DSAGraph:
             display_list += "\n"
             current_vertex = current_vertex.next
 
-        print(f"Graph adjacency list:\n\n{display_list}")
+        print(f"Graph adjacency list:\n{display_list}")
 
     def sort(self):
         if self.vertices.count <= 1:
@@ -269,13 +269,20 @@ class DSAGraph:
             start_vertex = self.get_vertex(start_label)
             if start_vertex is None:
                 raise ValueError(f"Start vertex '{start_label}' not found")
+
+            if start_vertex.data.edges.count == 0:
+                return ""
+
             output_string = self._dfs(start_vertex, output_string, vertex_stack)
 
         current_vertex_node = self.vertices.head
 
         while current_vertex_node is not None:
             if not current_vertex_node.data.visited:
-                output_string = self._dfs(current_vertex_node, output_string, vertex_stack)
+                if current_vertex_node.data.edges.count == 0:
+                    current_vertex_node.data.visited = True  # Mark as visited but don't process
+                else:
+                    output_string = self._dfs(current_vertex_node, output_string, vertex_stack)
             current_vertex_node = current_vertex_node.next
 
         return output_string.strip()
@@ -291,23 +298,23 @@ class DSAGraph:
             start_vertex = self.get_vertex(start_label)
             if start_vertex is None:
                 raise ValueError(f"Start vertex '{start_label}' not found")
+
+            if start_vertex.data.edges.count == 0:
+                return ""
+
             output_string = self._bfs(start_vertex, output_string, vertex_queue)
 
         current_vertex_node = self.vertices.head
 
         while current_vertex_node is not None:
             if not current_vertex_node.data.visited:
-                output_string = self._bfs(current_vertex_node, output_string, vertex_queue)
+                if current_vertex_node.data.edges.count == 0:
+                    current_vertex_node.data.visited = True  # Mark as visited but don't process
+                else:
+                    output_string = self._bfs(current_vertex_node, output_string, vertex_queue)
             current_vertex_node = current_vertex_node.next
 
         return output_string.strip()
-
-    def clear_visited(self):
-        current_node = self.vertices.head
-
-        while current_node is not None:
-            current_node.data.visited = False
-            current_node = current_node.next
 
     def _dfs(self, source_vertex, output_string, vertex_stack):
         vertex_stack.push(source_vertex)
@@ -354,6 +361,13 @@ class DSAGraph:
                 edge_node = edge_node.next
 
         return output_string
+
+    def clear_visited(self):
+        current_node = self.vertices.head
+
+        while current_node is not None:
+            current_node.data.visited = False
+            current_node = current_node.next
 
     def get_all_edges(self):
         edges = ll.DSALinkedList()
