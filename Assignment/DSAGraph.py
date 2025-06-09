@@ -3,9 +3,9 @@
 #
 
 
-from Assignment.DSAModules import DSALinkedList as ll
-from Assignment.DSAModules import DSAStack as s
-from Assignment.DSAModules import DSAQueue as q
+import DSALinkedList as ll
+import DSAStack
+import DSAQueue
 
 
 def alpha_order(char: str):
