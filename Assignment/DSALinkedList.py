@@ -11,30 +11,10 @@ class DSALinkedList:
             self.next = next
             self.prev = previous
 
-        def __str__(self):
-            return f"Node: {self.data}"
-
     def __init__(self):
         self.head = None
         self.tail = None
         self.count = 0
-
-    def __str__(self):
-        if self.is_empty():
-            return "[]"
-
-        result = ""
-        current = self.head
-
-        while current is not None:
-            result += str(current.data)
-
-            if current.next is not None:
-                result += " -> "
-
-            current = current.next
-
-        return result
 
     def is_empty(self):
         return self.count == 0

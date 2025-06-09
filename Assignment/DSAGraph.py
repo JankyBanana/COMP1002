@@ -23,9 +23,6 @@ class DSAGraph:
             self.target_label = target_label
             self.weight = weight
 
-        def __str__(self):
-            return f"{self.target_label}({self.weight})"
-
     class DSAGraphVertex:
         def __init__(self, label: str, data: object = None):
             self.label = label
@@ -33,15 +30,6 @@ class DSAGraph:
             self.visited = False
             self.degree = 0
             self.edges = ll.DSALinkedList()
-
-        def __str__(self):
-            edges_list = []
-            current_edge = self.edges.head
-
-            while current_edge is not None:
-                edges_list.append(str(current_edge.data))
-                current_edge = current_edge.next
-            return f"{self.label}[{', '.join(edges_list)}]"
 
         def _add_edge(self, target_label: str, weight: float = 1.0):
             current_edge = self.edges.head
@@ -112,28 +100,6 @@ class DSAGraph:
     def __init__(self):
         self.vertices = ll.DSALinkedList()
         self.current_vertex = None
-
-    def __str__(self):
-        if self.vertices.count == 0:
-            return "Empty Graph"
-
-        result = "Graph:"
-        current = self.vertices.head
-
-        while current is not None:
-            vertex = current.data
-            result += f"  {vertex.label}: ["
-            edge_current = vertex.edges.head
-            edges = []
-
-            while edge_current is not None:
-                edges.append(f"{edge_current.data.target_label}({edge_current.data.weight})")
-                edge_current = edge_current.next
-
-            result += ", ".join(edges) + "]"
-            current = current.next
-
-        return result
 
     def add_vertex(self, label: str, data: object = None):
         if label is None:
