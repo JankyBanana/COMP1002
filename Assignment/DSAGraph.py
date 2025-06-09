@@ -4,8 +4,8 @@
 
 
 import DSALinkedList as ll
-import DSAStack
-import DSAQueue
+import DSAStack as s
+import DSAQueue as q
 
 
 def alpha_order(char: str):
@@ -432,7 +432,7 @@ class DSAGraph:
                 current_edge = current_edge.next
 
             if not found_unvisited:
-                popped_vertex = vertex_stack.pop()
+                vertex_stack.pop()
 
                 if not path_stack.is_empty():
                     path_stack.pop()
