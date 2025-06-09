@@ -86,6 +86,7 @@ class DSAHashTable:
             hash_entry = self.hash_array[hash_index]
 
             if hash_entry.state == 0 or hash_entry.state == -1:
+                self.num_elements += 1
                 self.hash_array[hash_index]._put(id, name, address, priority, status)
                 hash_found = True
 
@@ -97,11 +98,8 @@ class DSAHashTable:
                 if hash_index == original_index:
                     raise RuntimeError("Hashtable full or key not found.")
 
-        if self.hash_array[hash_index].state != 1:
-            self.num_elements += 1
-
         lf = self.load_factor()
-        if lf > 0.7 or lf < 0.4:
+        if lf < 0.3 or lf > 0.7:
             self.resize()
 
     def remove(self, id: int):
@@ -148,7 +146,7 @@ class DSAHashTable:
 
         return self.hash_array[hash_idx]._get()
 
-    def has_key(self, id: int):
+    def has_id(self, id: int):
         if self.get(id) is not None:
             return True
 
@@ -163,7 +161,8 @@ class DSAHashTable:
 
     def display(self):
         for entry in self.hash_array:
-            print(f"Key: {entry.key} Data: {entry.data} State: {entry.state}")
+            print(f"ID: {entry.ID}  Name: {entry.Name}  Address: {entry.Address}  "
+                f"Priority: {entry.Priority}  Status: {entry.Status}")
         print(f'Load factor: {self.load_factor()}\n')
 
     def load_factor(self):
@@ -175,7 +174,7 @@ class DSAHashTable:
         if lf > 0.7:
             new_size = int(self.actual_size * 1.5)
             new_actual_size = next_prime(new_size)
-        elif lf < 0.4:
+        elif lf < 0.3:
             new_size = int(self.actual_size / 1.5)
             new_actual_size = next_prime(new_size)
         else:
