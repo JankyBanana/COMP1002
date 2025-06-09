@@ -13,6 +13,9 @@ import numpy as np
 
 
 def main():
+    route_graph = g.DSAGraph()
+    import_allowed = True
+
     user_input = input(f"\nGraph operations listed below. Select using square brackets [...]\n"
                        f"------------------------\n"
                        f" Add Vertex             [ADDV <LABEL> <DATA>]\n"
@@ -26,7 +29,6 @@ def main():
                        f"------------------------\n"
                        f"Input: ")
 
-    route_graph = g.DSAGraph()
     inputs = string_seperator(user_input)
 
     while 1:
@@ -35,16 +37,19 @@ def main():
 
             if inputs[0] == "ADDV":
                 label = inputs[1]
+
                 try:
                     data = inputs[2]
                 except IndexError:
                     data = None
 
                 route_graph.add_vertex(label, data)
+                import_allowed = False
                 print(f"Adding vertex with label '{label}' and data '{data}'")
 
             elif inputs[0] == "ADDE":
                 route_graph.add_edge(inputs[1], inputs[2], inputs[3])
+                import_allowed = False
                 print(f"Adding edge from '{inputs[1]}' to '{inputs[2]}' with weight '{inputs[3]}'")
 
             elif inputs[0] == "DELV":
@@ -65,24 +70,27 @@ def main():
                 print(route_graph.depth_first_search(inputs[1]))
 
             elif inputs[0] == "IMPORT":
-                with open(inputs[1], 'r') as graph_file:
+                if import_allowed:
+                    with open(inputs[1], 'r') as graph_file:
 
-                    print(f"Importing graph from {inputs[1]}")
-                    line = graph_file.readline()
-                    line_idx = 0
+                        print(f"Importing graph from {inputs[1]}")
+                        line = graph_file.readline()
+                        line_idx = 0
 
-                    for i in range(len(line)):
-                        if line[line_idx] != ',' and line[line_idx] != '\n':
-                            route_graph.add_vertex(line[line_idx])
-                            print(f"Adding vertex with label '{line[line_idx]}'")
-                        line_idx += 1
+                        for i in range(len(line)):
+                            if line[line_idx] != ',' and line[line_idx] != '\n':
+                                route_graph.add_vertex(line[line_idx])
+                                print(f"Adding vertex with label '{line[line_idx]}'")
+                            line_idx += 1
 
-                    line = graph_file.readline().strip('\n')
-
-                    while line:
-                        route_graph.add_edge(line[0], line[1], float(line[3:]))
-                        print(f"Adding edge from '{line[0]}' to '{line[1]}' with weight '{line[3:]}'")
                         line = graph_file.readline().strip('\n')
+
+                        while line:
+                            route_graph.add_edge(line[0], line[1], float(line[3:]))
+                            print(f"Adding edge from '{line[0]}' to '{line[1]}' with weight '{line[3:]}'")
+                            line = graph_file.readline().strip('\n')
+                else:
+                    print("Can't import another graph after already creating a graph.")
 
             elif inputs[0] == "EXIT":
                 print("Exiting")
@@ -92,7 +100,7 @@ def main():
                 print("Invalid input.")
 
         except Exception as e:
-            raise e
+            print(e)
 
         user_input = input("Input: ")
         inputs = string_seperator(user_input)
