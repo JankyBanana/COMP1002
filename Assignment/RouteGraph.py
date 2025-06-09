@@ -8,7 +8,7 @@
 #
 
 
-from Assignment.DSAModules import DSAGraph as g
+import DSAGraph as g
 import numpy as np
 
 
