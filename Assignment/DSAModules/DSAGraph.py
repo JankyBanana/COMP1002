@@ -326,7 +326,8 @@ class DSAGraph:
         self.sort()
         self.clear_visited()
 
-        output_string = f"\nStart vertex: {start_label}\n"
+        output_string = (f"\nStart vertex: {start_label}\n"
+                         f"<Vertex, Hops>\n")
         vertex_queue = DSAQueue.ShufflingQueue()
         hop_queue = DSAQueue.ShufflingQueue()
 
@@ -400,7 +401,7 @@ class DSAGraph:
                     vertex_queue.enqueue(sink_vertex_node)
                     hop_queue.enqueue(new_hops)
 
-                    output_string += f"Hops: {new_hops} - {current_vertex.data.label}{sink_vertex_node.data.label}\n"
+                    output_string += f"{sink_vertex_node.data.label}, {new_hops}\n"
 
                 edge_node = edge_node.next
 
