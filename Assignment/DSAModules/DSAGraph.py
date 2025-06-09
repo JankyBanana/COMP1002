@@ -270,7 +270,6 @@ class DSAGraph:
 
             if start_vertex is None:
                 raise ValueError(f"Start vertex '{start_label}' not found")
-
             if start_vertex.data.edges.count == 0:
                 return ""
 
@@ -370,24 +369,3 @@ class DSAGraph:
         while current_node is not None:
             current_node.data.visited = False
             current_node = current_node.next
-
-    def get_all_edges(self):
-        edges = ll.DSALinkedList()
-        current_vertex = self.vertices.head
-
-        while current_vertex is not None:
-            current_edge = current_vertex.data.edges.head
-            while current_edge is not None:
-                if current_vertex.data.label <= current_edge.data.target_label:
-                    edges.insert_last(f" source: {current_vertex.data.label} "
-                                      f"target: {current_edge.data.target_label}"
-                                      f"weight: {current_edge.data.weight}")
-                current_edge = current_edge.next
-            current_vertex = current_vertex.next
-        return edges
-
-    def get_vertex_degree(self, vertex_label: str):
-        vertex = self.get_vertex(vertex_label)
-        if vertex is None:
-            raise ValueError(f"Vertex '{vertex_label}' not found")
-        return vertex.data.degree
