@@ -34,6 +34,15 @@ class DSAGraph:
             self.degree = 0
             self.edges = ll.DSALinkedList()
 
+        def __str__(self):
+            edges_list = []
+            current_edge = self.edges.head
+
+            while current_edge is not None:
+                edges_list.append(str(current_edge.data))
+                current_edge = current_edge.next
+            return f"{self.label}[{', '.join(edges_list)}]"
+
         def _add_edge(self, target_label: str, weight: float = 1.0):
             current_edge = self.edges.head
 
@@ -104,12 +113,38 @@ class DSAGraph:
         self.vertices = ll.DSALinkedList()
         self.current_vertex = None
 
+    def __str__(self):
+        if self.vertices.count == 0:
+            return "Empty Graph"
+
+        result = "Graph:"
+        current = self.vertices.head
+
+        while current is not None:
+            vertex = current.data
+            result += f"  {vertex.label}: ["
+            edge_current = vertex.edges.head
+            edges = []
+
+            while edge_current is not None:
+                edges.append(f"{edge_current.data.target_label}({edge_current.data.weight})")
+                edge_current = edge_current.next
+
+            result += ", ".join(edges) + "]"
+            current = current.next
+
+        return result
+
     def add_vertex(self, label: str, data: object = None):
+        if label is None:
+            raise ValueError("Vertex must have a label")
+
         current_vertex = self.vertices.head
 
         while current_vertex is not None:
             if current_vertex.data.label == label:
                 raise ValueError(f"Vertex with label '{label}' already exists")
+
             current_vertex = current_vertex.next
 
         new_vertex = self.DSAGraphVertex(label, data)
@@ -140,7 +175,7 @@ class DSAGraph:
 
         while current_vertex is not None:
             if current_vertex.data.label == target_label:
-                self.vertices.remove(target_label)
+                self.vertices.remove(current_vertex.data)
                 return
             current_vertex = current_vertex.next
 

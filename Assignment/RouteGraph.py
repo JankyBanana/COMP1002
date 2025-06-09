@@ -92,7 +92,7 @@ def main():
                 print("Invalid input.")
 
         except Exception as e:
-            print(e)
+            raise e
 
         user_input = input("Input: ")
         inputs = string_seperator(user_input)
