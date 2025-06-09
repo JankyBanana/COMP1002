@@ -297,7 +297,8 @@ class DSAGraph:
         self.sort()
         self.clear_visited()
 
-        output_string = ""
+        output_string = (f"\nStart vertex: {start_label}\n"
+                         f"")
         vertex_stack = DSAStack.DSAStack()
 
         if start_label:
@@ -326,8 +327,7 @@ class DSAGraph:
         self.sort()
         self.clear_visited()
 
-        output_string = (f"\nStart vertex: {start_label}\n"
-                         f"<Vertex, Hops>\n")
+        output_string = f"\nVertices reachable from vertex '{start_label}': <Vertex, Hops>\n"
         vertex_queue = DSAQueue.ShufflingQueue()
         hop_queue = DSAQueue.ShufflingQueue()
 
