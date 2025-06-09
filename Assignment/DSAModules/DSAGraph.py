@@ -4,8 +4,8 @@
 
 
 from Assignment.DSAModules import DSALinkedList as ll
-from Assignment.DSAModules import DSAStack
-from Assignment.DSAModules import DSAQueue
+from Assignment.DSAModules import DSAStack as s
+from Assignment.DSAModules import DSAQueue as q
 
 
 def alpha_order(char: str):
@@ -293,43 +293,20 @@ class DSAGraph:
 
             current_vertex = current_vertex.next
 
-    def depth_first_search(self, start_label: str = None):
-        self.sort()
-        self.clear_visited()
+    def clear_visited(self):
+        current_node = self.vertices.head
 
-        output_string = (f"\nStart vertex: {start_label}\n"
-                         f"")
-        vertex_stack = DSAStack.DSAStack()
-
-        if start_label:
-            start_vertex = self.get_vertex(start_label)
-
-            if start_vertex is None:
-                raise ValueError(f"Start vertex '{start_label}' not found")
-            if start_vertex.data.edges.count == 0:
-                return ""
-
-            output_string = self._dfs(start_vertex, output_string, vertex_stack)
-
-        current_vertex_node = self.vertices.head
-
-        while current_vertex_node is not None:
-            if not current_vertex_node.data.visited:
-                if current_vertex_node.data.edges.count == 0:
-                    current_vertex_node.data.visited = True
-                else:
-                    output_string = self._dfs(current_vertex_node, output_string, vertex_stack)
-            current_vertex_node = current_vertex_node.next
-
-        return output_string.strip()
+        while current_node is not None:
+            current_node.data.visited = False
+            current_node = current_node.next
 
     def breadth_first_search(self, start_label: str = None):
         self.sort()
         self.clear_visited()
 
         output_string = f"\nVertices reachable from vertex '{start_label}': <Vertex, Hops>\n"
-        vertex_queue = DSAQueue.ShufflingQueue()
-        hop_queue = DSAQueue.ShufflingQueue()
+        vertex_queue = q.ShufflingQueue()
+        hop_queue = q.ShufflingQueue()
 
         if start_label:
             start_vertex = self.get_vertex(start_label)
@@ -353,32 +330,6 @@ class DSAGraph:
             current_vertex_node = current_vertex_node.next
 
         return output_string.strip()
-
-    def _dfs(self, source_vertex, output_string, vertex_stack):
-        vertex_stack.push(source_vertex)
-        source_vertex.data.visited = True
-
-        while not vertex_stack.is_empty():
-            current_vertex = vertex_stack.peek()
-            current_edge = current_vertex.data.edges.head
-
-            found_unvisited = False
-            while current_edge is not None:
-                sink_vertex = self.get_vertex(current_edge.data.target_label)
-
-                if sink_vertex and not sink_vertex.data.visited:
-                    output_string += f"{current_vertex.data.label}{sink_vertex.data.label} "
-                    sink_vertex.data.visited = True
-                    vertex_stack.push(sink_vertex)
-                    found_unvisited = True
-                    break
-
-                current_edge = current_edge.next
-
-            if not found_unvisited:
-                vertex_stack.pop()
-
-        return output_string
 
     def _bfs(self, start_vertex, output_string, vertex_queue, hop_queue):
         start_vertex.data.visited = True
@@ -407,9 +358,138 @@ class DSAGraph:
 
         return output_string
 
-    def clear_visited(self):
-        current_node = self.vertices.head
+    def depth_first_search(self, start_label: str = None):
+        self.sort()
+        self.clear_visited()
 
-        while current_node is not None:
-            current_node.data.visited = False
-            current_node = current_node.next
+        output_string = f"\nStart vertex: {start_label}\n"
+        vertex_stack = s.DSAStack()
+        path_stack = s.DSAStack()
+        cycle_list = ll.DSALinkedList()
+
+        if start_label:
+            start_vertex = self.get_vertex(start_label)
+
+            if start_vertex is None:
+                raise ValueError(f"Start vertex '{start_label}' not found")
+            if start_vertex.data.edges.count == 0:
+                return ""
+
+            output_string = self._dfs(start_vertex, output_string, vertex_stack, path_stack, cycle_list)
+
+        current_vertex_node = self.vertices.head
+
+        while current_vertex_node is not None:
+            if not current_vertex_node.data.visited:
+                if current_vertex_node.data.edges.count == 0:
+                    current_vertex_node.data.visited = True
+                else:
+                    output_string = self._dfs(current_vertex_node, output_string, vertex_stack, path_stack, cycle_list)
+            current_vertex_node = current_vertex_node.next
+
+        output_string += self.cycle_format(cycle_list)
+
+        return output_string.strip()
+
+    def _dfs(self, source_vertex, output_string, vertex_stack, path_stack, cycle_list):
+        vertex_stack.push(source_vertex)
+        path_stack.push(source_vertex.data.label)
+        source_vertex.data.visited = True
+
+        while not vertex_stack.is_empty():
+            current_vertex = vertex_stack.peek()
+            current_edge = current_vertex.data.edges.head
+
+            found_unvisited = False
+
+            while current_edge is not None:
+                sink_vertex = self.get_vertex(current_edge.data.target_label)
+
+                if sink_vertex:
+                    if self.in_path(path_stack, current_edge.data.target_label):
+                        cycle_nodes = self.cycle_path(path_stack, current_edge.data.target_label)
+
+                        length = 0
+                        node = cycle_nodes.head
+
+                        while node is not None:
+                            length += 1
+                            node = node.next
+
+                        if length >= 4:
+                            cycle_list.insert_last(cycle_nodes)
+
+                    if not sink_vertex.data.visited:
+                        output_string += f"{current_vertex.data.label}{sink_vertex.data.label} "
+                        sink_vertex.data.visited = True
+                        vertex_stack.push(sink_vertex)
+                        path_stack.push(sink_vertex.data.label)
+                        found_unvisited = True
+                        break
+
+                current_edge = current_edge.next
+
+            if not found_unvisited:
+                popped_vertex = vertex_stack.pop()
+
+                if not path_stack.is_empty():
+                    path_stack.pop()
+
+        return output_string
+
+    def in_path(self, path_stack, target_label):
+        if path_stack.is_empty():
+            return False
+
+        temp_stack = s.DSAStack()
+        found = False
+
+        while not path_stack.is_empty():
+            current_label = path_stack.pop()
+            temp_stack.push(current_label)
+
+            if current_label == target_label:
+                found = True
+
+        while not temp_stack.is_empty():
+            path_stack.push(temp_stack.pop())
+
+        return found
+
+    def cycle_path(self, path_stack, cycle_start):
+        temp_stack = s.DSAStack()
+        cycle_nodes = ll.DSALinkedList()
+        found_start = False
+
+        while not path_stack.is_empty():
+            label = path_stack.pop()
+            temp_stack.push(label)
+
+        while not temp_stack.is_empty():
+            label = temp_stack.pop()
+            path_stack.push(label)
+
+            if label == cycle_start:
+                found_start = True
+
+            if found_start:
+                cycle_nodes.insert_last(label)
+
+        cycle_nodes.insert_last(cycle_start)
+
+        return cycle_nodes
+
+    def cycle_format(self, cycle_list):
+        if cycle_list.is_empty():
+            return "\nNo cycles detected."
+
+        output = f"\n\nCycles detected ({cycle_list.count}):\n"
+        cycle_number = 1
+        current_cycle = cycle_list.head
+
+        while current_cycle is not None:
+            output += f"{cycle_number}. {current_cycle.data}\n"
+            cycle_number += 1
+            current_cycle = current_cycle.next
+
+        return output
