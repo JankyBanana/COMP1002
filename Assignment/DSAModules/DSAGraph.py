@@ -304,7 +304,7 @@ class DSAGraph:
         self.sort()
         self.clear_visited()
 
-        output_string = f"\nVertices reachable from vertex '{start_label}': <Vertex, Hops>\n"
+        output_string = f"\nVertices reachable from vertex '{start_label}': [Vertex, Hops]\n"
         vertex_queue = q.ShufflingQueue()
         hop_queue = q.ShufflingQueue()
 
@@ -335,6 +335,7 @@ class DSAGraph:
         start_vertex.data.visited = True
         vertex_queue.enqueue(start_vertex)
         hop_queue.enqueue(0)
+        hop_string = ''
 
         while not vertex_queue.is_empty():
             current_vertex = vertex_queue.dequeue()
@@ -352,17 +353,18 @@ class DSAGraph:
                     vertex_queue.enqueue(sink_vertex_node)
                     hop_queue.enqueue(new_hops)
 
-                    output_string += f"{sink_vertex_node.data.label}, {new_hops}\n"
+                    hop_string += f"{sink_vertex_node.data.label}, {new_hops}\n"
+                    output_string += f"{current_vertex.data.label}{sink_vertex_node.data.label} "
 
                 edge_node = edge_node.next
 
-        return output_string
+        return f"{output_string}\n{hop_string}"
 
     def depth_first_search(self, start_label: str = None):
         self.sort()
         self.clear_visited()
 
-        output_string = f"\nStart vertex: {start_label}\n"
+        output_string = f"\n\nStart vertex: {start_label}\n"
         vertex_stack = s.DSAStack()
         path_stack = s.DSAStack()
         cycle_list = ll.DSALinkedList()
@@ -483,7 +485,7 @@ class DSAGraph:
         if cycle_list.is_empty():
             return "\nNo cycles detected."
 
-        output = f"\n\nCycles detected ({cycle_list.count}):\n"
+        output = f"\n\n{cycle_list.count} Cycles detected:\n"
         cycle_number = 1
         current_cycle = cycle_list.head
 
@@ -493,3 +495,43 @@ class DSAGraph:
             current_cycle = current_cycle.next
 
         return output
+
+    def quickest_path(self, source_vertex, target_vertex):
+        bfs_output = self.breadth_first_search(source_vertex)
+        bfs_string = ''
+        new_line_count = 0
+        output_idx = 0
+
+        while new_line_count < 2:
+            output_element = bfs_output[output_idx]
+            if output_element == '\n':
+                new_line_count += 1
+
+            if new_line_count < 1:
+                output_idx += 1
+            elif new_line_count < 2:
+                bfs_string += bfs_output[output_idx]
+                output_idx += 1
+
+        bfs_string = bfs_string.strip()
+        quickest_path = ''
+        idx = len(bfs_string) - 1
+
+        while idx > 0:
+            element = bfs_string[idx]
+            if element == target_vertex:
+                quickest_path += f" {bfs_string[idx]}{bfs_string[idx-1]}"
+                target_vertex = bfs_string[idx - 1]
+                idx -= 6
+            else:
+                idx -= 3
+
+        quickest_path = quickest_path[::-1]
+        travel_time = 0
+        idx = 0
+
+        while idx < len(quickest_path):
+            travel_time += int(self.get_vertex(quickest_path[idx]).data._get_edge_weight(quickest_path[idx + 1]))
+            idx += 3
+
+        return f"Shortest path is [{quickest_path.strip()}] taking {travel_time} minutes."

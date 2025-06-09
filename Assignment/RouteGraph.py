@@ -25,6 +25,7 @@ def main():
                        f" Display as List        [DAL]\n"
                        f" Breadth First Search   [BFS <START VERTEX>]\n"
                        f" Depth First Search     [DFS <START VERTEX>]\n"
+                       f" Quickest Path          [QP <START VERTEX> <END VERTEX>]\n"
                        f" Import graph           [IMPORT <filename.txt>]\n"
                        f"------------------------\n"
                        f"Input: ")
@@ -69,6 +70,9 @@ def main():
             elif inputs[0] == "DFS":
                 print(route_graph.depth_first_search(inputs[1]))
 
+            elif inputs[0] == "QP":
+                print(route_graph.quickest_path(inputs[1], inputs[2]))
+
             elif inputs[0] == "IMPORT":
                 if import_allowed:
                     with open(inputs[1], 'r') as graph_file:
@@ -100,7 +104,7 @@ def main():
                 print("Invalid input.")
 
         except Exception as e:
-            print(e)
+            raise e
 
         user_input = input("Input: ")
         inputs = string_seperator(user_input)
