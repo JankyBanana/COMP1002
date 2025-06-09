@@ -71,7 +71,8 @@ def main():
                 print(route_graph.depth_first_search(inputs[1]))
 
             elif inputs[0] == "QP":
-                print(route_graph.quickest_path(inputs[1], inputs[2]))
+                quickest_path, travel_time = route_graph.quickest_path(inputs[1], inputs[2])
+                print(f"Shortest path is [{quickest_path.strip()}] taking {travel_time} minutes.")
 
             elif inputs[0] == "IMPORT":
                 if import_allowed:
@@ -135,5 +136,35 @@ def string_seperator(input_str):
 
     return results
 
+def export(command, file = None, graph = None, start = None, end = None):
+    if command == "import":
+        graph = g.DSAGraph()
 
-main()
+        with open(file, 'r') as graph_file:
+
+            print(f"Importing graph from {file}")
+            line = graph_file.readline()
+            line_idx = 0
+
+            for i in range(len(line)):
+                if line[line_idx] != ',' and line[line_idx] != '\n':
+                    graph.add_vertex(line[line_idx])
+                    print(f"Adding vertex with label '{line[line_idx]}'")
+                line_idx += 1
+
+            line = graph_file.readline().strip('\n')
+
+            while line:
+                graph.add_edge(line[0], line[1], float(line[3:]))
+                print(f"Adding edge from '{line[0]}' to '{line[1]}' with weight '{line[3:]}'")
+                line = graph_file.readline().strip('\n')
+
+        return graph
+
+    elif command == "travel_time":
+        quickest_path, travel_time = graph.quickest_path(start, end)
+        return travel_time
+
+
+if __name__ == "__main__":
+    main()

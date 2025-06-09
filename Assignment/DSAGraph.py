@@ -500,4 +500,4 @@ class DSAGraph:
             travel_time += int(self.get_vertex(quickest_path[idx]).data._get_edge_weight(quickest_path[idx + 1]))
             idx += 3
 
-        return f"Shortest path is [{quickest_path.strip()}] taking {travel_time} minutes."
+        return quickest_path.strip(), travel_time
