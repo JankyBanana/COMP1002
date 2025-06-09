@@ -326,8 +326,9 @@ class DSAGraph:
         self.sort()
         self.clear_visited()
 
-        output_string = ""
+        output_string = f"\nStart vertex: {start_label}\n"
         vertex_queue = DSAQueue.ShufflingQueue()
+        hop_queue = DSAQueue.ShufflingQueue()
 
         if start_label:
             start_vertex = self.get_vertex(start_label)
@@ -338,7 +339,7 @@ class DSAGraph:
             if start_vertex.data.edges.count == 0:
                 return ""
 
-            output_string = self._bfs(start_vertex, output_string, vertex_queue)
+            output_string = self._bfs(start_vertex, output_string, vertex_queue, hop_queue)
 
         current_vertex_node = self.vertices.head
 
@@ -347,7 +348,7 @@ class DSAGraph:
                 if current_vertex_node.data.edges.count == 0:
                     current_vertex_node.data.visited = True
                 else:
-                    output_string = self._bfs(current_vertex_node, output_string, vertex_queue)
+                    output_string = self._bfs(current_vertex_node, output_string, vertex_queue, hop_queue)
             current_vertex_node = current_vertex_node.next
 
         return output_string.strip()
@@ -378,12 +379,15 @@ class DSAGraph:
 
         return output_string
 
-    def _bfs(self, start_vertex, output_string, vertex_queue):
+    def _bfs(self, start_vertex, output_string, vertex_queue, hop_queue):
         start_vertex.data.visited = True
         vertex_queue.enqueue(start_vertex)
+        hop_queue.enqueue(0)
 
         while not vertex_queue.is_empty():
             current_vertex = vertex_queue.dequeue()
+            current_hops = hop_queue.dequeue()
+
             edge_node = current_vertex.data.edges.head
 
             while edge_node is not None:
@@ -391,8 +395,12 @@ class DSAGraph:
 
                 if sink_vertex_node and not sink_vertex_node.data.visited:
                     sink_vertex_node.data.visited = True
+                    new_hops = current_hops + 1
+
                     vertex_queue.enqueue(sink_vertex_node)
-                    output_string += f"{current_vertex.data.label}{sink_vertex_node.data.label} "
+                    hop_queue.enqueue(new_hops)
+
+                    output_string += f"Hops: {new_hops} - {current_vertex.data.label}{sink_vertex_node.data.label}\n"
 
                 edge_node = edge_node.next
 
